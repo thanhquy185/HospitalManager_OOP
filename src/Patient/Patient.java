@@ -11,7 +11,7 @@ public class Patient extends Person {
     private Relatives relatives;
 
     // Lab:
-    private static int patientCounter = 0001;
+    private static int patientCounter = 00001;
 
     /* CONSTRUCTORS */ 
     public Patient(){
@@ -28,13 +28,6 @@ public class Patient extends Person {
         this.type = "Normal";
         // Relative
     }
-    public Patient(Person person){
-        super(person);
-        setID();
-        this.isTest = false;
-        this.type = "Normal";
-        // Relative
-    }
     public Patient(String fullname, Date birthday, String gender, String country, String phone, 
                    boolean test, String type){
         super(fullname, birthday,gender, country, phone);
@@ -43,24 +36,29 @@ public class Patient extends Person {
         this.type = type;
         // Relative
     }
+    public Patient(Person person){
+        super(person);
+        setID();
+        this.isTest = false;
+        this.type = "Normal";
+        // Relative
+    }
+    public Patient(Person person, boolean test, String type){
+        super(person);
+        setID();
+        this.isTest = test;
+        this.type = type;
+    }
 
     /* SETTER - GETTER */ 
     public void setID(){
-        if(this.type.equals("Premium")){
-            this.ID = "PPAT" + this.birthday.toString();
-        } else {
-            this.ID = "NPAT" + this.birthday.toString();
-        }
-    }
-    // Lab:
-    public void setIDTest(){
         // Vì patientCounter: static field -> truy cập thông qua Patient class.
         // Format patientCounter (4 số): 0001
-        String counter = String.format("%04d", Patient.patientCounter);
+        String counter = String.format("%05d", Patient.patientCounter);
         if(this.type.equals("Premium")){
-            this.ID = "PPAT" + this.birthday.toString() + counter;
+            this.ID = "PPAT" + counter;
         } else {
-            this.ID = "NPAT" + this.birthday.toString() + counter;
+            this.ID = "NPAT" + counter;
         }
         Patient.patientCounter++;
     }
