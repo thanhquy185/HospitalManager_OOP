@@ -25,6 +25,14 @@ public class HealthcareWorker extends Person {
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
     }
+    public HealthcareWorker(HealthcareWorker healthcareWorker) {
+        super(healthcareWorker.fullname, healthcareWorker.birthday, healthcareWorker.gender, healthcareWorker.country, healthcareWorker.phone);
+        this.id = healthcareWorker.id;
+        this.department = healthcareWorker.department;
+        this.position = healthcareWorker.position;
+        this.yearsOfExperience = healthcareWorker.yearsOfExperience;
+        this.salary = healthcareWorker.salary;
+    }
 
     // Setter - Getter
     public void setId(String id) {
