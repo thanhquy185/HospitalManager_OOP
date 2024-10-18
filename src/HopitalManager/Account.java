@@ -1,4 +1,4 @@
-package Program;
+package HopitalManager;
 
 public class Account {
 
