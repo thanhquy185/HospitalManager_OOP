@@ -2,7 +2,7 @@ package HealthcareWorker;
 
 import Common.Date;
 
-class Doctor extends HealthcareWorker {
+public class Doctor extends HealthcareWorker {
     //Properties
 
     //Constructors

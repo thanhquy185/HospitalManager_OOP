@@ -1,6 +1,9 @@
 package MedicalRecord;
 
-    // Chứa thông tin về bệnh nhân (patient), bác sĩ (doctor), y tá (nurse), và tình trạng bệnh (sick).
+import Patient.Patient;
+import HealthcareWorker.Doctor;
+import HealthcareWorker.Nurse;
+
 public class TreamentRecord extends MedicalRecord {
     //	Properties
 	private Patient patient;
@@ -23,43 +26,38 @@ public class TreamentRecord extends MedicalRecord {
 		this.sick = sick;
 	}
 
-		public TreamentRecord(TreamentRecord treamentRecord)
-		{
-			this.patient = new Patient(treamentRecord.patient);
-			this.doctor = new Doctor(treamentRecord.doctor);
-			this.nurse = new Nurse(treamentRecord.nurse);
-			this.sick = new Sick(treamentRecord.sick);
-		}
+	public TreamentRecord(TreamentRecord treamentRecord) {
+		this.patient = new Patient(treamentRecord.patient);
+		this.doctor = new Doctor(treamentRecord.doctor);
+		this.nurse = new Nurse(treamentRecord.nurse);
+		this.sick = new Sick(treamentRecord.sick);
+	}
+
     // Setter - Getter
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-
 	public void setNurse(Nurse nurse) {
 		this.nurse = nurse;
 	}
-
 	public void setSick(Sick sick) {
 		this.sick = sick;
 	}
-
 	public Patient getPatient() {
 		return this.patient;
 	}
-
 	public Doctor getDoctor() {
 		return this.doctor;
 	}
-
 	public Nurse getNurse() {
 		return this.nurse;
 	}
-
 	public Sick getSick() {
-		return this.nurse;
+		return this.sick;
 	}
+
+	//Methods
 }
