@@ -1,4 +1,4 @@
-package Manager;
+package Common;
 
 public interface CRUD {
 

@@ -1,6 +1,6 @@
 package Common;
 
-public class Person {
+public abstract class Person {
 	//Properties
 	protected String fullname;
 	protected Date birthday;

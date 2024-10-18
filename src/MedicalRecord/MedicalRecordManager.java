@@ -1,4 +1,4 @@
-package Manager;
+package MedicalRecord;
 
 public class MedicalRecordManager {
 

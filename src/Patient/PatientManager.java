@@ -1,4 +1,4 @@
-package Manager;
+package Patient;
 
 public class PatientManager {
 
