@@ -5,44 +5,44 @@ import Common.Date;
 public class MedicalRecord {
     //	Properties
 	protected String id;
-	protected Date inputDate;
-	protected Date outputDate;
+	protected Date inputDay;
+	protected Date outputDay;
 
     // Constructor
 	public MedicalRecord() {
 		id = "";
-		inputDate = new Date();
-		outputDate = new Date();
+		inputDay = new Date();
+		outputDay = new Date();
 	}
-	public MedicalRecord(String id, Date inputDate, Date outputDate) {
+	public MedicalRecord(String id, Date inputDay, Date outputDay) {
 		this.id = id;
-		this.inputDate = inputDate;
-		this.outputDate = outputDate;
+		this.inputDay = inputDay;
+		this.outputDay = outputDay;
 	}
 	public MedicalRecord(MedicalRecord medicalRecord) {
 		this.id = medicalRecord.id;
-		this.inputDate = medicalRecord.inputDate;
-		this.outputDate = medicalRecord.outputDate;
+		this.inputDay = medicalRecord.inputDay;
+		this.outputDay = medicalRecord.outputDay;
 	}
 
 	// Setter-Getter
 	public void setId(String id) {
 		this.id = id;
 	}
-	public void setInputDate(Date inputDate) {
-		this.inputDate = inputDate;
+	public void setInputDay(Date inputDay) {
+		this.inputDay = inputDay;
 	}
-	public void setOutputDate(Date outputDate) {
-		this.outputDate = outputDate;
+	public void setOutputDay(Date outputDay) {
+		this.outputDay = outputDay;
 	}
 	public String getId() {
-		return this.id;
+		return id;
 	}
-	public Date getInputDate() {
-		return this.inputDate;
+	public Date getInputDay() {
+		return inputDay;
 	}
-	public Date getOutputDate() {
-		return this.outputDate;
+	public Date getOutputDay() {
+		return outputDay;
 	}
 
 	// Methods

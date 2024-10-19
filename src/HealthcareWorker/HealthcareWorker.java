@@ -51,23 +51,19 @@ public class HealthcareWorker extends Person {
         this.salary = salary;
     }
     public String getId() {
-        return this.id;
+        return id;
     }
-
     public String getDepartment() {
-        return this.department;
+        return department;
     }
-
     public String getPosition() {
-        return this.position;
+        return position;
     }
-
     public int getYearsOfExperience() {
-        return this.yearsOfExperience;
+        return yearsOfExperience;
     }
-
     public double getSalary() {
-        return this.salary;
+        return salary;
     }
 
     // Methods

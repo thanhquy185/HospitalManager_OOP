@@ -12,10 +12,10 @@ public class Patient extends Person {
     // Constructors
     public Patient(){
         super();
-        this.id = "000000000";
-        this.isTest = false;
-        this.type = "Normal";
-        this.relatives = new Relatives();
+        id = "000000000";
+        isTest = false;
+        type = "Normal";
+        relatives = new Relatives();
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone,
                             String id, boolean isTest, String type, Relatives relatives) {

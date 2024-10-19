@@ -9,9 +9,9 @@ public class Date {
 	
 	//Constructors
 	public Date() {
-		this.day = 1;
-		this.month = 1;
-		this.year = 1970;
+		day = 1;
+		month = 1;
+		year = 1970;
 	}
 	public Date(int day, int month, int year) {
 		if(!isDate(day, month, year)) {
@@ -55,13 +55,13 @@ public class Date {
 		this.year = year;
 	}
 	public int getDay() {
-		return this.day;
+		return day;
 	}
 	public int getMonth() {
-		return this.month;
+		return month;
 	}
 	public int getYear() {
-		return this.year;
+		return year;
 	}
 	
 	//Methods

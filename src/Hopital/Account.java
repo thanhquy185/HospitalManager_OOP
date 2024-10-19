@@ -1,4 +1,4 @@
-package HopitalManager;
+package Hopital;
 
 public class Account {
 

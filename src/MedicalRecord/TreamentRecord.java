@@ -1,5 +1,6 @@
 package MedicalRecord;
 
+import Common.Date;
 import Patient.Patient;
 import HealthcareWorker.Doctor;
 import HealthcareWorker.Nurse;
@@ -13,24 +14,25 @@ public class TreamentRecord extends MedicalRecord {
 
     // Constructor
 	public TreamentRecord() {
-		this.patient = new Patient();
-		this.doctor = new Doctor();
+		super();
+		patient = new Patient();
+		doctor = new Doctor();
 		nurse = new Nurse();
 		sick = new Sick();
 	}
-
-	public TreamentRecord(Patient patient, Doctor doctor, Nurse nurse, Sick sick) {
+	public TreamentRecord(String id, Date inputDay, Date outputDay, Patient patient, Doctor doctor, Nurse nurse, Sick sick) {
+		super(id, inputDay, outputDay);
 		this.patient = patient;
 		this.doctor = doctor;
 		this.nurse = nurse;
 		this.sick = sick;
 	}
-
 	public TreamentRecord(TreamentRecord treamentRecord) {
-		this.patient = new Patient(treamentRecord.patient);
-		this.doctor = new Doctor(treamentRecord.doctor);
-		this.nurse = new Nurse(treamentRecord.nurse);
-		this.sick = new Sick(treamentRecord.sick);
+		super(treamentRecord.id, treamentRecord.inputDay, treamentRecord.outputDay);
+		patient = new Patient(treamentRecord.patient);
+		doctor = new Doctor(treamentRecord.doctor);
+		nurse = new Nurse(treamentRecord.nurse);
+		sick = new Sick(treamentRecord.sick);
 	}
 
     // Setter - Getter
@@ -47,16 +49,16 @@ public class TreamentRecord extends MedicalRecord {
 		this.sick = sick;
 	}
 	public Patient getPatient() {
-		return this.patient;
+		return patient;
 	}
 	public Doctor getDoctor() {
-		return this.doctor;
+		return doctor;
 	}
 	public Nurse getNurse() {
-		return this.nurse;
+		return nurse;
 	}
 	public Sick getSick() {
-		return this.sick;
+		return sick;
 	}
 
 	//Methods

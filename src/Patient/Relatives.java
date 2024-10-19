@@ -8,9 +8,9 @@ class Relatives {
 
     // Constructors
     public Relatives() {
-        this.fullname = "anonymous";
-        this.patient = new Patient();
-        this.relationship = "???";
+        fullname = "anonymous";
+        patient = new Patient();
+        relationship = "???";
     }
     public Relatives(String fullname, Patient patient, String relationship) {
         this.fullname = fullname;
@@ -34,13 +34,13 @@ class Relatives {
         this.relationship = relationship;
     }
     public String getFullname() {
-        return this.fullname;
+        return fullname;
     }
     public Patient getPatient() {
-        return this.patient;
+        return patient;
     }
     public String getRelationship() {
-        return this.relationship;
+        return relationship;
     }
 
     //Methods

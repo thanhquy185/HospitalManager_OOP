@@ -34,13 +34,13 @@ class Sick {
 		this.level = level;
 	}
 	public String getId() {
-		return this.id;
+		return id;
 	}
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	public String getLevel() {
-		return this.level;
+		return level;
 	}
 
 	// Methods

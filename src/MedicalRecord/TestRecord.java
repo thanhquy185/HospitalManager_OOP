@@ -1,5 +1,6 @@
 package MedicalRecord;
 
+import Common.Date;
 import HealthcareWorker.Nurse;
 public class TestRecord extends MedicalRecord {
     // Properties
@@ -9,16 +10,19 @@ public class TestRecord extends MedicalRecord {
 
     // Constructor
 	public TestRecord() {
+		super();
 		nurse = new Nurse();
 		reason = "";
 		diagnose = "";
 	}
-	public TestRecord(Nurse nurse, String reason, String diagnose) {
+	public TestRecord(String id, Date inputDay, Date outputDay, Nurse nurse, String reason, String diagnose) {
+		super(id, inputDay, outputDay);
 		this.nurse = nurse;
 		this.reason = reason;
 		this.diagnose = diagnose;
 	}
 	public TestRecord(TestRecord testRecord) {
+		super(testRecord.id, testRecord.inputDay, testRecord.outputDay);
 		this.nurse = new Nurse(testRecord.nurse);
 		this.reason = testRecord.reason;
 		this.diagnose = testRecord.diagnose;
@@ -35,13 +39,13 @@ public class TestRecord extends MedicalRecord {
 		this.diagnose = diagnose;
 	}
 	public Nurse getNurse() {
-		return this.nurse;
+		return nurse;
 	}
 	public String getReason() {
-		return this.reason;
+		return reason;
 	}
 	public String getDiagnose() {
-		return this.diagnose;
+		return diagnose;
 	}
 
 	// Methods

@@ -4,28 +4,35 @@ import java.util.ArrayList;
 
 public class PatientManager {
     // Properties
-    private static ArrayList<Patient> patientList;
+    private static PatientManager instance;
+    private static ArrayList<Patient> list;
     private static int numbersOfList;
 
     // Constructors
     public PatientManager() {
-        PatientManager.patientList = new ArrayList<Patient>();
-        PatientManager.numbersOfList = 0;
+        list = new ArrayList<Patient>();
+        numbersOfList = 0;
     }
-    public PatientManager(ArrayList<Patient> patientList, int numbersOfList) {
-        PatientManager.patientList = patientList;
+    public PatientManager(ArrayList<Patient> list, int numbersOfList) {
+        PatientManager.list = list;
         PatientManager.numbersOfList = numbersOfList;
     }
 
     // Setter - Getter
-    public static void setPatientList(ArrayList<Patient> patientList) {
-        PatientManager.patientList = patientList;
+    public static void setList(ArrayList<Patient> list) {
+        PatientManager.list = list;
     }
     public static void setNumbersOfList(int numbersOfList) {
         PatientManager.numbersOfList = numbersOfList;
     }
-    public static ArrayList<Patient> getPatientList() {
-        return PatientManager.patientList;
+    public static PatientManager getInstance() {
+        if(instance == null) {
+            instance = new PatientManager();
+        }
+        return instance;
+    }
+    public static ArrayList<Patient> getList() {
+        return PatientManager.list;
     }
     public static int getNumbersOfList() {
         return PatientManager.numbersOfList;
