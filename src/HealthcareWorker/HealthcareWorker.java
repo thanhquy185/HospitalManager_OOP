@@ -34,6 +34,15 @@ public class HealthcareWorker extends Person {
         this.salary = healthcareWorker.salary;
     }
 
+    public HealthcareWorker(String id){
+        this.id = id;
+    }
+
+    public void HealthcareWorkerSalary(String salary){
+        this.salary = salary;
+
+    }
+
     // Setter - Getter
     public void setId(String id) {
         this.id = id;
