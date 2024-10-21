@@ -9,8 +9,6 @@ public class Patient extends Person {
     private boolean isTest;
     private String type;
     private Relatives relatives;
-
-    // Lab:
     private static int patientCounter = 00001;
 
     /* CONSTRUCTORS */ 
@@ -38,7 +36,7 @@ public class Patient extends Person {
     }
     public Patient(Person person){
         super(person);
-        setID();
+        setID();    
         this.isTest = false;
         this.type = "Normal";
         // Relative
@@ -53,7 +51,7 @@ public class Patient extends Person {
     /* SETTER - GETTER */ 
     public void setID(){
         // Vì patientCounter: static field -> truy cập thông qua Patient class.
-        // Format patientCounter (4 số): 0001
+        // Format patientCounter (5 số): 00001
         String counter = String.format("%05d", Patient.patientCounter);
         if(this.type.equals("Premium")){
             this.ID = "PPAT" + counter;
