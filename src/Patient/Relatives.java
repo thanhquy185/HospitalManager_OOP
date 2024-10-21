@@ -10,13 +10,17 @@ class Relatives {
     public Relatives() {
         fullname = "anonymous";
         patient = new Patient();
-        relationship = "???";
+        relationship = "?";
     }
-    public Relatives(String fullname, Patient patient, String relationship) {
+    public Relatives(String fullname, String relationship) {
         this.fullname = fullname;
-        this.patient = patient;
         this.relationship = relationship;
     }
+    // public Relatives(String fullname, Patient patient, String relationship) {
+    //     this.fullname = fullname;
+    //     this.patient = patient;
+    //     this.relationship = relationship;
+    // }
     public Relatives(Relatives relatives) {
         this.fullname = relatives.fullname;
         this.patient = relatives.patient;

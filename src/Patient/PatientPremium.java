@@ -10,11 +10,11 @@ public class PatientPremium extends Patient {
         super();
     }
     public PatientPremium(String fullname, Date birthday, String gender, String country, String phone,
-                            String id, boolean isTest, Relatives relatives) {
-        super(fullname, birthday, gender, country, phone, id, isTest, "Premium", relatives);                
+                            boolean isTest, Relatives relatives) {
+        super(fullname, birthday, gender, country, phone, isTest, "Premium", relatives);
     }
     public PatientPremium(PatientPremium patientPremium) {
-        super(patientPremium.fullname, patientPremium.birthday, patientPremium.gender, patientPremium.country, patientPremium.phone, patientPremium.id, patientPremium.isTest, "Premium", patientPremium.relatives);
+        super(patientPremium.getFullname(), patientPremium.getBirthday(), patientPremium.getGender(), patientPremium.getCountry(), patientPremium.getPhone(), patientPremium.getId(), patientPremium.getTest(), patientPremium.getType(), patientPremium.getRelatives());
     }
 
     //Methods
