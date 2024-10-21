@@ -14,38 +14,38 @@ public class Patient extends Person {
     /* CONSTRUCTORS */ 
     public Patient(){
         super();
-        setID();                
         this.isTest = false;
         this.type = "Normal";
+        setID();                
         // Relative
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone){
         super(fullname, birthday,gender, country, phone);
-        setID();
         this.isTest = false;
         this.type = "Normal";
+        setID();
         // Relative
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone, 
                    boolean test, String type){
         super(fullname, birthday,gender, country, phone);
-        setID();
         this.isTest = test;
         this.type = type;
+        setID();
         // Relative
     }
     public Patient(Person person){
         super(person);
-        setID();    
         this.isTest = false;
         this.type = "Normal";
+        setID();    
         // Relative
     }
     public Patient(Person person, boolean test, String type){
         super(person);
-        setID();
         this.isTest = test;
         this.type = type;
+        setID();
     }
 
     /* SETTER - GETTER */ 
