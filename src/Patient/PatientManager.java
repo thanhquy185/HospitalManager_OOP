@@ -65,6 +65,7 @@ public class PatientManager {
     // }
     void add(Patient obj){
         list.add(obj);
+        numbersOfElement++;
     }
     // Update information of Patient which exist (has ID)
     void update(Patient obj){
@@ -72,9 +73,11 @@ public class PatientManager {
     }
     void removeOne(Patient obj){
         list.remove(findIndexOfObject(obj));
+        numbersOfElement--;
     }
     void removeAll(){
         list.clear();
+        numbersOfElement = 0;
     }
     Patient find(Patient obj){
         return list.get(findIndexOfObject(obj));
@@ -96,6 +99,8 @@ public class PatientManager {
         PatientManager.getInstance().createObject(patientOne);
         PatientManager.getInstance().createObject(patientTwo);
 
+        PatientManager.getInstance().removeOne(patientOne);
+        System.out.println(PatientManager.getInstance().getList().get(0).getFullname());
         System.out.println(patientTwo.getID());    
     }
 }
