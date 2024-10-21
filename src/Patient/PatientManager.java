@@ -100,7 +100,7 @@ public class PatientManager {
         PatientManager.getInstance().createObject(patientTwo);
 
         PatientManager.getInstance().removeOne(patientOne);
-        System.out.println(PatientManager.getInstance().getList().get(0).getFullname());
+        System.out.println(PatientManager.getList().get(0).getFullname());
         System.out.println(patientTwo.getID());    
     }
 }
