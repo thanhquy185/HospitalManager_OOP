@@ -88,7 +88,7 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 	}
 	@Override
 	public ArrayList<MedicalRecord> findAllByCondition(String medicalRecord) {
-		return new ArrayList<MedicalRecord>()
+		return new ArrayList<MedicalRecord>();
 	}
 	@Override
 	public void sort() {

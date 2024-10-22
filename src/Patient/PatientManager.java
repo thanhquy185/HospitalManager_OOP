@@ -69,11 +69,11 @@ public class PatientManager implements CRUD<Patient> {
         }
         return -1;
     }
-    public Patient find(String id){
+    public Patient findOneById(String id){
         return PatientManager.list.get(findIndexById(id));
     }
     public Patient findOneByCondition(String condition){
-        return new Patient();   
+        return new Patient();  
     }
     public ArrayList<Patient> findAllByCondition(String condition){
         return new ArrayList<Patient>();
