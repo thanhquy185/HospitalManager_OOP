@@ -7,11 +7,13 @@ public interface CRUD<T> {
 
     void update(T obj);
 
-    void removeOne(T obj);
+    void removeOne(String id);
 
     void removeAll();
 
-    T find(T obj);
+    int findIndexById(String id);
+
+    T find(String id);
 
     T findOneByCondition(String condition);
 
