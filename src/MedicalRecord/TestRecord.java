@@ -11,21 +11,21 @@ public class TestRecord extends MedicalRecord {
     // Constructor
 	public TestRecord() {
 		super();
-		nurse = new Nurse();
-		reason = "";
-		diagnose = "";
+		this.nurse = new Nurse();
+		this.reason = "";
+		this.diagnose = "";
 	}
-	public TestRecord(String id, Date inputDay, Date outputDay, Nurse nurse, String reason, String diagnose) {
-		super(id, inputDay, outputDay);
+	public TestRecord(Date inputDay, Date outputDay, Nurse nurse, String reason, String diagnose) {
+		super(inputDay, outputDay);
 		this.nurse = nurse;
 		this.reason = reason;
 		this.diagnose = diagnose;
 	}
 	public TestRecord(TestRecord testRecord) {
-		super(testRecord.id, testRecord.inputDay, testRecord.outputDay);
-		this.nurse = new Nurse(testRecord.nurse);
-		this.reason = testRecord.reason;
-		this.diagnose = testRecord.diagnose;
+		super(testRecord.getInputDay(), testRecord.getOutputDay());
+		this.nurse = new Nurse(testRecord.getNurse());
+		this.reason = testRecord.getReason();
+		this.diagnose = testRecord.getDiagnose();
 	}
 
     // Setter - Getter
@@ -39,13 +39,13 @@ public class TestRecord extends MedicalRecord {
 		this.diagnose = diagnose;
 	}
 	public Nurse getNurse() {
-		return nurse;
+		return this.nurse;
 	}
 	public String getReason() {
-		return reason;
+		return this.reason;
 	}
 	public String getDiagnose() {
-		return diagnose;
+		return this.diagnose;
 	}
 
 	// Methods

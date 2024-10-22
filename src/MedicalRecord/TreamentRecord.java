@@ -15,24 +15,24 @@ public class TreamentRecord extends MedicalRecord {
     // Constructor
 	public TreamentRecord() {
 		super();
-		patient = new Patient();
-		doctor = new Doctor();
-		nurse = new Nurse();
-		sick = new Sick();
+		this.patient = new Patient();
+		this.doctor = new Doctor();
+		this.nurse = new Nurse();
+		this.sick = new Sick();
 	}
-	public TreamentRecord(String id, Date inputDay, Date outputDay, Patient patient, Doctor doctor, Nurse nurse, Sick sick) {
-		super(id, inputDay, outputDay);
+	public TreamentRecord(Date inputDay, Date outputDay, Patient patient, Doctor doctor, Nurse nurse, Sick sick) {
+		super(inputDay, outputDay);
 		this.patient = patient;
 		this.doctor = doctor;
 		this.nurse = nurse;
 		this.sick = sick;
 	}
 	public TreamentRecord(TreamentRecord treamentRecord) {
-		super(treamentRecord.id, treamentRecord.inputDay, treamentRecord.outputDay);
-		patient = new Patient(treamentRecord.patient);
-		doctor = new Doctor(treamentRecord.doctor);
-		nurse = new Nurse(treamentRecord.nurse);
-		sick = new Sick(treamentRecord.sick);
+		super(treamentRecord.getInputDay(), treamentRecord.getOutputDay());
+		patient = new Patient(treamentRecord.getPatient());
+		doctor = new Doctor(treamentRecord.getDoctor());
+		nurse = new Nurse(treamentRecord.getNurse());
+		sick = new Sick(treamentRecord.getSick());
 	}
 
     // Setter - Getter
@@ -49,16 +49,16 @@ public class TreamentRecord extends MedicalRecord {
 		this.sick = sick;
 	}
 	public Patient getPatient() {
-		return patient;
+		return this.patient;
 	}
 	public Doctor getDoctor() {
-		return doctor;
+		return this.doctor;
 	}
 	public Nurse getNurse() {
-		return nurse;
+		return this.nurse;
 	}
 	public Sick getSick() {
-		return sick;
+		return this.sick;
 	}
 
 	//Methods

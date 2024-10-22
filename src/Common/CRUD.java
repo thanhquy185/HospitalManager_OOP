@@ -13,7 +13,7 @@ public interface CRUD<T> {
 
     int findIndexById(String id);
 
-    T find(String id);
+    T findOneById(String id);
 
     T findOneByCondition(String condition);
 

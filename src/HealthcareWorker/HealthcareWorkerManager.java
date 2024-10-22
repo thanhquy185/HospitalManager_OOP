@@ -75,7 +75,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         return -1;
     }
     @Override
-    public HealthcareWorker find(String id){
+    public HealthcareWorker findOneById(String id){
         return HealthcareWorkerManager.list.get(findIndexById(id));
     }
     @Override

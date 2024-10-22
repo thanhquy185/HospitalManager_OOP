@@ -7,27 +7,37 @@ public class MedicalRecord {
 	protected String id;
 	protected Date inputDay;
 	protected Date outputDay;
+	private static int countMedicalRecordCreated;
+
+	// Static
+	static {
+		MedicalRecord.countMedicalRecordCreated = 0;
+	}
 
     // Constructor
 	public MedicalRecord() {
-		id = "";
-		inputDay = new Date();
-		outputDay = new Date();
+		this.id = "?";
+		this.inputDay = new Date();
+		this.outputDay = new Date();
 	}
-	public MedicalRecord(String id, Date inputDay, Date outputDay) {
-		this.id = id;
+	public MedicalRecord(Date inputDay, Date outputDay) {
+		MedicalRecord.countMedicalRecordCreated++;
+		this.id = getFormatId();
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
 	}
 	public MedicalRecord(MedicalRecord medicalRecord) {
-		this.id = medicalRecord.id;
-		this.inputDay = medicalRecord.inputDay;
-		this.outputDay = medicalRecord.outputDay;
+		MedicalRecord.countMedicalRecordCreated++;
+		this.id = medicalRecord.getId();
+		this.inputDay = medicalRecord.getInputDay();
+		this.outputDay = medicalRecord.getOutputDay();
 	}
 
 	// Setter-Getter
 	public void setId(String id) {
-		this.id = id;
+		if(isFormatId(id))
+			this.id = id;
+		this.id = "?";
 	}
 	public void setInputDay(Date inputDay) {
 		this.inputDay = inputDay;
@@ -36,14 +46,34 @@ public class MedicalRecord {
 		this.outputDay = outputDay;
 	}
 	public String getId() {
-		return id;
+		return this.id;
 	}
 	public Date getInputDay() {
-		return inputDay;
+		return this.inputDay;
 	}
 	public Date getOutputDay() {
-		return outputDay;
+		return this.outputDay;
 	}
 
 	// Methods
+	private boolean isFormatId(String id) {
+        // Nếu không phải là chuỗi 8 ký tự
+        if(id.length() != 8)
+            return false;
+        // Kiểm tra tiền tối
+        String prefix = id.substring(0, 3);
+        if(!prefix.equals("MER")) return false;
+        // Kiểm tra hậu tố
+        String postfix = id.substring(3);
+        for(int i = 0; i < postfix.length(); i++) {
+            // Chuyển ký tự về mã số Unicode
+            int charUnicode = (int) postfix.charAt(i);
+            if(charUnicode < 48 || charUnicode > 58) return false;
+        }
+        return true;
+    }
+    private String getFormatId() {
+        String postfix = String.format("%05d", MedicalRecord.countMedicalRecordCreated);
+        return "MER" + postfix;
+    }
 }
