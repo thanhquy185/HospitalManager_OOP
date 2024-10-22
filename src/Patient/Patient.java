@@ -5,18 +5,19 @@ import Common.Date;
 
 public class Patient extends Person {
     // Properties
-    private String id;
-    private boolean isTest;
-    private String type;
-    private Relatives relatives;
-    private static int countPersonCreated;
+    protected String id;
+    protected boolean isTest;
+    protected String type;
+    protected Relatives relatives;
+    protected static int countPersonCreated;
 
+    // Static
     static {
         Patient.countPersonCreated = 0;
     }
 
     // Constructors
-    public Patient(){
+    public Patient() {
         super();
         this.id = "?";
         this.isTest = false;
@@ -36,7 +37,7 @@ public class Patient extends Person {
         Patient.countPersonCreated++;
         this.isTest = test;
         this.type = type;
-        this.relatives = relatives;
+        this.relatives = new Relatives(relatives);
         this.id = getFormatId();
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone, 
@@ -45,14 +46,14 @@ public class Patient extends Person {
         this.id = id;
         this.isTest = test;
         this.type = type;
-        this.relatives = relatives;
+        this.relatives = new Relatives(relatives);
     }
     public Patient(Patient patient) {
         super(patient.getFullname(), patient.getBirthday(), patient.getGender(), patient.getCountry(), patient.getPhone());
         this.id = patient.getId();
         this.isTest = patient.getTest();
         this.type = patient.getType();
-        this.relatives = patient.getRelatives();
+        this.relatives = new Relatives(patient.getRelatives());
     }
     // public Patient(Person person){
     //     super(person);
@@ -76,11 +77,12 @@ public class Patient extends Person {
     //     this.relatives = relatives;
     // }
 
-
     // Setter - Getter
     public void setId(String id){
         // Cần một hàm kiểm tra id có hợp lệ hay không (này để Quy làm)
-        this.id = id;
+        if(isFormatId(id))
+            this.id = id;
+        this.id = "?";
     }
     public void setType(String type){
         this.type = type;
@@ -105,6 +107,24 @@ public class Patient extends Person {
     }
 
     // Methods
+    private boolean isFormatId(String id) {
+        // Nếu không phải là chuỗi 9 ký tự
+        if(id.length() != 9)
+            return false;
+        // Kiểm tra tiền tối
+        String prefix = id.substring(0, 4);
+        if(!prefix.equals("NPAT") && !prefix.equals("PPAT"))
+            return false;
+        // Kiểm tra hậu tố
+        String postfix = id.substring(4);
+        for(int i = 0; i < postfix.length(); i++) {
+            // Chuyển ký tự về mã số Unicode
+            int charUnicode = (int) postfix.charAt(i);
+            if(charUnicode < 48 || charUnicode > 58)
+                return false;
+        }
+        return true;
+    }
     private String getFormatId() {
         // Vì patientCounter: static field -> truy cập thông qua Patient class.
         // Format patientCounter (5 số): 00001
@@ -114,14 +134,4 @@ public class Patient extends Person {
         }
         return "NPAT" + postfix;
     }
-
-    public static void main(String[] args) {
-        Date date = new Date(1, 8, 1997);
-        Relatives relatives = new Relatives("huy", "Anh em");
-        Patient patient = new Patient("quy", date, "Nam", "Viet Nam", "0123456789", false, "Thường", relatives);
-        PatientManager.getInstance().add(patient);
-        System.out.println(patient.getId());
-    }
-
 }
-

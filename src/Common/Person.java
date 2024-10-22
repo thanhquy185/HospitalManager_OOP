@@ -10,11 +10,11 @@ public abstract class Person {
 	
 	//Constructors
 	public Person() {
-		fullname = "anonymous";
-		birthday = new Date();
-		gender = "???";
-		country = "???";
-		phone = "???";
+		this.fullname = "?";
+		this.birthday = new Date();
+		this.gender = "?";
+		this.country = "?";
+		this.phone = "?";
 	}
 	public Person(String fullname, Date birthday, String gender, String country, String phone) {
 		this.fullname = fullname;
@@ -48,19 +48,19 @@ public abstract class Person {
 		this.phone = phone;
 	}
 	public String getFullname() {
-		return fullname;
+		return this.fullname;
 	}
 	public Date getBirthday() {
-		return birthday;
+		return this.birthday;
 	}
 	public String getGender() {
-		return gender;
+		return this.gender;
 	}
 	public String getCountry() {
-		return country;
+		return this.country;
 	}
 	public String getPhone() {
-		return phone;
+		return this.phone;
 	}
 	
 	//Methods (Còn nhiều hàm nữa mà tôi chưa viết)
