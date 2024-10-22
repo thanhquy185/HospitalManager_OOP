@@ -2,41 +2,92 @@ package HealthcareWorker;
 
 import java.util.ArrayList;
 
-public class HealthcareWorkerManager {
+import Common.Date;
+import Common.CRUD;
+
+// import Common.Date; 
+public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Properties
     private static HealthcareWorkerManager instance;
     private static ArrayList<HealthcareWorker> list;
-    private static int numbersOfList;
+    private static int numbers;
 
     // Constructors
     public HealthcareWorkerManager() {
-        list = new ArrayList<>();
-        numbersOfList = 0;
+        HealthcareWorkerManager.list = new ArrayList<>();
+        HealthcareWorkerManager.numbers = 0;
     }
-    public HealthcareWorkerManager(ArrayList<HealthcareWorker> list, int numbersOfList) {
+    public HealthcareWorkerManager(ArrayList<HealthcareWorker> list, int numbers) {
         HealthcareWorkerManager.list = list;
-        HealthcareWorkerManager.numbersOfList = numbersOfList;
+        HealthcareWorkerManager.numbers = numbers;
     }
 
     // Setter - Getter
     public static void setList(ArrayList<HealthcareWorker> list) {
         HealthcareWorkerManager.list = list;
     }
-    public static void setNumbersOfList(int numbersOfList) {
-        HealthcareWorkerManager.numbersOfList = numbersOfList;
+    public static void setNumbers(int numbers) {
+        HealthcareWorkerManager.numbers = numbers;
     }
     public static HealthcareWorkerManager getInstance() {
-        if(instance == null) {
-            instance = new HealthcareWorkerManager();
+        if(HealthcareWorkerManager.instance == null) {
+            HealthcareWorkerManager.instance = new HealthcareWorkerManager();
         }
-        return instance;
+        return HealthcareWorkerManager.instance;
     }
     public static ArrayList<HealthcareWorker> getList() {
-        return list;
+        return HealthcareWorkerManager.list;
     }
-    public static int getNumbersOfList() {
-        return numbersOfList;
+    public static int getNumbers() {
+        return HealthcareWorkerManager.numbers;
     }
-    
+
     // Methods
+    // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
+    @Override
+    public void add(HealthcareWorker healthcareWorker){
+        HealthcareWorkerManager.list.add(healthcareWorker);
+        HealthcareWorkerManager.numbers++;
+    }
+    // -- Cập nhật thông tin của đối tượng thông qua id của đối tượng đó
+    @Override
+    public void update(HealthcareWorker healthcareWorker){
+        HealthcareWorkerManager.list.set(findIndexById(healthcareWorker.getId()), healthcareWorker);
+    }
+    @Override
+    public void removeOne(String id){
+        HealthcareWorkerManager.list.remove(findIndexById(id));
+        HealthcareWorkerManager.numbers--;
+    }
+    @Override
+    public void removeAll(){
+        HealthcareWorkerManager.list.clear();
+        HealthcareWorkerManager.numbers = 0;
+    }
+    @Override
+    // -- Tìm vị trí của đối tượng trong lớp quản lý
+    public int findIndexById(String idSearch){
+        for(int i = 0; i < HealthcareWorkerManager.numbers; i++){
+            if(HealthcareWorkerManager.list.get(i).getId().equals(idSearch)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    @Override
+    public HealthcareWorker find(String id){
+        return HealthcareWorkerManager.list.get(findIndexById(id));
+    }
+    @Override
+    public HealthcareWorker findOneByCondition(String condition){
+        return new HealthcareWorker();
+    }
+    @Override
+    public ArrayList<HealthcareWorker> findAllByCondition(String condition){
+        return new ArrayList<HealthcareWorker>();
+    }
+    @Override
+    public void sort(){
+        HealthcareWorkerManager.list.sort(null);
+    }
 }
