@@ -64,8 +64,8 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         HealthcareWorkerManager.list.clear();
         HealthcareWorkerManager.numbers = 0;
     }
-    @Override
     // -- Tìm vị trí của đối tượng trong lớp quản lý
+    @Override
     public int findIndexById(String idSearch){
         for(int i = 0; i < HealthcareWorkerManager.numbers; i++){
             if(HealthcareWorkerManager.list.get(i).getId().equals(idSearch)) {
