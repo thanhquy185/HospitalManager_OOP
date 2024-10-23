@@ -2,16 +2,15 @@ package Common;
 
 public class Date {
 	//Properties
-	private int day;
-	private int month;
-	private int year;
-	
-	
+	private Integer day;
+	private Integer month;
+	private Integer year;
+
 	//Constructors
 	public Date() {
-		day = 1;
-		month = 1;
-		year = 1970;
+		day = null;
+		month = null;
+		year = null;
 	}
 	public Date(int day, int month, int year) {
 		if(!isDate(day, month, year)) {
@@ -55,15 +54,15 @@ public class Date {
 		this.year = year;
 	}
 	public int getDay() {
-		return day;
+		return this.day;
 	}
 	public int getMonth() {
-		return month;
+		return this.month;
 	}
 	public int getYear() {
-		return year;
+		return this.year;
 	}
-	
+
 	//Methods
 	private boolean isDay(int day) {
 		if(day <= 0 || day >= 32)
@@ -88,8 +87,9 @@ public class Date {
 		return true;
 	}
 	public String getDate() {
-		if(!isDate(this.day, this.month, this.year)) 
-			return "Ngày sinh không hợp lệ";
+		if(this.day == null || this.month == null || this.year == null
+			|| !isDate(this.day, this.month, this.year))
+			return "dd/mm/yyyy";
 		String day = String.valueOf(this.day);
 		if(this.day<=9) day = "0" + day;
 		String month = String.valueOf(this.month);
@@ -97,4 +97,10 @@ public class Date {
 		//Lấy được định dạng "dd/mm/yyyy"
 		return day + "/" + month + "/" + String.valueOf(this.year);
 	}
+
+
+	// public static void main(String[] args) {
+	// 	Date date = new Date(1, 8, 1998);
+	// 	System.out.println(date.getDate());
+	// }
 }

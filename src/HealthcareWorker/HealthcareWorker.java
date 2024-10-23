@@ -4,13 +4,13 @@ import Common.Date;
 import Common.Person;
 
 // HealthcareWorker class
-public class HealthcareWorker extends Person {
+public abstract class HealthcareWorker extends Person {
     //Properties
     protected String id;
     protected String department;
     protected String position;
-    protected int yearsOfExperience;
-    protected double salary;
+    protected Integer yearsOfExperience;
+    protected Double salary;
     private static int countHealthcareWorkerCreated;
 
     // Static
@@ -21,6 +21,11 @@ public class HealthcareWorker extends Person {
     // Constructor
     public HealthcareWorker() {
         super();
+        this.id = null;
+        this.department = null;
+        this.position = null;
+        this.yearsOfExperience = null;
+        this.salary = null;
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String country, String phone,
                             String id, String department, String position, int yearsOfExperience, double salary) {

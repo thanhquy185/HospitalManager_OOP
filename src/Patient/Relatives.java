@@ -8,19 +8,20 @@ class Relatives {
 
     // Constructors
     public Relatives() {
-        this.fullname = "?";
-        // this.patient = new Patient();
-        this.relationship = "?";
+        this.fullname = null;
+        this.patient = null;
+        this.relationship = null;
     }
     public Relatives(String fullname, String relationship) {
         this.fullname = fullname;
+        this.patient = null;
         this.relationship = relationship;
     }
-    // public Relatives(String fullname, Patient patient, String relationship) {
-    //     this.fullname = fullname;
-    //     this.patient = patient;
-    //     this.relationship = relationship;
-    // }
+    public Relatives(String fullname, Patient patient, String relationship) {
+        this.fullname = fullname;
+        this.patient = patient;
+        this.relationship = relationship;
+    }
     public Relatives(Relatives relatives) {
         this.fullname = relatives.fullname;
         this.patient = relatives.patient;

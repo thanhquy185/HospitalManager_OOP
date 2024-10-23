@@ -3,7 +3,7 @@ package Patient;
 import Common.Person;
 import Common.Date;
 
-public class Patient extends Person {
+public abstract class Patient extends Person {
     // Properties
     protected String id;
     protected Boolean isTest;
@@ -20,38 +20,38 @@ public class Patient extends Person {
     public Patient() {
         super();
         this.id = null;
-        this.isTest = false;
-        this.type = "Normal";
+        this.isTest = null;
+        this.type = null;
         this.relatives = null;
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone){
         super(fullname, birthday,gender, country, phone);
         this.id = null;
-        this.isTest = false;
-        this.type = "Normal";
-        this.relatives = new Relatives();
+        this.isTest = null;
+        this.type = null;
+        this.relatives = null;
     }
-    public Patient(String fullname, Date birthday, String gender, String country, String phone, 
-                   boolean test, String type, Relatives relatives){
+    public Patient(String fullname, Date birthday, String gender,
+        String country, String phone, boolean isTest, String type){
         super(fullname, birthday,gender, country, phone);
         Patient.countPersonCreated++;
-        this.isTest = test;
-        this.type = type;
-        this.relatives = new Relatives(relatives);
         this.id = getFormatId();
+        this.isTest = isTest;
+        this.type = type;
+        this.relatives = null;
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone, 
-                   String id, boolean test, String type, Relatives relatives){
+                   String id, boolean isTest, String type, Relatives relatives){
         super(fullname, birthday, gender, country, phone);
         this.id = id;
-        this.isTest = test;
+        this.isTest = isTest;
         this.type = type;
         this.relatives = new Relatives(relatives);
     }
     public Patient(Patient patient) {
         super(patient.getFullname(), patient.getBirthday(), patient.getGender(), patient.getCountry(), patient.getPhone());
         this.id = patient.getId();
-        this.isTest = patient.getTest();
+        this.isTest = patient.getIsTest();
         this.type = patient.getType();
         this.relatives = new Relatives(patient.getRelatives());
     }
@@ -87,7 +87,7 @@ public class Patient extends Person {
     public void setType(String type){
         this.type = type;
     }
-    public void setTest(boolean test){
+    public void setIsTest(boolean test){
         this.isTest = test;
     }
     public void setRelatives(Relatives relatives) {
@@ -96,7 +96,7 @@ public class Patient extends Person {
     public String getId(){
         return this.id;
     }
-    public boolean getTest(){
+    public boolean getIsTest(){
         return this.isTest;
     }
     public String getType(){

@@ -1,9 +1,8 @@
 package MedicalRecord;
 
 import Common.Date;
-import Patient.Patient;
-import HealthcareWorker.Doctor;
-import HealthcareWorker.Nurse;
+import Patient.*;
+import HealthcareWorker.*;
 
 public class TreamentRecord extends MedicalRecord {
     //	Properties
@@ -15,10 +14,10 @@ public class TreamentRecord extends MedicalRecord {
     // Constructor
 	public TreamentRecord() {
 		super();
-		this.patient = new Patient();
-		this.doctor = new Doctor();
-		this.nurse = new Nurse();
-		this.sick = new Sick();
+		this.patient = null;
+		this.doctor = null;
+		this.nurse = null;
+		this.sick = null;
 	}
 	public TreamentRecord(Date inputDay, Date outputDay, Patient patient, Doctor doctor, Nurse nurse, Sick sick) {
 		super(inputDay, outputDay);
@@ -29,7 +28,19 @@ public class TreamentRecord extends MedicalRecord {
 	}
 	public TreamentRecord(TreamentRecord treamentRecord) {
 		super(treamentRecord.getInputDay(), treamentRecord.getOutputDay());
-		patient = new Patient(treamentRecord.getPatient());
+		if(treamentRecord.getPatient().getType() == "Thường") {
+			this.patient = new NormalPatient(treamentRecord.getPatient().getFullname(), 
+				treamentRecord.getPatient().getBirthday(), treamentRecord.getPatient().getGender(), 
+				treamentRecord.getPatient().getCountry(), treamentRecord.getPatient().getPhone(), 
+				treamentRecord.getPatient().getId(), treamentRecord.getPatient().getIsTest(),
+				treamentRecord.getPatient().getType(), treamentRecord.getPatient().getRelatives());
+		} else {
+			this.patient = new PremiumPatient(treamentRecord.getPatient().getFullname(),
+				treamentRecord.getPatient().getBirthday(), treamentRecord.getPatient().getGender(),
+				treamentRecord.getPatient().getCountry(), treamentRecord.getPatient().getPhone(),
+				treamentRecord.getPatient().getId(), treamentRecord.getPatient().getIsTest(),
+				treamentRecord.getPatient().getType(), treamentRecord.getPatient().getRelatives());
+		}
 		doctor = new Doctor(treamentRecord.getDoctor());
 		nurse = new Nurse(treamentRecord.getNurse());
 		sick = new Sick(treamentRecord.getSick());

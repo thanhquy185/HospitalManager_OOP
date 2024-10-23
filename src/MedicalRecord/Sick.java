@@ -8,9 +8,9 @@ class Sick {
 
     // Constructor
 	public Sick() {
-		id = "";
-		name = "";
-		level = "";
+		this.id = null;
+		this.name = null;
+		this.level = null;
 	}
 	public Sick(String id, String name, String level) {
 		this.id = id;
@@ -34,13 +34,13 @@ class Sick {
 		this.level = level;
 	}
 	public String getId() {
-		return id;
+		return this.id;
 	}
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	public String getLevel() {
-		return level;
+		return this.level;
 	}
 
 	// Methods

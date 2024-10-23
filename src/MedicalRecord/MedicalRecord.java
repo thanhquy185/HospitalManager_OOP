@@ -16,7 +16,7 @@ public class MedicalRecord {
 
     // Constructor
 	public MedicalRecord() {
-		this.id = "?";
+		this.id = null;
 		this.inputDay = new Date();
 		this.outputDay = new Date();
 	}

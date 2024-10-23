@@ -80,11 +80,11 @@ public class PatientManager implements CRUD<Patient> {
     }
     @Override
     public Patient findOneByCondition(String condition){
-        return new Patient();
+        return null;
     }
     @Override
     public ArrayList<Patient> findAllByCondition(String condition){
-        return new ArrayList<Patient>();
+        return null;
     }
     @Override
     public void sort(){

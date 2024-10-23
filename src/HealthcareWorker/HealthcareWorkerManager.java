@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Common.Date;
 import Common.CRUD;
 
-// import Common.Date; 
+// import Common.Date;
 public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Properties
     private static HealthcareWorkerManager instance;
@@ -80,11 +80,11 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     }
     @Override
     public HealthcareWorker findOneByCondition(String condition){
-        return new HealthcareWorker();
+        return null;
     }
     @Override
     public ArrayList<HealthcareWorker> findAllByCondition(String condition){
-        return new ArrayList<HealthcareWorker>();
+        return null;
     }
     @Override
     public void sort(){
