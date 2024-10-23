@@ -56,22 +56,23 @@ public class MedicalRecord {
 	}
 
 	// Methods
+	 // - Kiểm tra có đúng định dạng MERxxxxx
 	private boolean isFormatId(String id) {
-        // Nếu không phải là chuỗi 8 ký tự
+        // -- Nếu không phải là chuỗi 8 ký tự
         if(id.length() != 8)
             return false;
-        // Kiểm tra tiền tối
+        // -- Kiểm tra tiền tối
         String prefix = id.substring(0, 3);
         if(!prefix.equals("MER")) return false;
-        // Kiểm tra hậu tố
+        // -- Kiểm tra hậu tố
         String postfix = id.substring(3);
         for(int i = 0; i < postfix.length(); i++) {
-            // Chuyển ký tự về mã số Unicode
             int charUnicode = (int) postfix.charAt(i);
-            if(charUnicode < 48 || charUnicode > 58) return false;
+            if(charUnicode < 48 || charUnicode > 57) return false;
         }
         return true;
     }
+	 // - Lấy id có đúng định dạng MERxxxxx
     private String getFormatId() {
         String postfix = String.format("%05d", MedicalRecord.countMedicalRecordCreated);
         return "MER" + postfix;

@@ -45,11 +45,12 @@ public class PatientManager implements CRUD<Patient> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+    public void show() {}
+    @Override
     public void add(Patient patient){
         PatientManager.list.add(patient);
         PatientManager.numbers++;
     }
-    // -- Cập nhật thông tin của đối tượng thông qua id của đối tượng đó
     @Override
     public void update(Patient patient){
         PatientManager.list.set(findIndexById(patient.getId()), patient);
@@ -64,7 +65,6 @@ public class PatientManager implements CRUD<Patient> {
         PatientManager.list.clear();
         PatientManager.numbers = 0;
     }
-    // -- Tìm vị trí của đối tượng trong lớp quản lý
     @Override
     public int findIndexById(String idSearch){
         for(int i = 0; i < PatientManager.numbers; i++){
@@ -80,7 +80,7 @@ public class PatientManager implements CRUD<Patient> {
     }
     @Override
     public Patient findOneByCondition(String condition){
-        return new Patient();  
+        return new Patient();
     }
     @Override
     public ArrayList<Patient> findAllByCondition(String condition){

@@ -45,11 +45,12 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+    public void show() {}
+    @Override
     public void add(HealthcareWorker healthcareWorker){
         HealthcareWorkerManager.list.add(healthcareWorker);
         HealthcareWorkerManager.numbers++;
     }
-    // -- Cập nhật thông tin của đối tượng thông qua id của đối tượng đó
     @Override
     public void update(HealthcareWorker healthcareWorker){
         HealthcareWorkerManager.list.set(findIndexById(healthcareWorker.getId()), healthcareWorker);
@@ -64,7 +65,6 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         HealthcareWorkerManager.list.clear();
         HealthcareWorkerManager.numbers = 0;
     }
-    // -- Tìm vị trí của đối tượng trong lớp quản lý
     @Override
     public int findIndexById(String idSearch){
         for(int i = 0; i < HealthcareWorkerManager.numbers; i++){

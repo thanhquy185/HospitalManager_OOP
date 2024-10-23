@@ -6,10 +6,10 @@ import Common.Date;
 public class Patient extends Person {
     // Properties
     protected String id;
-    protected boolean isTest;
+    protected Boolean isTest;
     protected String type;
     protected Relatives relatives;
-    protected static int countPersonCreated;
+    protected static Integer countPersonCreated;
 
     // Static
     static {
@@ -19,14 +19,14 @@ public class Patient extends Person {
     // Constructors
     public Patient() {
         super();
-        this.id = "?";
+        this.id = null;
         this.isTest = false;
         this.type = "Normal";
-        this.relatives = new Relatives();
+        this.relatives = null;
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone){
         super(fullname, birthday,gender, country, phone);
-        this.id = "?";
+        this.id = null;
         this.isTest = false;
         this.type = "Normal";
         this.relatives = new Relatives();
@@ -107,27 +107,27 @@ public class Patient extends Person {
     }
 
     // Methods
+    // - Kiểm tra có đúng định dạng (NPAT/PPAT)xxxxx
     private boolean isFormatId(String id) {
-        // Nếu không phải là chuỗi 9 ký tự
+        // -- Nếu không phải là chuỗi 9 ký tự
         if(id.length() != 9)
             return false;
-        // Kiểm tra tiền tối
+        // -- Kiểm tra tiền tối
         String prefix = id.substring(0, 4);
         if(!prefix.equals("NPAT") && !prefix.equals("PPAT"))
             return false;
-        // Kiểm tra hậu tố
+        // -- Kiểm tra hậu tố
         String postfix = id.substring(4);
         for(int i = 0; i < postfix.length(); i++) {
-            // Chuyển ký tự về mã số Unicode
             int charUnicode = (int) postfix.charAt(i);
-            if(charUnicode < 48 || charUnicode > 58)
+            if(charUnicode < 48 || charUnicode > 57)
                 return false;
         }
         return true;
     }
+    // - Lấy id đúng định dạng (NPAT/PPAT)xxxxx
     private String getFormatId() {
-        // Vì patientCounter: static field -> truy cập thông qua Patient class.
-        // Format patientCounter (5 số): 00001
+        // -- 
         String postfix = String.format("%05d", Patient.countPersonCreated);
         if(this.type.equals(("Cao cấp"))){
             return "PPAT" + postfix;

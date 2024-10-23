@@ -41,6 +41,9 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     }
 
     // Methods
+    // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
+    @Override
+    public void show() {}
     @Override
 	public void add(MedicalRecord medicalRecord) {
 		MedicalRecordManager.list.add(medicalRecord);
