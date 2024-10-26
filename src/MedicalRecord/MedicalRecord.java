@@ -7,6 +7,9 @@ public abstract class MedicalRecord {
 	protected String id;
 	protected Date inputDay;
 	protected Date outputDay;
+	protected String idPatient;
+	protected String idDoctor;
+	protected String idNurse;
 	protected String idSick;
 	protected String levelSick;
 	protected Boolean isTest;
@@ -24,25 +27,35 @@ public abstract class MedicalRecord {
 		this.inputDay = new Date();
 		this.outputDay = new Date();
 		this.isTest = null;
+		this.idPatient = null;
+		this.idDoctor = null;
+		this.idNurse = null;
 		this.idSick = null;
 		this.levelSick = null;
 		this.price = null;
 	}
-	public MedicalRecord(Date inputDay, Date outputDay,
-			String idSick, String levelSick, boolean isTest) {
+	public MedicalRecord(Date inputDay, Date outputDay, String idPatient,
+			String idDoctor, String idNurse, String idSick, String levelSick, boolean isTest) {
 		MedicalRecord.countMedicalRecordCreated++;
 		this.id = getFormatId();
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
+		this.idPatient = idPatient;
+		this.idDoctor = idDoctor;
+		this.idNurse = idNurse;
 		this.idSick = idSick;
 		this.levelSick = levelSick;
 		this.isTest = isTest;
 	}
 	public MedicalRecord(String id, Date inputDay, Date outputDay,
-			String idSick, String levelSick, boolean isTest, double price) {
+			String idPatient, String idDoctor, String idNurse, String idSick, 
+			String levelSick, boolean isTest, double price) {
 		this.id = id;
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
+		this.idDoctor = idDoctor;
+		this.idNurse = idNurse;
+		this.idSick = idSick;
 		this.idSick = idSick;
 		this.levelSick = levelSick;
 		this.isTest = isTest;
@@ -52,6 +65,9 @@ public abstract class MedicalRecord {
 		this.id = medicalRecord.id;
 		this.inputDay = medicalRecord.inputDay;
 		this.outputDay = medicalRecord.outputDay;
+		this.idPatient = medicalRecord.idPatient;
+		this.idDoctor = medicalRecord.idDoctor;
+		this.idNurse = medicalRecord.idNurse;
 		this.idSick = medicalRecord.idSick;
 		this.levelSick = medicalRecord.levelSick;
 		this.isTest = medicalRecord.isTest;
@@ -69,6 +85,15 @@ public abstract class MedicalRecord {
 	}
 	public void setOutputDay(Date outputDay) {
 		this.outputDay = outputDay;
+	}
+	public void setIdPatient(String idPatient) {
+		this.idPatient = idPatient;
+	}
+	public void setIdDoctor(String idDoctor) {
+		this.idDoctor = idDoctor;
+	}
+	public void setIdNurse(String idNurse) {
+		this.idNurse = idNurse;
 	}
 	public void setIdSick(String idSick) {
 		this.idSick = idSick;
@@ -93,6 +118,15 @@ public abstract class MedicalRecord {
 	}
 	public Date getOutputDay() {
 		return this.outputDay;
+	}
+	public String getIdPatient() {
+		return this.idPatient;
+	}
+	public String getIdDoctor() {
+		return this.idDoctor;
+	}
+	public String getIdNurse() {
+		return this.idNurse;
 	}
 	public String getIdSick() {
 		return this.idSick;
