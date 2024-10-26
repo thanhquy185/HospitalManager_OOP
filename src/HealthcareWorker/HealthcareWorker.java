@@ -10,6 +10,7 @@ public abstract class HealthcareWorker extends Person {
     protected String type;
     protected Integer yearsOfExperience;
     protected Double salary;
+    protected Boolean isWorking;
     protected String idDepartment;
     protected Boolean isManagerDepartment;
     private static int countHealthcareWorkerCreated;
@@ -26,28 +27,31 @@ public abstract class HealthcareWorker extends Person {
         this.type = null;
         this.yearsOfExperience = null;
         this.salary = null;
-        this.isManagerDepartment = null;
+        this.isWorking = null;
         this.idDepartment = null;
+        this.isManagerDepartment = null;
     }
-    public HealthcareWorker(String fullname, Date birthday, String gender, String country,
-            String phone, String type, int yearsOfExperience, double salary, String idDepartment) {
+    public HealthcareWorker(String fullname, Date birthday, String gender, String country, String phone,
+            String type, int yearsOfExperience, double salary, boolean isWorking, String idDepartment) {
         super(fullname, birthday, gender, country, phone);
         HealthcareWorker.countHealthcareWorkerCreated++;
         this.type = type;
         this.id = getFormatId();
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
+        this.isWorking = isWorking;
         this.idDepartment = idDepartment;
         this.isManagerDepartment = null;
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String country,
             String phone, String id, String type, int yearsOfExperience, double salary,
-            String idDepartment, boolean isManagerDepartment) {
+            boolean isWorking, String idDepartment, boolean isManagerDepartment) {
         super(fullname, birthday, gender, country, phone);
         this.id = id;
         this.type = type;
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
+        this.isWorking = isWorking;
         this.idDepartment = idDepartment;
         this.isManagerDepartment = isManagerDepartment;
     }
@@ -57,6 +61,7 @@ public abstract class HealthcareWorker extends Person {
         this.type = healthcareWorker.type;
         this.yearsOfExperience = healthcareWorker.yearsOfExperience;
         this.salary = healthcareWorker.salary;
+        this.isWorking = healthcareWorker.isWorking;
         this.idDepartment = healthcareWorker.idDepartment;
         this.isManagerDepartment = healthcareWorker.isManagerDepartment;
     }
@@ -75,6 +80,9 @@ public abstract class HealthcareWorker extends Person {
     }
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+    public void setIsWorking(boolean isWorking) {
+        this.isWorking = isWorking;
     }
     public void setIdDepartment(String idDepartment) {
         this.idDepartment = idDepartment;
@@ -96,6 +104,9 @@ public abstract class HealthcareWorker extends Person {
     }
     public double getSalary() {
         return this.salary;
+    }
+    public boolean getIsWorking() {
+        return this.isWorking;
     }
     public String getIdDepartment() {
         return this.idDepartment;
