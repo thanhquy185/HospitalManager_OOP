@@ -83,8 +83,10 @@ public abstract class HealthcareWorker extends Person {
     public void setIdDepartment(String idDepartment) {
         this.idDepartment = idDepartment;
     }
-    public void setIsManagerDepartment(boolean isManagerDepartment) {
-        this.isManagerDepartment = isManagerDepartment;
+    public void setIsManagerDepartment(Boolean isManagerDepartment) {
+        if(isManagerDepartment == null)
+            this.isManagerDepartment = null;
+        this.isManagerDepartment = (boolean) isManagerDepartment;
     }
     public void setIdMedicalRecord(String idMedicalRecord) {
         this.idMedicalRecord = idMedicalRecord;

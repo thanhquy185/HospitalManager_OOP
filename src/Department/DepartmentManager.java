@@ -57,9 +57,9 @@ public class DepartmentManager implements CRUD<Department> {
             String id = department.getId();
             String name = department.getName();
             String idManager = null;
-            if(department.getIdManager() != null
-                    && !department.getIdManager().equals("null")) {
-                idManager = department.getIdManager();
+            if(department.getIdManager() != null) {
+                if(!department.getIdManager().equals("null"))
+                    idManager = department.getIdManager();
             }
             String nameManager = null;
             if(idManager != null) {

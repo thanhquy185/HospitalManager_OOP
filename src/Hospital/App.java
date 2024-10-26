@@ -546,17 +546,37 @@ public class App {
                                         subChoose3 = sc.nextLine();
                                     }
 
-                                    // Xoá Khoa nếu hợp lệ
-                                    Department departmentRemove = null;
+                                    // Tìm thông tin của Khoa cần xoá
+                                    Department oldDepartment = null;
                                     if(subChoose3.length() == 1) {
-                                        departmentRemove =  DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subChoose3) - 1);
+                                        oldDepartment =  DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subChoose3) - 1);
                                     } else {
-                                        departmentRemove = DepartmentManager.getInstance().findObjectById(subChoose3);
+                                        oldDepartment = DepartmentManager.getInstance().findObjectById(subChoose3);
                                     }
-                                    DepartmentManager.getInstance().removeOne(departmentRemove.getId());
+
+                                    // Tìm những đối tượng có liên quan đến Khoa để xoá sự liên kết
+                                    // - Đối tượng Bệnh
+                                    for(Sick sick : SickManager.getInstance().getList()) {
+                                        if(sick.getIdDepartment() == null) continue;
+                                        if(sick.getIdDepartment().equals(oldDepartment.getId())) {
+                                            sick.setIdDepartment(null);
+                                        }
+                                    }
+                                    // - Đối tượng Nhân viên Y tế
+                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
+                                        if(healthcareWorker.getIdDepartment() == null) continue;
+                                        if(healthcareWorker.getIdDepartment().equals(oldDepartment.getId())) {
+                                            healthcareWorker.setIdDepartment(null);
+                                            healthcareWorker.setIsManagerDepartment(null);
+                                        }
+                                    }
+                                    // - Đối tượng Bệnh án (tôi chưa nghĩ là Khoa sẽ quản lý hay Bệnh viện sẽ quản lý)
+
+                                    // Xoá Khoa đã tìm
+                                    DepartmentManager.getInstance().removeOne(oldDepartment.getId());
 
                                     // Thông báo thông tin của Khoa đã xoá
-                                    System.out.println("! -- Đã xoá một Khoa: " + departmentRemove.getInfo());
+                                    System.out.println("! -- Đã xoá một Khoa: " + oldDepartment.getInfo());
 
                                     // Thông báo hỏi có tiếp tục hay không
                                     System.out.print("Nhập 'YES' để tiếp tục: ");
@@ -573,6 +593,18 @@ public class App {
                                 } else if(subChoose2.equals("6")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Xoá tất cả Khoa");
+
+                                    // Tìm những đối tượng có liên quan đến Khoa để xoá sự liên kết
+                                    // - Đối tượng Bệnh
+                                    for(Sick sick : SickManager.getInstance().getList()) {
+                                        sick.setIdDepartment(null);
+                                    }
+                                    // - Đối tượng Nhân viên Y tế
+                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
+                                        healthcareWorker.setIdDepartment(null);
+                                        healthcareWorker.setIsManagerDepartment(null);
+                                    }
+                                    // - Đối tượng Bệnh án
 
                                     // Xoá tất cả Khoa hiện có
                                     DepartmentManager.getInstance().removeAll();

@@ -26,10 +26,10 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     }
 
     // Setter - Getter
-    public static void setList(ArrayList<HealthcareWorker> list) {
+    public void setList(ArrayList<HealthcareWorker> list) {
         HealthcareWorkerManager.list = list;
     }
-    public static void setNumbers(int numbers) {
+    public void setNumbers(int numbers) {
         HealthcareWorkerManager.numbers = numbers;
     }
     public static HealthcareWorkerManager getInstance() {
@@ -38,10 +38,10 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         }
         return HealthcareWorkerManager.instance;
     }
-    public static ArrayList<HealthcareWorker> getList() {
+    public ArrayList<HealthcareWorker> getList() {
         return HealthcareWorkerManager.list;
     }
-    public static int getNumbers() {
+    public int getNumbers() {
         return HealthcareWorkerManager.numbers;
     }
 

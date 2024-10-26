@@ -26,10 +26,10 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     }
 
     // Setter - Getter
-    public static void setList(ArrayList<MedicalRecord> list) {
+    public void setList(ArrayList<MedicalRecord> list) {
         MedicalRecordManager.list = list;
     }
-    public static void setNumbers(int numbers) {
+    public void setNumbers(int numbers) {
         MedicalRecordManager.numbers = numbers;
     }
     public static MedicalRecordManager getInstance() {
@@ -38,10 +38,10 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
         }
         return MedicalRecordManager.instance;
     }
-    public static ArrayList<MedicalRecord> getList() {
+    public ArrayList<MedicalRecord> getList() {
         return MedicalRecordManager.list;
     }
-    public static int getNumbers() {
+    public int getNumbers() {
         return MedicalRecordManager.numbers;
     }
 

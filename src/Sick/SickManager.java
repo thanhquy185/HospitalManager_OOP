@@ -57,15 +57,15 @@ public class SickManager implements CRUD<Sick> {
             String id = sick.getId();
             String name = sick.getName();
             String idDepartment = null;
-            if(sick.getIdDepartment() != null
-                    && !sick.getIdDepartment().equals("null")) {
-                idDepartment = sick.getIdDepartment();
+            if(sick.getIdDepartment() != null) {
+                if(!sick.getIdDepartment().equals("null"))
+                    idDepartment = sick.getIdDepartment();
             }
             String nameDepartment = null;
             if(idDepartment != null) {
                 nameDepartment = DepartmentManager.getInstance().findObjectById(idDepartment).getName();
             }
-            System.out.println(String.format("| %-9s | %-24s | %-8s - %-30s |", id, name, idDepartment, nameDepartment));
+            System.out.println(String.format("| %-9s | %-24s | %8s - %-30s |", id, name, idDepartment, nameDepartment));
         }
 		if(SickManager.numbers >= 1)
             System.out.println("*----------------------------------------------------------------------------------*");
