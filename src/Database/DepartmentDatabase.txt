@@ -1,0 +1,6 @@
+DEP00001 | Khoa 1 | null | A.101 |
+DEP00002 | Khoa 2 | null | A.102 |
+DEP00003 | Khoa 3 | null | A.103 |
+DEP00004 | Khoa 4 | null | A.104 |
+DEP00005 | Khoa 5 | null | A.105 |
+DEP00006 | Khoa 6 | null | A.106 |

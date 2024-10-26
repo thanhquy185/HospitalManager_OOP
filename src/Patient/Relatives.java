@@ -3,28 +3,23 @@ package Patient;
 class Relatives {
     // Properties
     private String fullname;
-    private Patient patient;
+    private String idPatient;
     private String relationship;
 
     // Constructors
     public Relatives() {
         this.fullname = null;
-        this.patient = null;
+        this.idPatient = null;
         this.relationship = null;
     }
-    public Relatives(String fullname, String relationship) {
+    public Relatives(String fullname, String idPatient, String relationship) {
         this.fullname = fullname;
-        this.patient = null;
-        this.relationship = relationship;
-    }
-    public Relatives(String fullname, Patient patient, String relationship) {
-        this.fullname = fullname;
-        this.patient = patient;
+        this.idPatient = idPatient;
         this.relationship = relationship;
     }
     public Relatives(Relatives relatives) {
         this.fullname = relatives.fullname;
-        this.patient = relatives.patient;
+        this.idPatient = relatives.idPatient;
         this.relationship = relatives.relationship;
     }
 
@@ -32,8 +27,8 @@ class Relatives {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setIdPatient(String idPatient) {
+        this.idPatient = idPatient;
     }
     public void setRelationship(String relationship) {
         this.relationship = relationship;
@@ -41,8 +36,8 @@ class Relatives {
     public String getFullname() {
         return this.fullname;
     }
-    public Patient getPatient() {
-        return this.patient;
+    public String getIdPatient() {
+        return this.idPatient;
     }
     public String getRelationship() {
         return this.relationship;

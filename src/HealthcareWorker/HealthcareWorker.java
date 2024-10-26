@@ -1,16 +1,17 @@
 package HealthcareWorker;
 
-import Common.Date;
 import Common.Person;
+import Common.Date;
 
 // HealthcareWorker class
 public abstract class HealthcareWorker extends Person {
     //Properties
     protected String id;
-    protected String department;
-    protected String position;
+    protected String type;
     protected Integer yearsOfExperience;
     protected Double salary;
+    protected String idDepartment;
+    protected Boolean isManagerDepartment;
     private static int countHealthcareWorkerCreated;
 
     // Static
@@ -22,42 +23,52 @@ public abstract class HealthcareWorker extends Person {
     public HealthcareWorker() {
         super();
         this.id = null;
-        this.department = null;
-        this.position = null;
+        this.type = null;
         this.yearsOfExperience = null;
         this.salary = null;
+        this.isManagerDepartment = null;
+        this.idDepartment = null;
     }
-    public HealthcareWorker(String fullname, Date birthday, String gender, String country, String phone,
-                            String id, String department, String position, int yearsOfExperience, double salary) {
+    public HealthcareWorker(String fullname, Date birthday, String gender, String country,
+            String phone, String type, int yearsOfExperience, double salary, String idDepartment) {
         super(fullname, birthday, gender, country, phone);
         HealthcareWorker.countHealthcareWorkerCreated++;
-        this.department = department;
-        this.position = position;
+        this.type = type;
+        this.id = getFormatId();
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
-        this.id = getFormatId();
+        this.idDepartment = idDepartment;
+        this.isManagerDepartment = null;
+    }
+    public HealthcareWorker(String fullname, Date birthday, String gender, String country,
+            String phone, String id, String type, int yearsOfExperience, double salary,
+            String idDepartment, boolean isManagerDepartment) {
+        super(fullname, birthday, gender, country, phone);
+        this.id = id;
+        this.type = type;
+        this.yearsOfExperience = yearsOfExperience;
+        this.salary = salary;
+        this.idDepartment = idDepartment;
+        this.isManagerDepartment = isManagerDepartment;
     }
     public HealthcareWorker(HealthcareWorker healthcareWorker) {
         super(healthcareWorker.fullname, healthcareWorker.birthday, healthcareWorker.gender, healthcareWorker.country, healthcareWorker.phone);
-        HealthcareWorker.countHealthcareWorkerCreated++;
-        this.id = healthcareWorker.getId();
-        this.department = healthcareWorker.getDepartment();
-        this.position = healthcareWorker.getPosition();
-        this.yearsOfExperience = healthcareWorker.getYearsOfExperience();
-        this.salary = healthcareWorker.getSalary();
+        this.id = healthcareWorker.id;
+        this.type = healthcareWorker.type;
+        this.yearsOfExperience = healthcareWorker.yearsOfExperience;
+        this.salary = healthcareWorker.salary;
+        this.idDepartment = healthcareWorker.idDepartment;
+        this.isManagerDepartment = healthcareWorker.isManagerDepartment;
     }
 
     // Setter - Getter
     public void setId(String id) {
-        if(isFormatId(id))
-            this.id = id;
-        this.id = "?";
+        if(!isFormatId(id))
+            this.id = null;
+        this.id = id;
     }
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-    public void setPosition(String position) {
-        this.position = position;
+    public void setType(String type) {
+        this.type = type;
     }
     public void setYearsOfExperience(int yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
@@ -65,20 +76,35 @@ public abstract class HealthcareWorker extends Person {
     public void setSalary(double salary) {
         this.salary = salary;
     }
+    public void setIdDepartment(String idDepartment) {
+        this.idDepartment = idDepartment;
+    }
+    public void setIsManagerDepartment(boolean isManagerDepartment) {
+        this.isManagerDepartment = isManagerDepartment;
+    }
+    public static void setCountHealthcareWorkerCreated(int countHealthcareWorkerCreated) {
+        HealthcareWorker.countHealthcareWorkerCreated = countHealthcareWorkerCreated;
+    }
     public String getId() {
         return this.id;
     }
-    public String getDepartment() {
-        return this.department;
-    }
-    public String getPosition() {
-        return this.position;
+    public String getType() {
+        return this.type;
     }
     public int getYearsOfExperience() {
         return this.yearsOfExperience;
     }
     public double getSalary() {
         return this.salary;
+    }
+    public String getIdDepartment() {
+        return this.idDepartment;
+    }
+    public boolean getIsManagerDepartment() {
+        return this.isManagerDepartment;
+    }
+    public static int getCountHealthcareWorkerCreated() {
+        return HealthcareWorker.countHealthcareWorkerCreated;
     }
 
     // Methods
@@ -89,8 +115,8 @@ public abstract class HealthcareWorker extends Person {
             return false;
         // -- Kiểm tra tiền tối
         String prefix = id.substring(0, 3);
-        if(!prefix.equals("DOC") && !prefix.equals("NUR"))
-            return false;
+        if(!prefix.equals("DOC")
+            && !prefix.equals("NUR")) return false;
         // -- Kiểm tra hậu tố
         String postfix = id.substring(3);
         for(int i = 0; i < postfix.length(); i++) {
@@ -102,7 +128,7 @@ public abstract class HealthcareWorker extends Person {
     // - Lấy id có đúng định dạng (DOC/NUR)xxxxx
     private String getFormatId() {
         String postfix = String.format("%05d", HealthcareWorker.countHealthcareWorkerCreated);
-        if(this.position.equals(("Bác sĩ"))){
+        if(this.type.equals(("Bác sĩ"))){
             return "DOC" + postfix;
         }
         return "NUR" + postfix;

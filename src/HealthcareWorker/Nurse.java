@@ -9,12 +9,14 @@ public class Nurse extends HealthcareWorker {
     public Nurse() {
         super();
     }
-    public Nurse(String fullname, Date birthday, String gender, String country, String phone,
-                  String id, String department, String position, int yearsOfExperience, double salary) {
-        super(fullname, birthday, gender, country, phone, id, department, "Y tá", yearsOfExperience, salary);
+    public Nurse(String fullname, Date birthday, String gender, String country,
+            String phone, String type, int yearsOfExperience, double salary, String idDepartment) {
+        super(fullname, birthday, gender, country, phone, type, yearsOfExperience, salary, idDepartment);
     }
     public Nurse(Nurse nurse) {
-        super(nurse.getFullname(), nurse.getBirthday(), nurse.getGender(), nurse.getCountry(), nurse.getPhone(), nurse.getId(), nurse.getDepartment(), nurse.getPosition(), nurse.getYearsOfExperience(), nurse.getSalary());
+        super(nurse.getFullname(), nurse.getBirthday(), nurse.getGender(), nurse.getCountry(),
+            nurse.getPhone(), nurse.getId(), nurse.getType(), nurse.getYearsOfExperience(),
+            nurse.getSalary(), nurse.getIdDepartment(), nurse.getIsManagerDepartment());
     }
 
     //Methods

@@ -1,9 +1,13 @@
 package Patient;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 import Common.CRUD;
-import Common.Date;
 
 public class PatientManager implements CRUD<Patient> {
     //Properties
@@ -66,30 +70,52 @@ public class PatientManager implements CRUD<Patient> {
         PatientManager.numbers = 0;
     }
     @Override
-    public int findIndexById(String idSearch){
+    public String getInfoByIndex(int index) {
+        return "";
+    }
+    @Override
+    public String getInfoById(String id) {
+        return "";
+    }
+    @Override
+    public int findIndexById(String id){
         for(int i = 0; i < PatientManager.numbers; i++){
-            if(PatientManager.list.get(i).getId().equals(idSearch)) {
+            if(PatientManager.list.get(i).getId().equals(id)) {
                 return i;
             }
         }
         return -1;
     }
     @Override
-    public Patient findOneById(String id){
-        return PatientManager.list.get(findIndexById(id));
+    public Patient findObjectByIndex(int index){
+        if(index < 0  || index > PatientManager.numbers) return null;
+        return PatientManager.list.get(index);
     }
     @Override
-    public Patient findOneByCondition(String condition){
+    public Patient findObjectById(String id){
+        int index = findIndexById(id);
+        if(index == -1) return null;
+        return PatientManager.list.get(index);
+    }
+    @Override
+    public Patient findObjectByCondition(String condition){
         return null;
     }
     @Override
-    public ArrayList<Patient> findAllByCondition(String condition){
+    public ArrayList<Patient> findObjectsByCondition(String condition){
         return null;
     }
     @Override
-    public void sort(){
+    public void sort(String condition){
         PatientManager.list.sort(null);
     }
+    @Override
+    public void loadFromFile() {
 
+    }
+    @Override
+    public void saveToFile() {
+        
+    }
 }
 

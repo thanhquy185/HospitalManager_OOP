@@ -14,13 +14,13 @@ public class PremiumPatient extends Patient {
         super(fullname, birthday, gender, country, phone, isTest, type);
     }
     public PremiumPatient(String fullname, Date birthday, String gender, String country,
-        String phone, String id, boolean isTest, String type, Relatives relatives) {
-        super(fullname, birthday, gender, country, phone, id, isTest, type, relatives);
+        String phone, String id, boolean isTest, String type) {
+        super(fullname, birthday, gender, country, phone, id, isTest, type);
     }
     public PremiumPatient(PremiumPatient premiumPatient) {
-        super(premiumPatient.getFullname(), premiumPatient.getBirthday(), premiumPatient.getGender(),
-            premiumPatient.getCountry(), premiumPatient.getPhone(), premiumPatient.getId(),
-            premiumPatient.getIsTest(), premiumPatient.getType(), premiumPatient.getRelatives());
+        super(premiumPatient.getFullname(), premiumPatient.getBirthday(),
+            premiumPatient.getGender(), premiumPatient.getCountry(), premiumPatient.getPhone(),
+            premiumPatient.getId(), premiumPatient.getIsTest(), premiumPatient.getType());
     }
 
     //Methods

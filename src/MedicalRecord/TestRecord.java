@@ -1,59 +1,46 @@
 package MedicalRecord;
 
 import Common.Date;
-import HealthcareWorker.Nurse;
-import Patient.NormalPatient;
-import Patient.Patient;
-import Patient.PremiumPatient;
+
 public class TestRecord extends MedicalRecord {
     // Properties
-	private Patient patient;
-	private Nurse nurse;
+	private String idPatient;
+	private String idNurse;
 	private String reason;
 	private String diagnose;
 
     // Constructor
 	public TestRecord() {
 		super();
-		this.patient = null;
-		this.nurse = null;
+		this.idPatient = null;
+		this.idNurse = null;
 		this.reason = null;
 		this.diagnose = null;
 	}
-	public TestRecord(Date inputDay, Date outputDay, Patient patient, Nurse nurse, String reason, String diagnose) {
-		super(inputDay, outputDay);
-		this.patient = patient;
-		this.nurse = nurse;
+	public TestRecord(Date inputDay, Date outputDay, String levelSick, String idSick,
+			boolean isTest, String idPatient, String idNurse, String reason, String diagnose) {
+		super(inputDay, outputDay, idSick, levelSick, isTest);
+		this.idPatient = idPatient;
+		this.idNurse = idNurse;
 		this.reason = reason;
 		this.diagnose = diagnose;
 	}
 	public TestRecord(TestRecord testRecord) {
-		super(testRecord.getInputDay(), testRecord.getOutputDay());
-		if(testRecord.getPatient().getType() == "Thường") {
-			this.patient = new NormalPatient(testRecord.getPatient().getFullname(),
-				testRecord.getPatient().getBirthday(), testRecord.getPatient().getGender(),
-				testRecord.getPatient().getCountry(), testRecord.getPatient().getPhone(),
-				testRecord.getPatient().getId(), testRecord.getPatient().getIsTest(),
-				testRecord.getPatient().getType(), testRecord.getPatient().getRelatives());
-
-		} else {
-			this.patient = new PremiumPatient(testRecord.getPatient().getFullname(),
-				testRecord.getPatient().getBirthday(), testRecord.getPatient().getGender(),
-				testRecord.getPatient().getCountry(), testRecord.getPatient().getPhone(),
-				testRecord.getPatient().getId(), testRecord.getPatient().getIsTest(),
-				testRecord.getPatient().getType(), testRecord.getPatient().getRelatives());
-		}
-		this.nurse = new Nurse(testRecord.getNurse());
+		super(testRecord.getId(), testRecord.getInputDay(), testRecord.getOutputDay(),
+			testRecord.getIdSick(), testRecord.getLevelSick(), testRecord.getIsTest(),
+			testRecord.getPrice());
+		this.idPatient = testRecord.getIdPatient();
+		this.idNurse = testRecord.getIdNurse();
 		this.reason = testRecord.getReason();
 		this.diagnose = testRecord.getDiagnose();
 	}
 
     // Setter - Getter
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setIdPatient(String idPatient) {
+		this.idPatient = idPatient;
 	}
-	public void setNurse(Nurse nurse) {
-		this.nurse = nurse;
+	public void setIdNurse(String idNurse) {
+		this.idNurse = idNurse;
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
@@ -61,11 +48,11 @@ public class TestRecord extends MedicalRecord {
 	public void setDiagnose(String diagnose) {
 		this.diagnose = diagnose;
 	}
-	public Patient getPatient() {
-		return this.patient;
+	public String getIdPatient() {
+		return this.idPatient;
 	}
-	public Nurse getNurse() {
-		return this.nurse;
+	public String getIdNurse() {
+		return this.idNurse;
 	}
 	public String getReason() {
 		return this.reason;

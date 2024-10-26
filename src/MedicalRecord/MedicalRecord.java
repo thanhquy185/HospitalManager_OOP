@@ -2,11 +2,15 @@ package MedicalRecord;
 
 import Common.Date;
 
-public class MedicalRecord {
+public abstract class MedicalRecord {
     //	Properties
 	protected String id;
 	protected Date inputDay;
 	protected Date outputDay;
+	protected String idSick;
+	protected String levelSick;
+	protected Boolean isTest;
+	protected Double price;
 	private static int countMedicalRecordCreated;
 
 	// Static
@@ -19,31 +23,67 @@ public class MedicalRecord {
 		this.id = null;
 		this.inputDay = new Date();
 		this.outputDay = new Date();
+		this.isTest = null;
+		this.idSick = null;
+		this.levelSick = null;
+		this.price = null;
 	}
-	public MedicalRecord(Date inputDay, Date outputDay) {
+	public MedicalRecord(Date inputDay, Date outputDay,
+			String idSick, String levelSick, boolean isTest) {
 		MedicalRecord.countMedicalRecordCreated++;
 		this.id = getFormatId();
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
+		this.idSick = idSick;
+		this.levelSick = levelSick;
+		this.isTest = isTest;
+	}
+	public MedicalRecord(String id, Date inputDay, Date outputDay,
+			String idSick, String levelSick, boolean isTest, double price) {
+		this.id = id;
+		this.inputDay = inputDay;
+		this.outputDay = outputDay;
+		this.idSick = idSick;
+		this.levelSick = levelSick;
+		this.isTest = isTest;
+		this.price = price;
 	}
 	public MedicalRecord(MedicalRecord medicalRecord) {
-		MedicalRecord.countMedicalRecordCreated++;
-		this.id = medicalRecord.getId();
-		this.inputDay = medicalRecord.getInputDay();
-		this.outputDay = medicalRecord.getOutputDay();
+		this.id = medicalRecord.id;
+		this.inputDay = medicalRecord.inputDay;
+		this.outputDay = medicalRecord.outputDay;
+		this.idSick = medicalRecord.idSick;
+		this.levelSick = medicalRecord.levelSick;
+		this.isTest = medicalRecord.isTest;
+		this.price = medicalRecord.price;
 	}
 
 	// Setter-Getter
 	public void setId(String id) {
-		if(isFormatId(id))
-			this.id = id;
-		this.id = "?";
+		if(!isFormatId(id))
+			this.id = null;
+		this.id = id;
 	}
 	public void setInputDay(Date inputDay) {
 		this.inputDay = inputDay;
 	}
 	public void setOutputDay(Date outputDay) {
 		this.outputDay = outputDay;
+	}
+	public void setIdSick(String idSick) {
+		this.idSick = idSick;
+	}
+	public void setLevelSick(String levelSick) {
+		this.levelSick = levelSick;
+	}
+	public void setIsTest(boolean isTest) {
+		this.isTest = isTest;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public static void setCountMedicalRecordCreated(int countMedicalRecordCreated) {
+		MedicalRecord.countMedicalRecordCreated = countMedicalRecordCreated;
 	}
 	public String getId() {
 		return this.id;
@@ -53,6 +93,21 @@ public class MedicalRecord {
 	}
 	public Date getOutputDay() {
 		return this.outputDay;
+	}
+	public String getIdSick() {
+		return this.idSick;
+	}
+	public String getLevelSick() {
+		return this.levelSick;
+	}
+	public boolean getIsTest() {
+		return this.isTest;
+	}
+	public double getPrice() {
+		return this.price;
+	}
+	public static int getCountMedicalRecordCreated() {
+		return MedicalRecord.countMedicalRecordCreated;
 	}
 
 	// Methods

@@ -6,54 +6,49 @@ import Common.Date;
 public abstract class Patient extends Person {
     // Properties
     protected String id;
-    protected Boolean isTest;
     protected String type;
-    protected Relatives relatives;
-    protected static Integer countPersonCreated;
+    protected Boolean isTest;
+    protected static int countPatientCreated;
 
     // Static
     static {
-        Patient.countPersonCreated = 0;
+        Patient.countPatientCreated = 0;
     }
 
     // Constructors
     public Patient() {
         super();
         this.id = null;
-        this.isTest = null;
         this.type = null;
-        this.relatives = null;
+        this.isTest = null;
     }
     public Patient(String fullname, Date birthday, String gender, String country, String phone){
         super(fullname, birthday,gender, country, phone);
         this.id = null;
-        this.isTest = null;
         this.type = null;
-        this.relatives = null;
+        this.isTest = null;
     }
     public Patient(String fullname, Date birthday, String gender,
-        String country, String phone, boolean isTest, String type){
+            String country, String phone, boolean isTest, String type){
         super(fullname, birthday,gender, country, phone);
-        Patient.countPersonCreated++;
+        Patient.countPatientCreated++;
+        this.type = type;
         this.id = getFormatId();
         this.isTest = isTest;
-        this.type = type;
-        this.relatives = null;
     }
-    public Patient(String fullname, Date birthday, String gender, String country, String phone, 
-                   String id, boolean isTest, String type, Relatives relatives){
+    public Patient(String fullname, Date birthday, String gender,
+            String country, String phone, String id, boolean isTest, String type){
         super(fullname, birthday, gender, country, phone);
         this.id = id;
-        this.isTest = isTest;
         this.type = type;
-        this.relatives = new Relatives(relatives);
+        this.isTest = isTest;
     }
     public Patient(Patient patient) {
-        super(patient.getFullname(), patient.getBirthday(), patient.getGender(), patient.getCountry(), patient.getPhone());
-        this.id = patient.getId();
-        this.isTest = patient.getIsTest();
-        this.type = patient.getType();
-        this.relatives = new Relatives(patient.getRelatives());
+        super(patient.fullname, patient.birthday,
+            patient.gender, patient.country, patient.phone);
+        this.id = patient.id;
+        this.type = patient.type;
+        this.isTest = patient.isTest;
     }
     // public Patient(Person person){
     //     super(person);
@@ -80,9 +75,9 @@ public abstract class Patient extends Person {
     // Setter - Getter
     public void setId(String id){
         // Cần một hàm kiểm tra id có hợp lệ hay không (này để Quy làm)
-        if(isFormatId(id))
-            this.id = id;
-        this.id = "?";
+        if(!isFormatId(id))
+            this.id = null;
+        this.id = id;
     }
     public void setType(String type){
         this.type = type;
@@ -90,20 +85,20 @@ public abstract class Patient extends Person {
     public void setIsTest(boolean test){
         this.isTest = test;
     }
-    public void setRelatives(Relatives relatives) {
-        this.relatives = relatives;
+    public static void setCountPatientCreated(int countPatientCreated) {
+        Patient.countPatientCreated = countPatientCreated;
     }
     public String getId(){
         return this.id;
     }
-    public boolean getIsTest(){
-        return this.isTest;
-    }
     public String getType(){
         return this.type;
     }
-    public Relatives getRelatives(){
-        return this.relatives;
+    public boolean getIsTest(){
+        return this.isTest;
+    }
+    public static int getCountPatientCreated() {
+        return Patient.countPatientCreated;
     }
 
     // Methods
@@ -114,8 +109,8 @@ public abstract class Patient extends Person {
             return false;
         // -- Kiểm tra tiền tối
         String prefix = id.substring(0, 4);
-        if(!prefix.equals("NPAT") && !prefix.equals("PPAT"))
-            return false;
+        if(!prefix.equals("NPAT")
+            && !prefix.equals("PPAT")) return false;
         // -- Kiểm tra hậu tố
         String postfix = id.substring(4);
         for(int i = 0; i < postfix.length(); i++) {
@@ -127,8 +122,8 @@ public abstract class Patient extends Person {
     }
     // - Lấy id đúng định dạng (NPAT/PPAT)xxxxx
     private String getFormatId() {
-        // -- 
-        String postfix = String.format("%05d", Patient.countPersonCreated);
+        // --
+        String postfix = String.format("%05d", Patient.countPatientCreated);
         if(this.type.equals(("Cao cấp"))){
             return "PPAT" + postfix;
         }

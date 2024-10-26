@@ -10,11 +10,13 @@ public class Doctor extends HealthcareWorker {
         super();
     }
     public Doctor(String fullname, Date birthday, String gender, String country, String phone,
-                  String id, String department, String position, int yearsOfExperience, double salary) {
-        super(fullname, birthday, gender, country, phone, id, department, "Bác sĩ", yearsOfExperience, salary);
+                  String type, int yearsOfExperience, double salary, String idDepartment) {
+        super(fullname, birthday, gender, country, phone, type, yearsOfExperience, salary, idDepartment);
     }
     public Doctor(Doctor doctor) {
-        super(doctor.getFullname(), doctor.getBirthday(), doctor.getGender(), doctor.getCountry(), doctor.getPhone(), doctor.getId(), doctor.getDepartment(), doctor.getPosition(), doctor.getYearsOfExperience(), doctor.getSalary());
+        super(doctor.getFullname(), doctor.getBirthday(), doctor.getGender(), doctor.getCountry(),
+            doctor.getPhone(), doctor.getId(), doctor.getType(), doctor.getYearsOfExperience(),
+            doctor.getSalary(), doctor.getIdDepartment(), doctor.getIsManagerDepartment());
     }
 
     //Methods

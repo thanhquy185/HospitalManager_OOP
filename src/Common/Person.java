@@ -1,6 +1,6 @@
 package Common;
 
-public abstract class Person {
+public class Person {
 	//Properties
 	protected String fullname;
 	protected Date birthday;
@@ -10,11 +10,11 @@ public abstract class Person {
 	
 	//Constructors
 	public Person() {
-		this.fullname = "?";
+		this.fullname = null;
 		this.birthday = new Date();
-		this.gender = "?";
-		this.country = "?";
-		this.phone = "?";
+		this.gender = null;
+		this.country = null;
+		this.phone = null;
 	}
 	public Person(String fullname, Date birthday, String gender, String country, String phone) {
 		this.fullname = fullname;
@@ -30,7 +30,7 @@ public abstract class Person {
 		this.country = person.country;
 		this.phone = person.phone;
 	}
-	
+
 	//Setter - Getter
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
@@ -62,6 +62,17 @@ public abstract class Person {
 	public String getPhone() {
 		return this.phone;
 	}
-	
-	//Methods (Còn nhiều hàm nữa mà tôi chưa viết)
+
+	//Methods
+	// - Hàm trả về tên gồm các chữ cái thường và không khoảng trắng
+	public String getFullnameFormat() {
+		return CharacterFormat.removeAccent(
+			this.fullname.toLowerCase().replaceAll(" ", "")
+		);
+	}
+	public String getBirthdayFormat(String condition) {
+		if(condition == null)
+			return "dd/mm/yyyy";
+		return this.birthday.getDateFormatByCondition(condition);
+	}
 }

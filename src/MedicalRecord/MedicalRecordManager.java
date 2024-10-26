@@ -1,6 +1,11 @@
 package MedicalRecord;
 
 import Common.CRUD;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 import java.util.ArrayList;
 
@@ -63,6 +68,14 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 		MedicalRecordManager.list.clear();
         MedicalRecordManager.numbers = 0;
 	}
+    @Override
+    public String getInfoByIndex(int index) {
+        return "";
+    }
+    @Override
+    public String getInfoById(String id) {
+        return "";
+    }
 	@Override
     public int findIndexById(String id) {
         for(int i = 0; i < MedicalRecordManager.numbers; i++){
@@ -73,28 +86,26 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
         return -1;
     }
     @Override
-	public MedicalRecord findOneById(String id) {
-		return MedicalRecordManager.list.get(findIndexById(id));
+	public MedicalRecord findObjectByIndex(int index) {
+        if(index < 0 || index > MedicalRecordManager.numbers) return null;
+        return MedicalRecordManager.list.get(index);
+	}
+    @Override
+    public MedicalRecord findObjectById(String id) {
+        int index = findIndexById(id);
+        if(index == -1) return null;
+        return MedicalRecordManager.list.get(index);
+    }
+	@Override
+	public MedicalRecord findObjectByCondition(String condition) {
+        return null;
 	}
 	@Override
-	public MedicalRecord findOneByCondition(String condition) {
-		// for (int i = 0; i < list.size(); i++) {
-		// 	if (list.get(i).getId() == medicalRecord) {
-		// 		System.out.println("Tìm thấy hồ sơ bệnh án");
-		// 		medicalRecord.toString();
-		// 		return list.get(i);
-		// 	}
-		// }
-		// System.out.println("Không tìm thấy hồ sơ bệnh án");
-		// return null;
-        return new MedicalRecord();
+	public ArrayList<MedicalRecord> findObjectsByCondition(String medicalRecord) {
+		return null;
 	}
 	@Override
-	public ArrayList<MedicalRecord> findAllByCondition(String medicalRecord) {
-		return new ArrayList<MedicalRecord>();
-	}
-	@Override
-	public void sort() {
+	public void sort(String condition) {
 		// Collections.sort(list, new Comparator<MedicalRecord>() {
 		// 	@Override
 		// 	public int compare(MedicalRecord o1, MedicalRecord o2) {
@@ -102,4 +113,12 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 		// 	}
 		// });
 	}
+    @Override
+    public void loadFromFile() {
+
+    }
+    @Override
+    public void saveToFile() {
+        
+    }
 }

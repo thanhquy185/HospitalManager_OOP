@@ -1,10 +1,13 @@
 package HealthcareWorker;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
-import Common.Date;
 import Common.CRUD;
-
 // import Common.Date;
 public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Properties
@@ -66,28 +69,74 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         HealthcareWorkerManager.numbers = 0;
     }
     @Override
-    public int findIndexById(String idSearch){
+    public String getInfoByIndex(int index) {
+        return "";
+    }
+    @Override
+    public String getInfoById(String id) {
+        return "";
+    }
+    @Override
+    public int findIndexById(String id){
         for(int i = 0; i < HealthcareWorkerManager.numbers; i++){
-            if(HealthcareWorkerManager.list.get(i).getId().equals(idSearch)) {
+            if(HealthcareWorkerManager.list.get(i).getId().equals(id)) {
                 return i;
             }
         }
         return -1;
     }
     @Override
-    public HealthcareWorker findOneById(String id){
-        return HealthcareWorkerManager.list.get(findIndexById(id));
+    public HealthcareWorker findObjectByIndex(int index){
+        if(index < 0 || index > HealthcareWorkerManager.numbers) return null;
+        return HealthcareWorkerManager.list.get(index);
     }
     @Override
-    public HealthcareWorker findOneByCondition(String condition){
+    public HealthcareWorker findObjectById(String id){
+        int index = findIndexById(id);
+        if(index == -1) return null;
+        return HealthcareWorkerManager.list.get(index);
+    }
+    @Override
+    public HealthcareWorker findObjectByCondition(String condition){
         return null;
     }
     @Override
-    public ArrayList<HealthcareWorker> findAllByCondition(String condition){
-        return null;
+    public ArrayList<HealthcareWorker> findObjectsByCondition(String condition){
+        ArrayList<HealthcareWorker> list = null;
+        // - Mảng các Bác sĩ đã là trưởng Khoa
+        if(condition.equals("doctor is manager department")
+                && HealthcareWorkerManager.numbers >= 1) {
+            list = new ArrayList<>();
+            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
+                if(healthcareWorker.getType() == "Bác sĩ"
+                        && healthcareWorker.getIsManagerDepartment()) {
+                    list.add(healthcareWorker);
+                }
+            }
+        }
+        // - Mảng các Bác sĩ đã là trưởng Khoa
+        if(condition.equals("doctor is not manager department")
+                && HealthcareWorkerManager.numbers >= 1) {
+            list = new ArrayList<>();
+            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
+                if(healthcareWorker.getType() == "Bác sĩ"
+                        && !healthcareWorker.getIsManagerDepartment()) {
+                    list.add(healthcareWorker);
+                }
+            }
+        }
+        return list;
     }
     @Override
-    public void sort(){
+    public void sort(String condition){
         HealthcareWorkerManager.list.sort(null);
+    }
+    @Override
+    public void loadFromFile() {
+
+    }
+    @Override
+    public void saveToFile() {
+        
     }
 }
