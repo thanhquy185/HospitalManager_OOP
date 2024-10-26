@@ -13,6 +13,7 @@ public abstract class HealthcareWorker extends Person {
     protected Boolean isWorking;
     protected String idDepartment;
     protected Boolean isManagerDepartment;
+    protected String idMedicalRecord;
     private static int countHealthcareWorkerCreated;
 
     // Static
@@ -30,6 +31,7 @@ public abstract class HealthcareWorker extends Person {
         this.isWorking = null;
         this.idDepartment = null;
         this.isManagerDepartment = null;
+        this.idMedicalRecord = null;
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String country, String phone,
             String type, int yearsOfExperience, double salary, boolean isWorking, String idDepartment) {
@@ -45,7 +47,7 @@ public abstract class HealthcareWorker extends Person {
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String country,
             String phone, String id, String type, int yearsOfExperience, double salary,
-            boolean isWorking, String idDepartment, boolean isManagerDepartment) {
+            boolean isWorking, String idDepartment, boolean isManagerDepartment, String idMedicalRecord) {
         super(fullname, birthday, gender, country, phone);
         this.id = id;
         this.type = type;
@@ -54,6 +56,7 @@ public abstract class HealthcareWorker extends Person {
         this.isWorking = isWorking;
         this.idDepartment = idDepartment;
         this.isManagerDepartment = isManagerDepartment;
+        this.idMedicalRecord = idMedicalRecord;
     }
     public HealthcareWorker(HealthcareWorker healthcareWorker) {
         super(healthcareWorker.fullname, healthcareWorker.birthday, healthcareWorker.gender, healthcareWorker.country, healthcareWorker.phone);
@@ -64,6 +67,7 @@ public abstract class HealthcareWorker extends Person {
         this.isWorking = healthcareWorker.isWorking;
         this.idDepartment = healthcareWorker.idDepartment;
         this.isManagerDepartment = healthcareWorker.isManagerDepartment;
+        this.idMedicalRecord = healthcareWorker.idMedicalRecord;
     }
 
     // Setter - Getter
@@ -90,6 +94,9 @@ public abstract class HealthcareWorker extends Person {
     public void setIsManagerDepartment(boolean isManagerDepartment) {
         this.isManagerDepartment = isManagerDepartment;
     }
+    public void setIdMedicalRecord(String idMedicalRecord) {
+        this.idMedicalRecord = idMedicalRecord;
+    }
     public static void setCountHealthcareWorkerCreated(int countHealthcareWorkerCreated) {
         HealthcareWorker.countHealthcareWorkerCreated = countHealthcareWorkerCreated;
     }
@@ -113,6 +120,9 @@ public abstract class HealthcareWorker extends Person {
     }
     public boolean getIsManagerDepartment() {
         return this.isManagerDepartment;
+    }
+    public String getIdMedicalRecord() {
+        return this.idMedicalRecord;
     }
     public static int getCountHealthcareWorkerCreated() {
         return HealthcareWorker.countHealthcareWorkerCreated;

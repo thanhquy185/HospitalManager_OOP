@@ -8,6 +8,7 @@ public abstract class Patient extends Person {
     protected String id;
     protected String type;
     protected Boolean isTest;
+    protected String idMedicalRecord;
     protected static int countPatientCreated;
 
     // Static
@@ -21,7 +22,9 @@ public abstract class Patient extends Person {
         this.id = null;
         this.type = null;
         this.isTest = null;
+        this.idMedicalRecord = null;
     }
+    // Này Quy dùng để khi Đăng ký người dùng mới
     public Patient(String fullname, Date birthday, String gender, String country, String phone){
         super(fullname, birthday,gender, country, phone);
         this.id = null;
@@ -36,12 +39,13 @@ public abstract class Patient extends Person {
         this.id = getFormatId();
         this.isTest = isTest;
     }
-    public Patient(String fullname, Date birthday, String gender,
-            String country, String phone, String id, boolean isTest, String type){
+    public Patient(String fullname, Date birthday, String gender, String country,
+            String phone, String id, boolean isTest, String type, String idMedicalRecord){
         super(fullname, birthday, gender, country, phone);
         this.id = id;
         this.type = type;
         this.isTest = isTest;
+        this.idMedicalRecord = idMedicalRecord;
     }
     public Patient(Patient patient) {
         super(patient.fullname, patient.birthday,
@@ -49,28 +53,8 @@ public abstract class Patient extends Person {
         this.id = patient.id;
         this.type = patient.type;
         this.isTest = patient.isTest;
+        this.idMedicalRecord = patient.idMedicalRecord;
     }
-    // public Patient(Person person){
-    //     super(person);
-    //     this.id = "?";
-    //     this.isTest = false;
-    //     this.type = "Normal";
-    //     this.relatives = new Relatives();
-    // }
-    // public Patient(Person person, boolean test, String type, Relatives relatives){
-    //     super(person);
-    //     this.id = getFormatId();
-    //     this.isTest = test;
-    //     this.type = type;
-    //     this.relatives = relatives;
-    // }
-    // public Patient(Person person, String id, boolean test, String type, Relatives relatives){
-    //     super(person);
-    //     this.id = id;
-    //     this.isTest = test;
-    //     this.type = type;
-    //     this.relatives = relatives;
-    // }
 
     // Setter - Getter
     public void setId(String id){
@@ -85,6 +69,9 @@ public abstract class Patient extends Person {
     public void setIsTest(boolean test){
         this.isTest = test;
     }
+    public void setIdMedicalRecord(String idMedicalRecord) {
+        this.idMedicalRecord = idMedicalRecord;
+    }
     public static void setCountPatientCreated(int countPatientCreated) {
         Patient.countPatientCreated = countPatientCreated;
     }
@@ -96,6 +83,9 @@ public abstract class Patient extends Person {
     }
     public boolean getIsTest(){
         return this.isTest;
+    }
+    public String getIdMedicalRecord() {
+        return this.idMedicalRecord;
     }
     public static int getCountPatientCreated() {
         return Patient.countPatientCreated;

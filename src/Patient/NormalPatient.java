@@ -14,13 +14,13 @@ public class NormalPatient extends Patient {
         super(fullname, birthday, gender, country, phone, isTest, type);
     }
     public NormalPatient(String fullname, Date birthday, String gender, String country,
-        String phone, String id, boolean isTest, String type) {
-        super(fullname, birthday, gender, country, phone, id, isTest, type);
+        String phone, String id, boolean isTest, String type, String idMedicalRecord) {
+        super(fullname, birthday, gender, country, phone, id, isTest, type, idMedicalRecord);
     }
     public NormalPatient(NormalPatient normalPatient) {
-        super(normalPatient.getFullname(), normalPatient.getBirthday(),
-            normalPatient.getGender(), normalPatient.getCountry(), normalPatient.getPhone(),
-            normalPatient.getId(), normalPatient.getIsTest(), normalPatient.getType());
+        super(normalPatient.getFullname(), normalPatient.getBirthday(), normalPatient.getGender(),
+            normalPatient.getCountry(), normalPatient.getPhone(), normalPatient.getId(),
+            normalPatient.getIsTest(), normalPatient.getType(), normalPatient.getIdMedicalRecord());
     }
 
     //Methods

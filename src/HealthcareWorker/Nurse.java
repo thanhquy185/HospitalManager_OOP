@@ -16,7 +16,8 @@ public class Nurse extends HealthcareWorker {
     public Nurse(Nurse nurse) {
         super(nurse.getFullname(), nurse.getBirthday(), nurse.getGender(), nurse.getCountry(),
             nurse.getPhone(), nurse.getId(), nurse.getType(), nurse.getYearsOfExperience(),
-            nurse.getSalary(), nurse.getIsWorking(), nurse.getIdDepartment(), nurse.getIsManagerDepartment());
+            nurse.getSalary(), nurse.getIsWorking(), nurse.getIdDepartment(),
+            nurse.getIsManagerDepartment(), nurse.getIdMedicalRecord());
     }
 
     //Methods
