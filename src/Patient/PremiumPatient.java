@@ -9,18 +9,18 @@ public class PremiumPatient extends Patient {
     public PremiumPatient() {
         super();
     }
-    public PremiumPatient(String fullname, Date birthday, String gender,
-        String country, String phone, boolean isTest, String type) {
-        super(fullname, birthday, gender, country, phone, isTest, type);
+    public PremiumPatient(String fullname, Date birthday,
+            String gender, String phone, String country, String type) {
+        super(fullname, birthday, gender, phone, country, type);
     }
-    public PremiumPatient(String fullname, Date birthday, String gender, String country,
-        String phone, String id, boolean isTest, String type, String idMedicalRecord) {
-        super(fullname, birthday, gender, country, phone, id, isTest, type, idMedicalRecord);
+    public PremiumPatient(String fullname, Date birthday, String gender,
+            String phone, String country, String id, String type, String idMedicalRecord) {
+        super(fullname, birthday, gender, phone, country, id, type, idMedicalRecord);
     }
     public PremiumPatient(PremiumPatient premiumPatient) {
-        super(premiumPatient.getFullname(), premiumPatient.getBirthday(), premiumPatient.getGender(),
-            premiumPatient.getCountry(), premiumPatient.getPhone(), premiumPatient.getId(),
-            premiumPatient.getIsTest(), premiumPatient.getType(), premiumPatient.getIdMedicalRecord());
+        super(premiumPatient.getFullname(), premiumPatient.getBirthday(),
+            premiumPatient.getGender(), premiumPatient.getPhone(), premiumPatient.getCountry(),
+            premiumPatient.getId(),premiumPatient.getType(), premiumPatient.getIdMedicalRecord());
     }
 
     //Methods

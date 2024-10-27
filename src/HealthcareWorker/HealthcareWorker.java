@@ -31,9 +31,9 @@ public abstract class HealthcareWorker extends Person {
         this.isManagerDepartment = null;
         this.idMedicalRecord = null;
     }
-    public HealthcareWorker(String fullname, Date birthday, String gender, String country,
-            String phone, String type, int yearsOfExperience, double salary, String idDepartment) {
-        super(fullname, birthday, gender, country, phone);
+    public HealthcareWorker(String fullname, Date birthday, String gender, String phone,
+            String country, String type, int yearsOfExperience, double salary, String idDepartment) {
+        super(fullname, birthday, gender, phone, country);
         HealthcareWorker.countHealthcareWorkerCreated++;
         this.type = type;
         this.id = getFormatId();
@@ -42,10 +42,10 @@ public abstract class HealthcareWorker extends Person {
         this.idDepartment = idDepartment;
         this.isManagerDepartment = null;
     }
-    public HealthcareWorker(String fullname, Date birthday, String gender, String country,
-            String phone, String id, String type, int yearsOfExperience, double salary,
+    public HealthcareWorker(String fullname, Date birthday, String gender, String phone,
+            String country, String id, String type, int yearsOfExperience, double salary,
             String idDepartment, boolean isManagerDepartment, String idMedicalRecord) {
-        super(fullname, birthday, gender, country, phone);
+        super(fullname, birthday, gender, phone, country);
         this.id = id;
         this.type = type;
         this.yearsOfExperience = yearsOfExperience;
@@ -55,7 +55,8 @@ public abstract class HealthcareWorker extends Person {
         this.idMedicalRecord = idMedicalRecord;
     }
     public HealthcareWorker(HealthcareWorker healthcareWorker) {
-        super(healthcareWorker.fullname, healthcareWorker.birthday, healthcareWorker.gender, healthcareWorker.country, healthcareWorker.phone);
+        super(healthcareWorker.fullname, healthcareWorker.birthday,
+            healthcareWorker.gender, healthcareWorker.phone, healthcareWorker.country);
         this.id = healthcareWorker.id;
         this.type = healthcareWorker.type;
         this.yearsOfExperience = healthcareWorker.yearsOfExperience;
@@ -109,7 +110,7 @@ public abstract class HealthcareWorker extends Person {
     public String getIdDepartment() {
         return this.idDepartment;
     }
-    public boolean getIsManagerDepartment() {
+    public Boolean getIsManagerDepartment() {
         return this.isManagerDepartment;
     }
     public String getIdMedicalRecord() {
@@ -144,5 +145,9 @@ public abstract class HealthcareWorker extends Person {
             return "DOC" + postfix;
         }
         return "NUR" + postfix;
+    }
+    // - Hàm lấy ra thông tinnn của Bệnh nhân
+    public String getInfo() {
+        return null;
     }
 }

@@ -9,8 +9,8 @@ public class TreatmentRecord extends MedicalRecord {
 	public TreatmentRecord() {
 		super();
 	}
-	public TreatmentRecord(Date inputDay, Date outputDay, String idSick, String levelSick,
-			boolean isTest, String idPatient, String idDoctor, String idNurse) {
+	public TreatmentRecord(Date inputDay, Date outputDay, String idPatient, String idDoctor,
+			String idNurse, String idSick, String levelSick, boolean isTest) {
 		super(inputDay, outputDay, idPatient, idDoctor, idNurse, idSick, levelSick, isTest);
 	}
 	public TreatmentRecord(TreatmentRecord treatmentRecord) {

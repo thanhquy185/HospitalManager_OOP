@@ -7,7 +7,6 @@ public abstract class Patient extends Person {
     // Properties
     protected String id;
     protected String type;
-    protected Boolean isTest;
     protected String idMedicalRecord;
     protected static int countPatientCreated;
 
@@ -21,38 +20,27 @@ public abstract class Patient extends Person {
         super();
         this.id = null;
         this.type = null;
-        this.isTest = null;
         this.idMedicalRecord = null;
     }
-    // Này Quy dùng để khi Đăng ký người dùng mới
-    public Patient(String fullname, Date birthday, String gender, String country, String phone){
-        super(fullname, birthday,gender, country, phone);
-        this.id = null;
-        this.type = null;
-        this.isTest = null;
-    }
     public Patient(String fullname, Date birthday, String gender,
-            String country, String phone, boolean isTest, String type){
-        super(fullname, birthday,gender, country, phone);
+            String phone, String country, String type){
+        super(fullname, birthday,gender, phone, country);
         Patient.countPatientCreated++;
         this.type = type;
         this.id = getFormatId();
-        this.isTest = isTest;
     }
-    public Patient(String fullname, Date birthday, String gender, String country,
-            String phone, String id, boolean isTest, String type, String idMedicalRecord){
-        super(fullname, birthday, gender, country, phone);
+    public Patient(String fullname, Date birthday, String gender, String phone,
+            String country, String id, String type, String idMedicalRecord){
+        super(fullname, birthday, gender, phone, country);
         this.id = id;
         this.type = type;
-        this.isTest = isTest;
         this.idMedicalRecord = idMedicalRecord;
     }
     public Patient(Patient patient) {
         super(patient.fullname, patient.birthday,
-            patient.gender, patient.country, patient.phone);
+            patient.gender, patient.phone, patient.country);
         this.id = patient.id;
         this.type = patient.type;
-        this.isTest = patient.isTest;
         this.idMedicalRecord = patient.idMedicalRecord;
     }
 
@@ -66,9 +54,6 @@ public abstract class Patient extends Person {
     public void setType(String type){
         this.type = type;
     }
-    public void setIsTest(boolean test){
-        this.isTest = test;
-    }
     public void setIdMedicalRecord(String idMedicalRecord) {
         this.idMedicalRecord = idMedicalRecord;
     }
@@ -80,9 +65,6 @@ public abstract class Patient extends Person {
     }
     public String getType(){
         return this.type;
-    }
-    public boolean getIsTest(){
-        return this.isTest;
     }
     public String getIdMedicalRecord() {
         return this.idMedicalRecord;
@@ -118,5 +100,9 @@ public abstract class Patient extends Person {
             return "PPAT" + postfix;
         }
         return "NPAT" + postfix;
+    }
+    // - Hàm lấy ra thông tinnn của Bệnh nhân
+    public String getInfo() {
+        return null;
     }
 }

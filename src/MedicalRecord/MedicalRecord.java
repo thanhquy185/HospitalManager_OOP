@@ -34,8 +34,23 @@ public abstract class MedicalRecord {
 		this.levelSick = null;
 		this.price = null;
 	}
+	// Tạo Hồ sơ Khám bệnh
 	public MedicalRecord(Date inputDay, Date outputDay, String idPatient,
-			String idDoctor, String idNurse, String idSick, String levelSick, boolean isTest) {
+			String idDoctor, String idNurse, boolean isTest) {
+		MedicalRecord.countMedicalRecordCreated++;
+		this.id = getFormatId();
+		this.inputDay = inputDay;
+		this.outputDay = outputDay;
+		this.idPatient = idPatient;
+		this.idDoctor = idDoctor;
+		this.idNurse = idNurse;
+		this.idSick = null;
+		this.levelSick = null;
+		this.isTest = isTest;
+	}
+	// Tạo Hồ sơ Chữa bệnh
+	public MedicalRecord(Date inputDay, Date outputDay, String idPatient, String idDoctor,
+			String idNurse, String idSick, String levelSick, boolean isTest) {
 		MedicalRecord.countMedicalRecordCreated++;
 		this.id = getFormatId();
 		this.inputDay = inputDay;
@@ -48,8 +63,8 @@ public abstract class MedicalRecord {
 		this.isTest = isTest;
 	}
 	public MedicalRecord(String id, Date inputDay, Date outputDay,
-			String idPatient, String idDoctor, String idNurse, String idSick, 
-			String levelSick, boolean isTest, double price) {
+			String idPatient, String idDoctor, String idNurse,
+			String idSick, String levelSick, boolean isTest, double price) {
 		this.id = id;
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
@@ -134,10 +149,10 @@ public abstract class MedicalRecord {
 	public String getLevelSick() {
 		return this.levelSick;
 	}
-	public boolean getIsTest() {
+	public Boolean getIsTest() {
 		return this.isTest;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return this.price;
 	}
 	public static int getCountMedicalRecordCreated() {
@@ -165,5 +180,9 @@ public abstract class MedicalRecord {
     private String getFormatId() {
         String postfix = String.format("%05d", MedicalRecord.countMedicalRecordCreated);
         return "MER" + postfix;
+    }
+	// - Hàm lấy ra thông tinnn của Bệnh án
+    public String getInfo() {
+        return null;
     }
 }

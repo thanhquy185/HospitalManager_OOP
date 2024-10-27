@@ -5,30 +5,30 @@ public class Person {
 	protected String fullname;
 	protected Date birthday;
 	protected String gender;
-	protected String country;
 	protected String phone;
+	protected String country;
 	
 	//Constructors
 	public Person() {
 		this.fullname = null;
 		this.birthday = new Date();
 		this.gender = null;
-		this.country = null;
 		this.phone = null;
+		this.country = null;
 	}
-	public Person(String fullname, Date birthday, String gender, String country, String phone) {
+	public Person(String fullname, Date birthday, String gender, String phone, String country) {
 		this.fullname = fullname;
 		this.birthday = birthday;
 		this.gender = gender;
-		this.country = country;
 		this.phone = phone;
+		this.country = country;
 	}
 	public Person(Person person) {
 		this.fullname = person.fullname;
 		this.birthday = person.birthday;
 		this.gender = person.gender;
-		this.country = person.country;
 		this.phone = person.phone;
+		this.country = person.country;
 	}
 
 	//Setter - Getter
@@ -41,11 +41,11 @@ public class Person {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	public String getFullname() {
 		return this.fullname;
@@ -56,11 +56,11 @@ public class Person {
 	public String getGender() {
 		return this.gender;
 	}
-	public String getCountry() {
-		return this.country;
-	}
 	public String getPhone() {
 		return this.phone;
+	}
+	public String getCountry() {
+		return this.country;
 	}
 
 	//Methods
