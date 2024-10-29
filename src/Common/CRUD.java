@@ -1,7 +1,6 @@
 package Common;
 
 import java.util.ArrayList;
-import java.io.IOException;
 
 public interface CRUD<T> {
     //Methods
@@ -47,8 +46,8 @@ public interface CRUD<T> {
     void sort(String condition);
 
     // -- Truy xuất dữ liệu từ file
-    void loadFromFile() throws IOException;
+    void loadFromFile();
 
     // -- Sao lưu dữ liệu lên file
-    void saveToFile() throws IOException;
+    void saveToFile();
 }
