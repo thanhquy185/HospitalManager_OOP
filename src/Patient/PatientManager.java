@@ -49,27 +49,6 @@ public class PatientManager implements CRUD<Patient> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
-    public void show() {}
-    @Override
-    public void add(Patient patient){
-        PatientManager.list.add(patient);
-        PatientManager.numbers++;
-    }
-    @Override
-    public void update(Patient patient){
-        PatientManager.list.set(findIndexById(patient.getId()), patient);
-    }
-    @Override
-    public void removeOne(String id){
-        PatientManager.list.remove(findIndexById(id));
-        PatientManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        PatientManager.list.clear();
-        PatientManager.numbers = 0;
-    }
-    @Override
     public String getInfoByIndex(int index) {
         return "";
     }
@@ -77,6 +56,8 @@ public class PatientManager implements CRUD<Patient> {
     public String getInfoById(String id) {
         return "";
     }
+    @Override
+    public void show() {}
     @Override
     public int findIndexById(String id){
         for(int i = 0; i < PatientManager.numbers; i++){
@@ -98,12 +79,23 @@ public class PatientManager implements CRUD<Patient> {
         return PatientManager.list.get(index);
     }
     @Override
-    public Patient findObjectByCondition(String condition){
-        return null;
+    public void add(Patient patient){
+        PatientManager.list.add(patient);
+        PatientManager.numbers++;
     }
     @Override
-    public ArrayList<Patient> findObjectsByCondition(String condition){
-        return null;
+    public void update(Patient patient){
+        PatientManager.list.set(findIndexById(patient.getId()), patient);
+    }
+    @Override
+    public void removeOne(String id){
+        PatientManager.list.remove(findIndexById(id));
+        PatientManager.numbers--;
+    }
+    @Override
+    public void removeAll(){
+        PatientManager.list.clear();
+        PatientManager.numbers = 0;
     }
     @Override
     public void sort(String condition){

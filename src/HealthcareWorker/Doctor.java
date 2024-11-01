@@ -16,8 +16,8 @@ public class Doctor extends HealthcareWorker {
     public Doctor(Doctor doctor) {
         super(doctor.getFullname(), doctor.getBirthday(), doctor.getGender(), doctor.getPhone(),
             doctor.getCountry(), doctor.getId(), doctor.getType(), doctor.getYearsOfExperience(),
-            doctor.getSalary(), doctor.getIdDepartment(), doctor.getIsManagerDepartment(),
-            doctor.getIdMedicalRecord());
+            doctor.getSalary(), doctor.getDepartmentID(), doctor.getIsManagerDepartment(),
+            doctor.getMedicalRecordID());
     }
 
     //Methods

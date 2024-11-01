@@ -20,7 +20,7 @@ public class PremiumPatient extends Patient {
     public PremiumPatient(PremiumPatient premiumPatient) {
         super(premiumPatient.getFullname(), premiumPatient.getBirthday(),
             premiumPatient.getGender(), premiumPatient.getPhone(), premiumPatient.getCountry(),
-            premiumPatient.getId(),premiumPatient.getType(), premiumPatient.getIdMedicalRecord());
+            premiumPatient.getId(),premiumPatient.getType(), premiumPatient.getMedicalRecordID());
     }
 
     //Methods

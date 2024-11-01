@@ -1,4 +1,4 @@
-package Hospital;
+package Account;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -23,19 +23,19 @@ public class AccountManager {
     }
 
     // Setter - Getter
-    static void setList(ArrayList<Account> list) {
+    public void setList(ArrayList<Account> list) {
         AccountManager.list = list;
     }
-    static void setNumbers(int numbers) {
+    public void setNumbers(int numbers) {
         AccountManager.numbers = numbers;
     }
-    static ArrayList<Account> getList() {
+    public ArrayList<Account> getList() {
         return AccountManager.list;
     }
-    static int getNumbers() {
+    public int getNumbers() {
         return AccountManager.numbers;
     }
-    static AccountManager getInstance() {
+    public static AccountManager getInstance() {
         if(AccountManager.instance == null)
             AccountManager.instance = new AccountManager();
         return AccountManager.instance;
@@ -43,22 +43,34 @@ public class AccountManager {
 
     // Methods
     // - Kiểm tra tài khoản có thể truy cập được hay không ?
-    // - Nếu chưa tồn tại thì không thể truy cập
-    boolean canAccessAccount(String username, String password) {
-        for(Account account : list) {
+    // - Nếu tài khoản chưa tồn tại thì không thể truy cập
+    public boolean canAccess(String username, String password) {
+        for(Account account : AccountManager.list) {
             if(account.getUsername().equals(username)
-                && account.getPassword().equals(password))
+                    && account.getPassword().equals(password))
                 return true;
         }
         return false;
     }
-    /* -- Nếu chưa tồn tại thì có thể tạo tài khoản đăng ký mới, mật khẩu
-    có thể trùng nhưng tên tài khoản phải khác nhau */
-    boolean canNotRegisterAccount(String username, String password) {
+    // - Kiểm tra tài khoản có thể đăng ký được không ?
+    public boolean canNotRegister(String username, String password) {
+        /* -- Nếu chưa tồn tại thì có thể tạo tài khoản đăng ký mới, mật khẩu
+        có thể trùng nhưng tên tài khoản phải khác nhau */
         for(Account account : list) {
             if(account.getUsername().equals(username)) return true;
         }
-        // --- Kiểm tra tên tài khoản
+
+        // -- Ngăn cấm việc tạo tài khoản có tên tài khoản trùng với cách tạo tài khoản của Bệnh viện
+        // --- Nếu là các tiền tố DEP, DOC, NUR, MER thì không được đăng ký
+        String prefix1 = username.substring(0, 3);
+        if(prefix1.equals("DEP") || prefix1.equals("DOC")
+            || prefix1.equals("NUR") || prefix1.equals("MER")) return true;
+        // --- Nếu là các tiền tố SICK, NPAT, PPAT thì không được đăng ký
+        String prefix2 = username.substring(0, 4);
+        if(prefix2.equals("SICK") || prefix2.equals("NPAT")
+            || prefix2.equals("PPAT")) return true;
+
+        // -- Kiểm tra tên tài khoản phải là ký tự chữ cái và chữ số
         for(int i = 0; i < username.length(); i++) {
             int charUnicode = (int) username.charAt(i);
             if((charUnicode < 48 || charUnicode > 57)
@@ -66,7 +78,8 @@ public class AccountManager {
                     && (charUnicode < 97 || charUnicode > 122))
                 return true;
         }
-        // --- Kiểm tra mật khẩu
+
+        // -- Kiểm tra mật khẩu phải là ký tự chữ cái và chữ số
         for(int i = 0; i < password.length(); i++) {
             int charUnicode = (int) password.charAt(i);
             if((charUnicode < 48 || charUnicode > 57)
@@ -74,18 +87,19 @@ public class AccountManager {
                     && (charUnicode < 97 || charUnicode > 122))
                 return true;
         }
+
         return false;
     }
     // - Kiểm tra có phải là tài khoản Quản lý hay không ?
     // - Tài khoản Quản lý mặc định là admin - 1
-    boolean isAdmin(String username, String password) {
+    public boolean isAdmin(String username, String password) {
         if(!username.equals("admin")
             || !password.equals("1")) return false;
         return true;
     }
     // - Kiểm tra có phải là tài khoản Người dùng trong Bệnh viện (Bệnh nhân, Bác sĩ, Y tá) hay không ?
     // -- Tài khoản Người dùng sẽ là id (của đối tượng tương ứng) - ngaysinh (ddmmyyyy)
-    boolean isUserInHospital(String username) {
+    public boolean isUserInHospital(String username) {
         for(Account account : AccountManager.list) {
             if(account.getUsername().equals(username)
                     && account.getType().equals("Tài khoản mới"))
@@ -94,14 +108,14 @@ public class AccountManager {
         return true;
     }
     // -- Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
-    boolean isUserInHospitalIsHealthcareWorker(String username) {
+    public boolean isHealthcareWorker(String username) {
         if(username.substring(0, 3).equals("DOC")
                 || username.substring(0, 3).equals("NUR"))
             return true;
         return false;
     }
     // -- Kiểm tra có phải Người dùng là Bệnh nhân
-    boolean isUserInHospitalIsPatient(String username) {
+    public boolean isPatient(String username) {
         if(username.substring(0, 4).equals("NPAT")
                 || username.substring(0, 4).equals("PPAT"))
             return true;
@@ -138,14 +152,14 @@ public class AccountManager {
         //     System.out.println("+--------------------------------------------------------+");
     }
     // -- Thêm một tài khoản
-    void add(Account account) {
+    public void add(Account account) {
         AccountManager.list.add(account);
         AccountManager.numbers++;
     }
     // -- Cập nhật một tài khoản (đã tồn tại, tài khoản Người dùng ngoài Bệnh viện)
-    void update(Account account) {}
+    public void update(Account account) {}
     // -- Xoá một tài khoản (đã tồn tại)
-    void remove(String username, String password) {
+    public void remove(String username, String password) {
         AccountManager.list.remove(findIndexByAccount(username, password));
         AccountManager.numbers--;
     }

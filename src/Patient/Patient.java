@@ -7,7 +7,7 @@ public abstract class Patient extends Person {
     // Properties
     protected String id;
     protected String type;
-    protected String idMedicalRecord;
+    protected String medicalRecordID;
     protected static int countPatientCreated;
 
     // Static
@@ -20,7 +20,7 @@ public abstract class Patient extends Person {
         super();
         this.id = null;
         this.type = null;
-        this.idMedicalRecord = null;
+        this.medicalRecordID = null;
     }
     public Patient(String fullname, Date birthday, String gender,
             String phone, String country, String type){
@@ -30,18 +30,18 @@ public abstract class Patient extends Person {
         this.id = getFormatId();
     }
     public Patient(String fullname, Date birthday, String gender, String phone,
-            String country, String id, String type, String idMedicalRecord){
+            String country, String id, String type, String medicalRecordID){
         super(fullname, birthday, gender, phone, country);
         this.id = id;
         this.type = type;
-        this.idMedicalRecord = idMedicalRecord;
+        this.medicalRecordID = medicalRecordID;
     }
     public Patient(Patient patient) {
         super(patient.fullname, patient.birthday,
             patient.gender, patient.phone, patient.country);
         this.id = patient.id;
         this.type = patient.type;
-        this.idMedicalRecord = patient.idMedicalRecord;
+        this.medicalRecordID = patient.medicalRecordID;
     }
 
     // Setter - Getter
@@ -54,8 +54,8 @@ public abstract class Patient extends Person {
     public void setType(String type){
         this.type = type;
     }
-    public void setIdMedicalRecord(String idMedicalRecord) {
-        this.idMedicalRecord = idMedicalRecord;
+    public void setMedicalRecordID(String medicalRecordID) {
+        this.medicalRecordID = medicalRecordID;
     }
     public static void setCountPatientCreated(int countPatientCreated) {
         Patient.countPatientCreated = countPatientCreated;
@@ -66,8 +66,8 @@ public abstract class Patient extends Person {
     public String getType(){
         return this.type;
     }
-    public String getIdMedicalRecord() {
-        return this.idMedicalRecord;
+    public String getMedicalRecordID() {
+        return this.medicalRecordID;
     }
     public static int getCountPatientCreated() {
         return Patient.countPatientCreated;
@@ -101,7 +101,7 @@ public abstract class Patient extends Person {
         }
         return "NPAT" + postfix;
     }
-    // - Hàm lấy ra thông tinnn của Bệnh nhân
+    // - Hàm lấy ra thông tin của Bệnh nhân
     public String getInfo() {
         return null;
     }

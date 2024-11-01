@@ -20,7 +20,7 @@ public class NormalPatient extends Patient {
     public NormalPatient(NormalPatient normalPatient) {
         super(normalPatient.getFullname(), normalPatient.getBirthday(),
             normalPatient.getGender(), normalPatient.getPhone(), normalPatient.getCountry(),
-            normalPatient.getId(),normalPatient.getType(), normalPatient.getIdMedicalRecord());
+            normalPatient.getId(),normalPatient.getType(), normalPatient.getMedicalRecordID());
     }
 
     //Methods

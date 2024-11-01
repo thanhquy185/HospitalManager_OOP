@@ -48,27 +48,6 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
-    public void show() {}
-    @Override
-    public void add(HealthcareWorker healthcareWorker){
-        HealthcareWorkerManager.list.add(healthcareWorker);
-        HealthcareWorkerManager.numbers++;
-    }
-    @Override
-    public void update(HealthcareWorker healthcareWorker){
-        HealthcareWorkerManager.list.set(findIndexById(healthcareWorker.getId()), healthcareWorker);
-    }
-    @Override
-    public void removeOne(String id){
-        HealthcareWorkerManager.list.remove(findIndexById(id));
-        HealthcareWorkerManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        HealthcareWorkerManager.list.clear();
-        HealthcareWorkerManager.numbers = 0;
-    }
-    @Override
     public String getInfoByIndex(int index) {
         return "";
     }
@@ -76,6 +55,8 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     public String getInfoById(String id) {
         return "";
     }
+    @Override
+    public void show() {}
     @Override
     public int findIndexById(String id){
         for(int i = 0; i < HealthcareWorkerManager.numbers; i++){
@@ -97,35 +78,23 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         return HealthcareWorkerManager.list.get(index);
     }
     @Override
-    public HealthcareWorker findObjectByCondition(String condition){
-        return null;
+    public void add(HealthcareWorker healthcareWorker){
+        HealthcareWorkerManager.list.add(healthcareWorker);
+        HealthcareWorkerManager.numbers++;
     }
     @Override
-    public ArrayList<HealthcareWorker> findObjectsByCondition(String condition){
-        ArrayList<HealthcareWorker> list = null;
-        // - Mảng các Bác sĩ đã là trưởng Khoa
-        if(condition.equals("doctor is manager department")
-                && HealthcareWorkerManager.numbers >= 1) {
-            list = new ArrayList<>();
-            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
-                if(healthcareWorker.getType() == "Bác sĩ"
-                        && healthcareWorker.getIsManagerDepartment()) {
-                    list.add(healthcareWorker);
-                }
-            }
-        }
-        // - Mảng các Bác sĩ đã là trưởng Khoa
-        if(condition.equals("doctor is not manager department")
-                && HealthcareWorkerManager.numbers >= 1) {
-            list = new ArrayList<>();
-            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
-                if(healthcareWorker.getType() == "Bác sĩ"
-                        && !healthcareWorker.getIsManagerDepartment()) {
-                    list.add(healthcareWorker);
-                }
-            }
-        }
-        return list;
+    public void update(HealthcareWorker healthcareWorker){
+        HealthcareWorkerManager.list.set(findIndexById(healthcareWorker.getId()), healthcareWorker);
+    }
+    @Override
+    public void removeOne(String id){
+        HealthcareWorkerManager.list.remove(findIndexById(id));
+        HealthcareWorkerManager.numbers--;
+    }
+    @Override
+    public void removeAll(){
+        HealthcareWorkerManager.list.clear();
+        HealthcareWorkerManager.numbers = 0;
     }
     @Override
     public void sort(String condition){

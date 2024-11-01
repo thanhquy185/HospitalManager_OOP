@@ -7,12 +7,12 @@ public abstract class MedicalRecord {
 	protected String id;
 	protected Date inputDay;
 	protected Date outputDay;
-	protected String idPatient;
-	protected String idDoctor;
-	protected String idNurse;
-	protected String idSick;
-	protected String levelSick;
-	protected Boolean isTest;
+	protected String type;
+	protected String patientID;
+	protected String doctorID;
+	protected String nurseID;
+	protected String sickID;
+	protected String sickLevel;
 	protected Double price;
 	private static int countMedicalRecordCreated;
 
@@ -26,66 +26,67 @@ public abstract class MedicalRecord {
 		this.id = null;
 		this.inputDay = new Date();
 		this.outputDay = new Date();
-		this.isTest = null;
-		this.idPatient = null;
-		this.idDoctor = null;
-		this.idNurse = null;
-		this.idSick = null;
-		this.levelSick = null;
+		this.type = null;
+		this.patientID = null;
+		this.doctorID = null;
+		this.nurseID = null;
+		this.sickID = null;
+		this.sickLevel = null;
 		this.price = null;
 	}
 	// Tạo Hồ sơ Khám bệnh
-	public MedicalRecord(Date inputDay, Date outputDay, String idPatient,
-			String idDoctor, String idNurse, boolean isTest) {
+	public MedicalRecord(Date inputDay, Date outputDay, String type,
+			String patientID, String doctorID, String nurseID) {
 		MedicalRecord.countMedicalRecordCreated++;
 		this.id = getFormatId();
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
-		this.idPatient = idPatient;
-		this.idDoctor = idDoctor;
-		this.idNurse = idNurse;
-		this.idSick = null;
-		this.levelSick = null;
-		this.isTest = isTest;
+		this.type = type;
+		this.patientID = patientID;
+		this.doctorID = doctorID;
+		this.nurseID = nurseID;
+		this.sickID = null;
+		this.sickLevel = null;
 	}
 	// Tạo Hồ sơ Chữa bệnh
-	public MedicalRecord(Date inputDay, Date outputDay, String idPatient, String idDoctor,
-			String idNurse, String idSick, String levelSick, boolean isTest) {
+	public MedicalRecord(Date inputDay, Date outputDay, String type, String patientID,
+			String doctorID, String nurseID, String sickID, String sickLevel) {
 		MedicalRecord.countMedicalRecordCreated++;
 		this.id = getFormatId();
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
-		this.idPatient = idPatient;
-		this.idDoctor = idDoctor;
-		this.idNurse = idNurse;
-		this.idSick = idSick;
-		this.levelSick = levelSick;
-		this.isTest = isTest;
+		this.type = type;
+		this.patientID = patientID;
+		this.doctorID = doctorID;
+		this.nurseID = nurseID;
+		this.sickID = sickID;
+		this.sickLevel = sickLevel;
 	}
 	public MedicalRecord(String id, Date inputDay, Date outputDay,
-			String idPatient, String idDoctor, String idNurse,
-			String idSick, String levelSick, boolean isTest, double price) {
+			String type, String patientID, String doctorID, String nurseID,
+			String sickID, String sickLevel, double price) {
 		this.id = id;
 		this.inputDay = inputDay;
 		this.outputDay = outputDay;
-		this.idDoctor = idDoctor;
-		this.idNurse = idNurse;
-		this.idSick = idSick;
-		this.idSick = idSick;
-		this.levelSick = levelSick;
-		this.isTest = isTest;
+		this.type = type;
+		this.patientID = patientID;
+		this.doctorID = doctorID;
+		this.nurseID = nurseID;
+		this.sickID = sickID;
+		this.sickID = sickID;
+		this.sickLevel = sickLevel;
 		this.price = price;
 	}
 	public MedicalRecord(MedicalRecord medicalRecord) {
 		this.id = medicalRecord.id;
 		this.inputDay = medicalRecord.inputDay;
 		this.outputDay = medicalRecord.outputDay;
-		this.idPatient = medicalRecord.idPatient;
-		this.idDoctor = medicalRecord.idDoctor;
-		this.idNurse = medicalRecord.idNurse;
-		this.idSick = medicalRecord.idSick;
-		this.levelSick = medicalRecord.levelSick;
-		this.isTest = medicalRecord.isTest;
+		this.type = type;
+		this.patientID = medicalRecord.patientID;
+		this.doctorID = medicalRecord.doctorID;
+		this.nurseID = medicalRecord.nurseID;
+		this.sickID = medicalRecord.sickID;
+		this.sickLevel = medicalRecord.sickLevel;
 		this.price = medicalRecord.price;
 	}
 
@@ -101,23 +102,23 @@ public abstract class MedicalRecord {
 	public void setOutputDay(Date outputDay) {
 		this.outputDay = outputDay;
 	}
-	public void setIdPatient(String idPatient) {
-		this.idPatient = idPatient;
+	public void setType(String type) {
+		this.type = type;
 	}
-	public void setIdDoctor(String idDoctor) {
-		this.idDoctor = idDoctor;
+	public void setPatientID(String patientID) {
+		this.patientID = patientID;
 	}
-	public void setIdNurse(String idNurse) {
-		this.idNurse = idNurse;
+	public void setDoctorID(String doctorID) {
+		this.doctorID = doctorID;
 	}
-	public void setIdSick(String idSick) {
-		this.idSick = idSick;
+	public void setNurseID(String nurseID) {
+		this.nurseID = nurseID;
 	}
-	public void setLevelSick(String levelSick) {
-		this.levelSick = levelSick;
+	public void setSickID(String sickID) {
+		this.sickID = sickID;
 	}
-	public void setIsTest(boolean isTest) {
-		this.isTest = isTest;
+	public void setSickLevel(String sickLevel) {
+		this.sickLevel = sickLevel;
 	}
 	public void setPrice(double price) {
 		this.price = price;
@@ -134,23 +135,23 @@ public abstract class MedicalRecord {
 	public Date getOutputDay() {
 		return this.outputDay;
 	}
-	public String getIdPatient() {
-		return this.idPatient;
+	public String getType() {
+		return this.type;
 	}
-	public String getIdDoctor() {
-		return this.idDoctor;
+	public String getPatientID() {
+		return this.patientID;
 	}
-	public String getIdNurse() {
-		return this.idNurse;
+	public String getDoctorID() {
+		return this.doctorID;
 	}
-	public String getIdSick() {
-		return this.idSick;
+	public String getNurseID() {
+		return this.nurseID;
 	}
-	public String getLevelSick() {
-		return this.levelSick;
+	public String getSickID() {
+		return this.sickID;
 	}
-	public Boolean getIsTest() {
-		return this.isTest;
+	public String getSickLevel() {
+		return this.sickLevel;
 	}
 	public Double getPrice() {
 		return this.price;

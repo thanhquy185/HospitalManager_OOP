@@ -4,7 +4,7 @@ public class Sick {
     // Properties
 	private String id;
 	private String name;
-	private String idDepartment;
+	private String departmentID;
 	private static int countSickCreated;
 
 	// Static
@@ -16,23 +16,23 @@ public class Sick {
 	public Sick() {
 		this.id = null;
 		this.name = null;
-		this.idDepartment = null;
+		this.departmentID = null;
 	}
-	public Sick(String name, String idDepartment) {
+	public Sick(String name, String departmentID) {
 		Sick.countSickCreated++;
-		this.idDepartment = idDepartment;
+		this.departmentID = departmentID;
 		this.id = getFormatId();
 		this.name = name;
 	}
-	public Sick(String id, String name, String idDepartment) {
+	public Sick(String id, String name, String departmentID) {
 		this.id = id;
-		this.idDepartment = idDepartment;
+		this.departmentID = departmentID;
 		this.name = name;
 	}
 	public Sick (Sick sick) {
 		this.id = sick.id;
 		this.name = sick.name;
-		this.idDepartment = sick.idDepartment;
+		this.departmentID = sick.departmentID;
 	}
 
     // Setter-Getter
@@ -44,8 +44,8 @@ public class Sick {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setIdDepartment(String idDepartment) {
-		this.idDepartment = idDepartment;
+	public void setDepartmentID(String departmentID) {
+		this.departmentID = departmentID;
 	}
 	public static void setCountSickCreated(int countSickCreated) {
 		Sick.countSickCreated = countSickCreated;
@@ -56,8 +56,8 @@ public class Sick {
 	public String getName() {
 		return this.name;
 	}
-	public String getIdDepartment() {
-		return this.idDepartment;
+	public String getDepartmentID() {
+		return this.departmentID;
 	}
 	public static int getCountSickCreated() {
 		return Sick.countSickCreated;
@@ -85,6 +85,6 @@ public class Sick {
         return "SICK" + postfix;
     }
 	public String getInfo() {
-		return this.id + " | " + this.name + " | " + this.idDepartment;
+		return this.id + " | " + this.name + " | " + this.departmentID;
 	}
 }

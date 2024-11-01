@@ -3,7 +3,15 @@ package Common;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
-public class CharacterFormat {
+public class myCharacterClass {
+    // Kiểm tra trong chuỗi có ít nhất 1 ký tự là chữ cái hay không ?
+    public static boolean hasOneCharacterIsLetter(String s) {
+        for(int i = 0; i < s.length(); i++) {
+            if(Character.isLetter(s.charAt(i)))
+                return true;
+        }
+        return false;
+    }
     // Chuyển đổi ký tự có dấu thành ký tự thường
     public static String removeAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
@@ -16,8 +24,8 @@ public class CharacterFormat {
     }
     // Kết hợp cả 2 hàm trên
     public static String normalCharacterFormat(String s) {
-        return CharacterFormat.removeSpecialCharacter(
-            CharacterFormat.removeAccent(s)
+        return myCharacterClass.removeSpecialCharacter(
+            myCharacterClass.removeAccent(s)
         );
     }
 }

@@ -13,16 +13,16 @@ public class TestRecord extends MedicalRecord {
 		this.reason = null;
 		this.diagnose = null;
 	}
-	public TestRecord(Date inputDay, Date outputDay, String idPatient,
-			String idDoctor, String idNurse, boolean isTest, String reason) {
-		super(inputDay, outputDay, idPatient, idDoctor, idNurse, isTest);
+	public TestRecord(Date inputDay, Date outputDay, String type,
+			String idPatient, String idDoctor, String idNurse, String reason) {
+		super(inputDay, outputDay, type, idPatient, idDoctor, idNurse);
 		this.reason = reason;
 		this.diagnose = null;
 	}
 	public TestRecord(TestRecord testRecord) {
 		super(testRecord.getId(), testRecord.getInputDay(), testRecord.getOutputDay(),
-			testRecord.getIdPatient(),testRecord.getIdDoctor(), testRecord.getIdNurse(),
-			testRecord.getIdSick(), testRecord.getLevelSick(), testRecord.getIsTest(),
+			testRecord.getType(), testRecord.getPatientID(),testRecord.getDoctorID(),
+			testRecord.getNurseID(), testRecord.getSickID(), testRecord.getSickLevel(),
 			testRecord.getPrice());
 		this.reason = testRecord.getReason();
 		this.diagnose = testRecord.getDiagnose();

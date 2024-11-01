@@ -4,7 +4,7 @@ public class Department {
     // Properties
     private String id;
     private String name;
-    private String idManager;
+    private String managerID;
     private String room;
     private static int countDepartmentCreated;
 
@@ -17,26 +17,26 @@ public class Department {
     public Department() {
         this.id = null;
         this.name = null;
-        this.idManager = null;
+        this.managerID = null;
         this.room = null;
     }
-    public Department(String name, String idManager, String room) {
+    public Department(String name, String managerID, String room) {
         Department.countDepartmentCreated++;
         this.id = getFormatId();
         this.name = name;
-        this.idManager = idManager;
+        this.managerID = managerID;
         this.room = room;
     }
-    public Department(String id, String name, String idManager, String room) {
+    public Department(String id, String name, String managerID, String room) {
         this.id = id;
         this.name = name;
-        this.idManager = idManager;
+        this.managerID = managerID;
         this.room = room;
     }
     public Department(Department department) {
         this.id = department.id;
         this.name = department.name;
-        this.idManager = department.idManager;
+        this.managerID = department.managerID;
         this.room = department.room;
     }
 
@@ -49,8 +49,8 @@ public class Department {
     public void setName(String name) {
         this.name = name;
     }
-    public void setIdManager(String idManager) {
-        this.idManager = idManager;
+    public void setManagerID(String managerID) {
+        this.managerID = managerID;
     }
     public void setRoom(String room) {
         this.room = room;
@@ -64,8 +64,8 @@ public class Department {
     public String getName() {
         return this.name;
     }
-    public String getIdManager() {
-        return this.idManager;
+    public String getManagerID() {
+        return this.managerID;
     }
     public String getRoom() {
         return this.room;
@@ -99,6 +99,6 @@ public class Department {
     }
     // - Hàm lấy ra thông tinnn của Khoa
     public String getInfo() {
-        return this.id + " | " + this.name + " | " + this.idManager + " | " + this.room;
+        return this.id + " | " + this.name + " | " + this.managerID + " | " + this.room;
     }
 }

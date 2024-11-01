@@ -49,47 +49,6 @@ public class SickManager implements CRUD<Sick> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
-    public void show() {
-        System.out.println("*----------------------------------------------------------------------------------*");
-	    System.out.println("|  MÃ BỆNH  |         TÊN BỆNH         |                    KHOA                   |");
-	    System.out.println("*-----------+--------------------------+-------------------------------------------*");
-        for(Sick sick : list) {
-            String id = sick.getId();
-            String name = sick.getName();
-            String idDepartment = null;
-            if(sick.getIdDepartment() != null) {
-                if(!sick.getIdDepartment().equals("null"))
-                    idDepartment = sick.getIdDepartment();
-            }
-            String nameDepartment = null;
-            if(idDepartment != null) {
-                nameDepartment = DepartmentManager.getInstance().findObjectById(idDepartment).getName();
-            }
-            System.out.println(String.format("| %-9s | %-24s | %8s - %-30s |", id, name, idDepartment, nameDepartment));
-        }
-		if(SickManager.numbers >= 1)
-            System.out.println("*----------------------------------------------------------------------------------*");
-    }
-    @Override
-    public void add(Sick Sick){
-        SickManager.list.add(Sick);
-        SickManager.numbers++;
-    }
-    @Override
-    public void update(Sick Sick){
-        SickManager.list.set(findIndexById(Sick.getId()), Sick);
-    }
-    @Override
-    public void removeOne(String id){
-        SickManager.list.remove(findIndexById(id));
-        SickManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        SickManager.list.clear();
-        SickManager.numbers = 0;
-    }
-    @Override
     public String getInfoByIndex(int index) {
         if(index < 0 || index > SickManager.numbers) return null;
         return SickManager.list.get(index).getInfo();
@@ -99,6 +58,28 @@ public class SickManager implements CRUD<Sick> {
         int index = findIndexById(id);
         if(index == -1) return null;
         return SickManager.list.get(index).getInfo();
+    }
+    @Override
+    public void show() {
+        System.out.println("*----------------------------------------------------------------------------------*");
+	    System.out.println("|  MÃ BỆNH  |         TÊN BỆNH         |                    KHOA                   |");
+	    System.out.println("*-----------+--------------------------+-------------------------------------------*");
+        for(Sick sick : list) {
+            String id = sick.getId();
+            String name = sick.getName();
+            String idDepartment = null;
+            if(sick.getDepartmentID() != null) {
+                if(!sick.getDepartmentID().equals("null"))
+                    idDepartment = sick.getDepartmentID();
+            }
+            String nameDepartment = null;
+            if(idDepartment != null) {
+                nameDepartment = DepartmentManager.getInstance().findObjectById(idDepartment).getName();
+            }
+            System.out.println(String.format("| %-9s | %-24s | %8s - %-30s |", id, name, idDepartment, nameDepartment));
+        }
+		if(SickManager.numbers >= 1)
+            System.out.println("*----------------------------------------------------------------------------------*");
     }
     @Override
     public int findIndexById(String id){
@@ -121,12 +102,23 @@ public class SickManager implements CRUD<Sick> {
         return SickManager.list.get(index);
     }
     @Override
-    public Sick findObjectByCondition(String condition){
-        return null;
+    public void add(Sick Sick){
+        SickManager.list.add(Sick);
+        SickManager.numbers++;
     }
     @Override
-    public ArrayList<Sick> findObjectsByCondition(String condition){
-        return null;
+    public void update(Sick Sick){
+        SickManager.list.set(findIndexById(Sick.getId()), Sick);
+    }
+    @Override
+    public void removeOne(String id){
+        SickManager.list.remove(findIndexById(id));
+        SickManager.numbers--;
+    }
+    @Override
+    public void removeAll(){
+        SickManager.list.clear();
+        SickManager.numbers = 0;
     }
     @Override
     public void sort(String condition){
@@ -148,8 +140,8 @@ public class SickManager implements CRUD<Sick> {
                 String[] info = line.split("\\|");
                 String id = info[0].trim();
                 String name = info[1].trim();
-                String idDepartment = info[2].trim();
-                Sick newSick = new Sick(id, name, idDepartment);
+                String departmentID = info[2].trim();
+                Sick newSick = new Sick(id, name, departmentID);
                 add(newSick);
             }
             bufferedReader.close();
@@ -171,7 +163,7 @@ public class SickManager implements CRUD<Sick> {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for(Sick sick : SickManager.list) {
                 bufferedWriter.write(String.format(String.format("| %-9s | %-24s | %-8s |\n",
-                    sick.getId(), sick.getName(), sick.getIdDepartment())));
+                    sick.getId(), sick.getName(), sick.getDepartmentID())));
             }
             bufferedWriter.close();
             fileWriter.close();

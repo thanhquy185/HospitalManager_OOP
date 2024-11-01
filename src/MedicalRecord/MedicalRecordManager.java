@@ -48,27 +48,6 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
-    public void show() {}
-    @Override
-	public void add(MedicalRecord medicalRecord) {
-		MedicalRecordManager.list.add(medicalRecord);
-        MedicalRecordManager.numbers++;
-	}
-    @Override
-	public void update(MedicalRecord medicalRecord) {
-		MedicalRecordManager.list.set(findIndexById(medicalRecord.getId()), medicalRecord);
-	}
-	@Override
-	public void removeOne(String id) {
-		MedicalRecordManager.list.remove(findIndexById(id));
-        MedicalRecordManager.numbers--;
-	}
-	@Override
-	public void removeAll() {
-		MedicalRecordManager.list.clear();
-        MedicalRecordManager.numbers = 0;
-	}
-    @Override
     public String getInfoByIndex(int index) {
         return "";
     }
@@ -76,7 +55,9 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     public String getInfoById(String id) {
         return "";
     }
-	@Override
+    @Override
+    public void show() {}
+    @Override
     public int findIndexById(String id) {
         for(int i = 0; i < MedicalRecordManager.numbers; i++){
             if(MedicalRecordManager.list.get(i).getId().equals(id)) {
@@ -96,13 +77,24 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
         if(index == -1) return null;
         return MedicalRecordManager.list.get(index);
     }
-	@Override
-	public MedicalRecord findObjectByCondition(String condition) {
-        return null;
+    @Override
+	public void add(MedicalRecord medicalRecord) {
+		MedicalRecordManager.list.add(medicalRecord);
+        MedicalRecordManager.numbers++;
+	}
+    @Override
+	public void update(MedicalRecord medicalRecord) {
+		MedicalRecordManager.list.set(findIndexById(medicalRecord.getId()), medicalRecord);
 	}
 	@Override
-	public ArrayList<MedicalRecord> findObjectsByCondition(String medicalRecord) {
-		return null;
+	public void removeOne(String id) {
+		MedicalRecordManager.list.remove(findIndexById(id));
+        MedicalRecordManager.numbers--;
+	}
+	@Override
+	public void removeAll() {
+		MedicalRecordManager.list.clear();
+        MedicalRecordManager.numbers = 0;
 	}
 	@Override
 	public void sort(String condition) {

@@ -49,49 +49,6 @@ public class DepartmentManager implements CRUD<Department> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
-    public void show() {
-        System.out.println("*-----------------------------------------------------------------------------------------*");
-	    System.out.println("| MÃ KHOA  |            TÊN KHOA            |             TRƯỞNG KHOA             | PHÒNG |");
-	    System.out.println("*----------+--------------------------------+-------------------------------------+-------*");
-        for(Department department : list) {
-            String id = department.getId();
-            String name = department.getName();
-            String idManager = null;
-            if(department.getIdManager() != null) {
-                if(!department.getIdManager().equals("null"))
-                    idManager = department.getIdManager();
-            }
-            String nameManager = null;
-            if(idManager != null) {
-                nameManager = HealthcareWorkerManager.getInstance().findObjectById(idManager).getFullname();
-            }
-            String room = department.getRoom();
-            System.out.println(String.format("| %-8s | %-30s | %8s - %-24s | %-4s |", id, name, idManager, nameManager, room));
-        }
-        if(DepartmentManager.numbers >= 1)
-	        System.out.println("*-----------------------------------------------------------------------------------------*");
-
-    }
-    @Override
-    public void add(Department Department){
-        DepartmentManager.list.add(Department);
-        DepartmentManager.numbers++;
-    }
-    @Override
-    public void update(Department Department){
-        DepartmentManager.list.set(findIndexById(Department.getId()), Department);
-    }
-    @Override
-    public void removeOne(String id){
-        DepartmentManager.list.remove(findIndexById(id));
-        DepartmentManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        DepartmentManager.list.clear();
-        DepartmentManager.numbers = 0;
-    }
-    @Override
     public String getInfoByIndex(int index) {
         if(index < 0 || index > DepartmentManager.numbers) return null;
         return DepartmentManager.list.get(index).getInfo();
@@ -101,6 +58,30 @@ public class DepartmentManager implements CRUD<Department> {
         Department department = findObjectById(id);
         if(department == null) return null;
         return department.getInfo();
+    }
+    @Override
+    public void show() {
+        System.out.println("*-----------------------------------------------------------------------------------------*");
+	    System.out.println("| MÃ KHOA  |            TÊN KHOA            |             TRƯỞNG KHOA             | PHÒNG |");
+	    System.out.println("*----------+--------------------------------+-------------------------------------+-------*");
+        for(Department department : list) {
+            String id = department.getId();
+            String name = department.getName();
+            String managerID = null;
+            if(department.getManagerID() != null) {
+                if(!department.getManagerID().equals("null"))
+                    managerID = department.getManagerID();
+            }
+            String nameManager = null;
+            if(managerID != null) {
+                nameManager = HealthcareWorkerManager.getInstance().findObjectById(managerID).getFullname();
+            }
+            String room = department.getRoom();
+            System.out.println(String.format("| %-8s | %-30s | %8s - %-24s | %-4s |", id, name, managerID, nameManager, room));
+        }
+        if(DepartmentManager.numbers >= 1)
+	        System.out.println("*-----------------------------------------------------------------------------------------*");
+
     }
     @Override
     public int findIndexById(String id){
@@ -123,12 +104,23 @@ public class DepartmentManager implements CRUD<Department> {
         return DepartmentManager.list.get(index);
     }
     @Override
-    public Department findObjectByCondition(String condition){
-        return null;
+    public void add(Department Department){
+        DepartmentManager.list.add(Department);
+        DepartmentManager.numbers++;
     }
     @Override
-    public ArrayList<Department> findObjectsByCondition(String condition){
-        return null;
+    public void update(Department Department){
+        DepartmentManager.list.set(findIndexById(Department.getId()), Department);
+    }
+    @Override
+    public void removeOne(String id){
+        DepartmentManager.list.remove(findIndexById(id));
+        DepartmentManager.numbers--;
+    }
+    @Override
+    public void removeAll(){
+        DepartmentManager.list.clear();
+        DepartmentManager.numbers = 0;
     }
     @Override
     public void sort(String condition){
@@ -150,10 +142,10 @@ public class DepartmentManager implements CRUD<Department> {
                 String[] info = line.split("\\|");
                 String id = info[0].trim();
                 String name = info[1].trim();
-                String idManager = info[2].trim();
+                String managerID = info[2].trim();
                 String room = info[3].trim();
-                System.out.println(id + "|" + name + "|" + idManager + "|" + room);
-                Department newDepartment = new Department(id, name, idManager, room);
+                System.out.println(id + "|" + name + "|" + managerID + "|" + room);
+                Department newDepartment = new Department(id, name, managerID, room);
                 add(newDepartment);
             }
             bufferedReader.close();
@@ -174,7 +166,7 @@ public class DepartmentManager implements CRUD<Department> {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for(Department department : DepartmentManager.list) {
                 bufferedWriter.write(String.format("| %8s | %-30s | %-8s | %4s |\n", department.getId(),
-                    department.getName(),department.getIdManager(),department.getRoom()));
+                    department.getName(),department.getManagerID(),department.getRoom()));
             }
             bufferedWriter.close();
             fileWriter.close();

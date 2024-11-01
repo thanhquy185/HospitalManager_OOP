@@ -1,7 +1,5 @@
 package Hospital;
 
-import Common.Date;
-
 public class Program {
     public static void main(String[] args) {
         App.getInstance().init();

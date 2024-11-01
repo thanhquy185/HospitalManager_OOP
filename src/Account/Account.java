@@ -1,24 +1,24 @@
-package Hospital;
+package Account;
 
 public class Account {
     // Properties
     private String username;
     private String password;
     private String type;
-    private String idObject;
+    private String objectID;
 
     // Constructors
     public Account() {
         this.username = null;
         this.password = null;
         this.type = null;
-        this.idObject = null;
+        this.objectID = null;
     }
-    public Account(String username, String password, String type, String idObject) {
+    public Account(String username, String password, String type, String objectID) {
         this.username = username;
         this.password = password;
         this.type = type;
-        this.idObject = idObject;
+        this.objectID = objectID;
     }
 
     // Setter - Getter
@@ -31,8 +31,8 @@ public class Account {
     public void setType(String type) {
         this.type = type;
     }
-    public void setIdObject(String idObject) {
-        this.idObject = idObject;
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
     }
     public String getUsername() {
         return this.username;
@@ -43,13 +43,13 @@ public class Account {
     public String getType() {
         return this.type;
     }
-    public String getIdObject() {
-        return this.idObject;
+    public String getObjectID() {
+        return this.objectID;
     }
 
     // Methods
     public String getInfo() {
         return this.username + " | " + this.password
-            + " | " + this.type + " | " + this.idObject;
+            + " | " + this.type + " | " + this.objectID;
     }
 }

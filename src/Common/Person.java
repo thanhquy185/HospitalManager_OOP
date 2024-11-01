@@ -66,7 +66,7 @@ public class Person {
 	//Methods
 	// - Hàm trả về tên gồm các chữ cái thường và không khoảng trắng
 	public String getFullnameFormat() {
-		return CharacterFormat.removeAccent(
+		return myCharacterClass.removeAccent(
 			this.fullname.toLowerCase().replaceAll(" ", "")
 		);
 	}
