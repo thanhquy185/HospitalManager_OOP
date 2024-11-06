@@ -3,11 +3,12 @@ package Patient;
 import Common.Person;
 import Common.Date;
 
-public abstract class Patient extends Person {
+// public abstract class Patient extends Person {
+public class Patient extends Person {
     // Properties
     protected String id;
-    protected String type;
-    protected String medicalRecordID;
+    protected String type;                      // Normal | Premium
+    protected String medicalRecordID;           // ID Bệnh Án
     protected static int countPatientCreated;
 
     // Static
@@ -16,22 +17,36 @@ public abstract class Patient extends Person {
     }
 
     // Constructors
+    // Không có tham số => Patient này không có ID -> Không thể đưa vào list
     public Patient() {
-        super();
+        super();                        // All: null
         this.id = null;
         this.type = null;
         this.medicalRecordID = null;
     }
-    public Patient(String fullname, Date birthday, String gender,
-            String phone, String country, String type){
-        super(fullname, birthday,gender, phone, country);
+    // Cơ bản, không có [type] -> Mặc định [type]: "Normal"
+    public Patient( String fullName, Date birthday, String gender, String phone, String country){
+        super(fullName, birthday, gender, phone, country);
+        Patient.countPatientCreated++;
+        this.id = getFormatId();
+        this.type = "Normal";
+        this.medicalRecordID = null;
+
+    }
+    // Cơ bản, có [type]
+    public Patient( String fullname, Date birthday, String gender, String phone, String country,
+                    String type){
+        super(fullname, birthday, gender, phone, country);
         Patient.countPatientCreated++;
         this.type = type;
         this.id = getFormatId();
+        this.medicalRecordID = null;
     }
-    public Patient(String fullname, Date birthday, String gender, String phone,
-            String country, String id, String type, String medicalRecordID){
+    // Cơ bản, có [ID], [type], [medicalRecordID]
+    public Patient( String fullname, Date birthday, String gender, String phone, String country, 
+                    String id, String type, String medicalRecordID){
         super(fullname, birthday, gender, phone, country);
+        Patient.countPatientCreated++;
         this.id = id;
         this.type = type;
         this.medicalRecordID = medicalRecordID;
@@ -39,6 +54,7 @@ public abstract class Patient extends Person {
     public Patient(Patient patient) {
         super(patient.fullname, patient.birthday,
             patient.gender, patient.phone, patient.country);
+        Patient.countPatientCreated++;
         this.id = patient.id;
         this.type = patient.type;
         this.medicalRecordID = patient.medicalRecordID;
@@ -47,7 +63,7 @@ public abstract class Patient extends Person {
     // Setter - Getter
     public void setId(String id){
         // Cần một hàm kiểm tra id có hợp lệ hay không (này để Quy làm)
-        if(!isFormatId(id))
+        if(!Patient.isFormatId(id))
             this.id = null;
         this.id = id;
     }
@@ -75,11 +91,12 @@ public abstract class Patient extends Person {
 
     // Methods
     // - Kiểm tra có đúng định dạng (NPAT/PPAT)xxxxx
-    private boolean isFormatId(String id) {
+    // Để public static: có thể sử dụng để kiểm tra formatID (được nhập) khi update() bệnh nhân
+    public static boolean isFormatId(String id) {
         // -- Nếu không phải là chuỗi 9 ký tự
         if(id.length() != 9)
             return false;
-        // -- Kiểm tra tiền tối
+        // -- Kiểm tra tiền tố
         String prefix = id.substring(0, 4);
         if(!prefix.equals("NPAT")
             && !prefix.equals("PPAT")) return false;
@@ -96,13 +113,15 @@ public abstract class Patient extends Person {
     private String getFormatId() {
         // --
         String postfix = String.format("%05d", Patient.countPatientCreated);
-        if(this.type.equals(("Cao cấp"))){
+        if(this.type.equals(("Premium"))){
             return "PPAT" + postfix;
         }
         return "NPAT" + postfix;
     }
+    // Done
     // - Hàm lấy ra thông tin của Bệnh nhân
     public String getInfo() {
-        return null;
+        return  this.fullname + " | " + this.birthday + " | " + this.gender + " | " + this.phone + this.country + " | " +
+                this.id + " | " + this.type + " | " + this.medicalRecordID;    
     }
 }

@@ -93,4 +93,19 @@ public class Date {
 			return day + month + year;
 		return null;
 	}
+
+	//  Chuyển date đang ở String -> Date (Object), return: Date
+	public static Date convertStringToDate(String string){
+		Date date = new Date(Integer.parseInt(string.substring(0, 2)),
+		Integer.parseInt(string.substring(2, 4)),
+		Integer.parseInt(string.substring(4)));
+		return date;
+	}
+	// public String convertDateToString(Date date){
+	// 	return 	this.day.toString() + 
+	// 			this.month.toString() +
+	// 			this.year.toString();
+	// }
 }
+
+
