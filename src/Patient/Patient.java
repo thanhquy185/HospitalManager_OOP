@@ -3,7 +3,7 @@ package Patient;
 import Common.Person;
 import Common.Date;
 
-public abstract class Patient extends Person {
+public class Patient extends Person {
     // Properties
     protected String id;
     protected String type;
@@ -28,6 +28,7 @@ public abstract class Patient extends Person {
         Patient.countPatientCreated++;
         this.type = type;
         this.id = getFormatId();
+        this.medicalRecordID = null;
     }
     public Patient(String fullname, Date birthday, String gender, String phone,
             String country, String id, String type, String medicalRecordID){
@@ -96,13 +97,11 @@ public abstract class Patient extends Person {
     private String getFormatId() {
         // --
         String postfix = String.format("%05d", Patient.countPatientCreated);
-        if(this.type.equals(("Cao cấp"))){
-            return "PPAT" + postfix;
-        }
-        return "NPAT" + postfix;
+        return "PAT" + postfix;
     }
     // - Hàm lấy ra thông tin của Bệnh nhân
     public String getInfo() {
-        return null;
+        return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender + " | " + this.phone 
+            + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
     }
 }

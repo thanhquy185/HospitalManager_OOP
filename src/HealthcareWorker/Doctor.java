@@ -10,8 +10,8 @@ public class Doctor extends HealthcareWorker {
         super();
     }
     public Doctor(String fullname, Date birthday, String gender, String phone, String country,
-                  String type, int yearsOfExperience, double salary, String idDepartment) {
-        super(fullname, birthday, gender, phone, country, type, yearsOfExperience, salary, idDepartment);
+            String type, int yearsOfExperience, int salary, String idDepartment, String isManagerDepartment) {
+        super(fullname, birthday, gender, phone, country, type, yearsOfExperience, salary, idDepartment, isManagerDepartment);
     }
     public Doctor(Doctor doctor) {
         super(doctor.getFullname(), doctor.getBirthday(), doctor.getGender(), doctor.getPhone(),

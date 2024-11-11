@@ -3,23 +3,27 @@ package MedicalRecord;
 import Common.Date;
 
 public class TreatmentRecord extends MedicalRecord {
-    //	Properties
+    // Properties
 
     // Constructor
 	public TreatmentRecord() {
 		super();
 	}
-	public TreatmentRecord(Date inputDay, Date outputDay, String type,
-			String idPatient, String idDoctor, String idNurse, String idSick, String levelSick) {
-		super(inputDay, outputDay, type, idPatient, idDoctor, idNurse, idSick, levelSick);
+	public TreatmentRecord(Date inputDay, Date outputDay, String type, String patientID, 
+			String sickID, String sickLevel, String healthcareWorkerID) {
+		super(inputDay, outputDay, type, patientID, sickID, sickLevel, healthcareWorkerID);
+	}
+	public TreatmentRecord(String id, Date inputDay, Date outputDay, String type, 
+			Double fee, String patientID, String sickID, String sickLevel, String healthcareWorkerID) {
+		super(id, inputDay, outputDay, type, fee, patientID, sickID, sickLevel, healthcareWorkerID);
 	}
 	public TreatmentRecord(TreatmentRecord treatmentRecord) {
 		super(treatmentRecord.getId(), treatmentRecord.getInputDay(), treatmentRecord.getOutputDay(),
-			treatmentRecord.getType(), treatmentRecord.getPatientID(),treatmentRecord.getDoctorID(),
-			treatmentRecord.getNurseID(), treatmentRecord.getSickID(), treatmentRecord.getSickLevel(),
-			treatmentRecord.getPrice());
+			treatmentRecord.getType(), treatmentRecord.getFee(), treatmentRecord.getPatientID(),
+			treatmentRecord.getSickID(), treatmentRecord.getSickLevel(), treatmentRecord.getHealthcareWorkerID());
 	}
+
     // Setter - Getter
 
-	//Methods
+	// Methods
 }

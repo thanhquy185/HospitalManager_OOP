@@ -4,14 +4,14 @@ import Common.Person;
 import Common.Date;
 
 // HealthcareWorker class
-public abstract class HealthcareWorker extends Person {
+public class HealthcareWorker extends Person {
     //Properties
     protected String id;
     protected String type;
     protected Integer yearsOfExperience;
-    protected Double salary;
+    protected Integer salary;
     protected String departmentID;
-    protected Boolean isManagerDepartment;
+    protected String isManagerDepartment;
     protected String medicalRecordID;
     private static int countHealthcareWorkerCreated;
 
@@ -31,21 +31,21 @@ public abstract class HealthcareWorker extends Person {
         this.isManagerDepartment = null;
         this.medicalRecordID = null;
     }
-    public HealthcareWorker(String fullname, Date birthday, String gender, String phone,
-            String country, String type, int yearsOfExperience, double salary, String departmentID) {
+    public HealthcareWorker(String fullname, Date birthday, String gender, String phone, String country,
+            String type, int yearsOfExperience, int salary, String departmentID, String isManagerDepartment) {
         super(fullname, birthday, gender, phone, country);
         HealthcareWorker.countHealthcareWorkerCreated++;
-        this.type = type;
         this.id = getFormatId();
+        this.type = type;
         this.yearsOfExperience = yearsOfExperience;
         this.salary = salary;
         this.departmentID = departmentID;
-        this.isManagerDepartment = false;
+        this.isManagerDepartment = isManagerDepartment;
         this.medicalRecordID = null;
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String phone,
-            String country, String id, String type, int yearsOfExperience, double salary,
-            String departmentID, boolean isManagerDepartment, String medicalRecordID) {
+            String country, String id, String type, int yearsOfExperience, int salary,
+            String departmentID, String isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country);
         this.id = id;
         this.type = type;
@@ -79,16 +79,14 @@ public abstract class HealthcareWorker extends Person {
     public void setYearsOfExperience(int yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
     }
-    public void setSalary(double salary) {
+    public void setSalary(int salary) {
         this.salary = salary;
     }
     public void setDepartmentID(String departmentID) {
         this.departmentID = departmentID;
     }
-    public void setIsManagerDepartment(Boolean isManagerDepartment) {
-        if(isManagerDepartment == null)
-            this.isManagerDepartment = null;
-        this.isManagerDepartment = (boolean) isManagerDepartment;
+    public void setIsManagerDepartment(String isManagerDepartment) {
+        this.isManagerDepartment = isManagerDepartment;
     }
     public void setMedicalRecordID(String medicalRecordID) {
         this.medicalRecordID = medicalRecordID;
@@ -105,13 +103,13 @@ public abstract class HealthcareWorker extends Person {
     public int getYearsOfExperience() {
         return this.yearsOfExperience;
     }
-    public double getSalary() {
+    public int getSalary() {
         return this.salary;
     }
     public String getDepartmentID() {
         return this.departmentID;
     }
-    public Boolean getIsManagerDepartment() {
+    public String getIsManagerDepartment() {
         return this.isManagerDepartment;
     }
     public String getMedicalRecordID() {
@@ -142,13 +140,13 @@ public abstract class HealthcareWorker extends Person {
     // - Lấy id có đúng định dạng (DOC/NUR)xxxxx
     private String getFormatId() {
         String postfix = String.format("%05d", HealthcareWorker.countHealthcareWorkerCreated);
-        if(this.type.equals(("Bác sĩ"))){
-            return "DOC" + postfix;
-        }
-        return "NUR" + postfix;
+        return "HEW" + postfix;
     }
     // - Hàm lấy ra thông tinnn của Bệnh nhân
     public String getInfo() {
-        return null;
+        return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross")
+            + " | " + this.gender + " | " + this.phone + " | " + this.country + " | " + this.id
+            + " | " + this.type + " | " + this.yearsOfExperience + " | " + this.salary
+            + " | " + this.departmentID + " | " + this.isManagerDepartment + " | " + this.medicalRecordID;
     }
 }

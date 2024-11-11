@@ -1,6 +1,7 @@
 package Sick;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -50,14 +51,14 @@ public class SickManager implements CRUD<Sick> {
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
     public String getInfoByIndex(int index) {
-        if(index < 0 || index > SickManager.numbers) return null;
+        if(index < 0 || index > SickManager.numbers - 1) return null;
         return SickManager.list.get(index).getInfo();
     }
     @Override
     public String getInfoById(String id) {
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return SickManager.list.get(index).getInfo();
+        Sick sick = findObjectById(id);
+        if(sick == null) return null;
+        return sick.getInfo();
     }
     @Override
     public void show() {
@@ -67,16 +68,12 @@ public class SickManager implements CRUD<Sick> {
         for(Sick sick : list) {
             String id = sick.getId();
             String name = sick.getName();
-            String idDepartment = null;
-            if(sick.getDepartmentID() != null) {
-                if(!sick.getDepartmentID().equals("null"))
-                    idDepartment = sick.getDepartmentID();
+            String departmentID = sick.getDepartmentID();
+            String departmentName = null;
+            if(departmentID != null) {
+                departmentName = DepartmentManager.getInstance().findObjectById(departmentID).getName();
             }
-            String nameDepartment = null;
-            if(idDepartment != null) {
-                nameDepartment = DepartmentManager.getInstance().findObjectById(idDepartment).getName();
-            }
-            System.out.println(String.format("| %-9s | %-24s | %8s - %-30s |", id, name, idDepartment, nameDepartment));
+            System.out.println(String.format("| %-9s | %-24s | %8s - %-30s |", id, name, departmentID, departmentName));
         }
 		if(SickManager.numbers >= 1)
             System.out.println("*----------------------------------------------------------------------------------*");
@@ -98,7 +95,7 @@ public class SickManager implements CRUD<Sick> {
     }
      @Override
     public Sick findObjectByIndex(int index){
-        if(index < 0 || index > SickManager.numbers) return null;
+        if(index < 0 || index > SickManager.numbers - 1) return null;
         return SickManager.list.get(index);
     }
     @Override
@@ -122,11 +119,31 @@ public class SickManager implements CRUD<Sick> {
     }
     @Override
     public void sort(String condition){
-        SickManager.list.sort(null);
+        // SickManager.getInstance().getList().sort(Comparator.comparing(()));
+        // asc: Sắp xếp tăng dần
+        // desc: Sắp xếp giảm dần
+        switch (condition) {
+            case "id asc": {
+                SickManager.list.sort(Comparator.comparing((Sick sick) -> sick.getId()));
+                break;
+            }
+            case "id desc": {
+                SickManager.list.sort((Comparator.comparing((Sick sick) -> sick.getId())).reversed());
+                break;
+            }
+            case "name asc": {
+                SickManager.list.sort(Comparator.comparing((Sick sick) -> sick.getName()));
+                break;
+            }
+            case "name desc": {
+                SickManager.list.sort((Comparator.comparing((Sick sick) -> sick.getName())).reversed());
+                break;
+            }
+        }
     }
     @Override
     public void loadFromFile() {
-        File file = new File("HospitalManager/src/Database/SickDatabase.txt");
+        File file = new File("src/Database/SickDatabase.txt");
         if(!file.exists()) {
             System.out.println("Tệp tin quản lý dữ liệu về Bệnh không tồn tại");
             return;
@@ -138,9 +155,12 @@ public class SickManager implements CRUD<Sick> {
                 String line = bufferedReader.readLine();
                 if(line == null) break;
                 String[] info = line.split("\\|");
-                String id = info[0].trim();
-                String name = info[1].trim();
-                String departmentID = info[2].trim();
+                String id = info[0];
+                String name = info[1];
+                String departmentID = null;
+                if(!info[2].equals("null")) {
+                    departmentID = info[2];
+                }
                 Sick newSick = new Sick(id, name, departmentID);
                 add(newSick);
             }
@@ -153,7 +173,7 @@ public class SickManager implements CRUD<Sick> {
     }
     @Override
     public void saveToFile() {
-        File file = new File("HospitalManager/src/Database/SickDatabase.txt");
+        File file = new File("src/Database/SickDatabase.txt");
         if(!file.exists()) {
             System.out.println("Tệp tin quản lý dữ liệu về Bệnh không tồn tại");
             return;
@@ -162,8 +182,10 @@ public class SickManager implements CRUD<Sick> {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for(Sick sick : SickManager.list) {
-                bufferedWriter.write(String.format(String.format("| %-9s | %-24s | %-8s |\n",
-                    sick.getId(), sick.getName(), sick.getDepartmentID())));
+                String id = sick.getId();
+                String name = sick.getName();
+                String departmentID = sick.getDepartmentID();
+                bufferedWriter.write(id + "|" + name + "|" + departmentID + "\n");
             }
             bufferedWriter.close();
             fileWriter.close();
