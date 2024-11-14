@@ -1,5 +1,10 @@
 package Sick;
 
+import java.util.Scanner;
+
+import Common.*;
+import Department.*;
+
 public class Sick {
     // Properties
 	private String id;
@@ -79,11 +84,49 @@ public class Sick {
         }
         return true;
     }
-    // - Lấy id có đúng định dạng SICKxxxxx
+	// - Lấy id có đúng định dạng SICKxxxxx
     private String getFormatId() {
         String postfix = String.format("%05d", Sick.countSickCreated);
         return "SICK" + postfix;
     }
+	public void setInfo() {
+		Scanner sc = new Scanner(System.in);
+
+		// Nhập tên Bệnh
+		System.out.print(" - Nhập tên Bệnh: ");
+		String name = sc.nextLine();
+		// Chọn Khoa sẽ quản lý Bệnh được tạo
+		System.out.println(" - Chọn Khoa thuộc về");
+		// 1 - DEP00001 | Tai-Mũi-Họng
+		// 2 - DEP00002 | Thận
+		// ...
+		int numberList = 1;
+		for(Department department : DepartmentManager.getInstance().getList()) {
+		    System.out.println(numberList++ + " - " + department.getId() + " | " + department.getName());
+		}
+		// Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
+		System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
+		String info = sc.nextLine();
+		while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+		            && DepartmentManager.getInstance().findObjectById(info) == null)
+		        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+		            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+		    System.out.println("----- -----");
+		    System.out.println("! - KHOA KHÔNG HỢP LỆ");
+		    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
+		    info = sc.nextLine();
+		}
+		// Lấy mã Khoa đã được chọn
+		String departmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+		    ? DepartmentManager.getInstance().findObjectById(info).getId()
+		    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
+
+		// Gán dữ liệu đã nhập cho đối tượng
+		countSickCreated++;
+		this.id = getFormatId();
+		this.name = name;
+		this.departmentID = departmentID;
+	}
 	public String getInfo() {
 		return this.id + " | " + this.name + " | " + this.departmentID;
 	}

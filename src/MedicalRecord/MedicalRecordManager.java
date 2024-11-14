@@ -2,20 +2,18 @@ package MedicalRecord;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
-import Common.CRUD;
-import Common.Date;
+import Common.*;
+import Sick.*;
 import HealthcareWorker.HealthcareWorker;
 import HealthcareWorker.HealthcareWorkerManager;
-import Patient.Patient;
-import Patient.PatientManager;
-import Sick.Sick;
-import Sick.SickManager;
+import Patient.*;
 public class MedicalRecordManager implements CRUD<MedicalRecord> {
     // Properties
     private static MedicalRecordManager instance;
@@ -68,9 +66,9 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     }
     @Override
     public void show() {
-		System.out.println("*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
-	    System.out.println("| MÃ BỆNH ÁN | NGÀY MỞ HỒ SƠ | NGÀY ĐÓNG HỒ SƠ | LOẠI HỒ SƠ | TIỀN PHÍ |               BỆNH NHÂN              |              NHÂN VIÊN              |              BỆNH              | MỨC ĐỘ |");  
-	    System.out.println("*------------+---------------+-----------------+------------+----------+--------------------------------------+-------------------------------------+--------------------------------+--------*");
+		System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+	    System.out.println("| MÃ BỆNH ÁN | NGÀY LẬP HỒ SƠ | NGÀY KHOÁ HỒ SƠ | LOẠI HỒ SƠ | TIỀN PHÍ |               BỆNH NHÂN              |              NHÂN VIÊN              |              BỆNH              | MỨC ĐỘ |");  
+	    System.out.println("*------------+----------------+-----------------+------------+----------+--------------------------------------+-------------------------------------+--------------------------------+--------*");
 		for(MedicalRecord medicalRecord : MedicalRecordManager.list) {
 			String id = medicalRecord.getId();
             String inputDay = medicalRecord.getInputDay().getDateFormatByCondition("has cross");
@@ -113,21 +111,12 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 
 			String sickLevel = medicalRecord.getSickLevel();
 
-			System.out.println(String.format("| %-10s | %-13s | %-15s | %-10s | %-8s | %-9s - %-24s | %-8s - %-24s | %-9s - %-18s | %-6s |",
+			System.out.println(String.format("| %-10s | %-14s | %-15s | %-10s | %-8s | %-9s - %-24s | %-8s - %-24s | %-9s - %-18s | %-6s |",
 				id, inputDay, outputDay, type, fee, patientID, patientName, healthcareWorkerID, healthcareWorkerFullname, sickID, sickName, sickLevel));
 		}
 		if(MedicalRecordManager.numbers >= 1)
-	    	System.out.println("*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+	    	System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
 	}
-    @Override
-    public int findIndexById(String id) {
-        for(int i = 0; i < MedicalRecordManager.numbers; i++){
-            if(MedicalRecordManager.list.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
     @Override
 	public MedicalRecord findObjectByIndex(int index) {
         if(index < 0 || index > MedicalRecordManager.numbers - 1) return null;
@@ -135,9 +124,11 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 	}
     @Override
     public MedicalRecord findObjectById(String id) {
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return MedicalRecordManager.list.get(index);
+        if(MedicalRecordManager.numbers == 0) return null;
+        for(MedicalRecord medicalRecord : MedicalRecordManager.list) {
+            if(medicalRecord.getId().equals(id)) return medicalRecord;
+        }
+        return null;
     }
     @Override
 	public void add(MedicalRecord medicalRecord) {
@@ -145,18 +136,58 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
         MedicalRecordManager.numbers++;
 	}
     @Override
-	public void update(MedicalRecord medicalRecord) {
-		MedicalRecordManager.list.set(findIndexById(medicalRecord.getId()), medicalRecord);
+	public void update(MedicalRecord medicalRecordUpdate, int choice) {
+		Scanner sc = new Scanner(System.in);
+		if(choice == 1 || choice == 4) {
+			System.out.print(" - Nhập ngày lập Hồ sơ Bệnh án mới (dd-mm-yyyy hoặc ddmmyyyy): ");
+			String inputDayStr = sc.nextLine();
+			while(!Date.getInstance().isDateFormat(inputDayStr)
+					|| !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()) {
+				System.out.println("----- -----");
+				System.out.println("! - NGÀY LẬP HỒ SƠ KHÔNG HỢP LỆ");
+				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+				inputDayStr = sc.nextLine();
+			System.out.println("----- -----");
+			}
+			Date inputDayObj = Date.getInstance().getDateFromDateFormat(inputDayStr);
+			medicalRecordUpdate.setInputDay(inputDayObj);
+		}
+		if(choice == 2 || choice == 4) {
+			System.out.print(" - Nhập ngày khoá Hồ sơ Bệnh án mới (dd-mm-yyyy hoặc ddmmyyyy): ");
+			String outputDayStr = sc.nextLine();
+			while(!Date.getInstance().isDateFormat(outputDayStr)
+					|| !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()) {
+				System.out.println("----- -----");
+				System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
+				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+				outputDayStr = sc.nextLine();
+			System.out.println("----- -----");
+			}
+        	Date outputDayObj = Date.getInstance().getDateFromDateFormat(outputDayStr);
+			medicalRecordUpdate.setOutputDay(outputDayObj);
+		}
+		if(choice == 3 || choice == 4) {
+			System.out.print(" - Nhập mức độ Bệnh mới (Nhẹ. Vừa hoặc Nặng):");
+            String newSickLevel = sc.nextLine();
+            while(!newSickLevel.equals("Nhẹ") && !newSickLevel.equals("Vừa") 
+					&& !newSickLevel.equals("Nặng")) {
+                System.out.println("----- -----");
+                System.out.println("! - MỨC ĐỘ BỆNH KHÔNG HỢP LỆ");
+                System.out.print("?! - Chọn lại: ");
+                newSickLevel = sc.nextLine();
+            }
+            medicalRecordUpdate.setSickLevel(newSickLevel);
+		}
 	}
 	@Override
-	public void removeOne(String id) {
-		MedicalRecordManager.list.remove(findIndexById(id));
-        MedicalRecordManager.numbers--;
-	}
-	@Override
-	public void removeAll() {
-		MedicalRecordManager.list.clear();
-        MedicalRecordManager.numbers = 0;
+	public void remove(String id) {
+		if(MedicalRecordManager.numbers == 0) return;
+        for(int i = 0; i < MedicalRecordManager.numbers; i++) {
+            if(MedicalRecordManager.list.get(i).equals(id)) {
+                MedicalRecordManager.list.remove(i);
+                MedicalRecordManager.numbers--;
+            }
+        }
 	}
 	@Override
 	public void sort(String condition) {
@@ -239,7 +270,6 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 			e.printStackTrace();
 		}
 	}
-
 	@Override
 	public void saveToFile() {
 		File file = new File("src/Database/MedicalRecordDatabase.txt");

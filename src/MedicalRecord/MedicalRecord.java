@@ -1,8 +1,13 @@
 package MedicalRecord;
 
-import Common.Date;
+import java.util.Scanner;
 
-public abstract class MedicalRecord {
+import Common.*;
+import Sick.*;
+import HealthcareWorker.HealthcareWorker;
+import HealthcareWorker.HealthcareWorkerManager;
+
+public abstract class MedicalRecord implements ActionsInHospital {
     //	Properties
 	protected String id;
 	protected Date inputDay;
@@ -32,21 +37,6 @@ public abstract class MedicalRecord {
 		this.sickLevel = null;
 		this.healthcareWorkerID = null;
 	}
-
-	// public MedicalRecord(Date inputDay, Date outputDay, String type,
-	// 		String patientID, String doctorID, String nurseID) {
-	// 	MedicalRecord.countMedicalRecordCreated++;
-	// 	this.id = getFormatId();
-	// 	this.inputDay = inputDay;
-	// 	this.outputDay = outputDay;
-	// 	this.type = type;
-	// 	this.patientID = patientID;
-	// 	this.doctorID = doctorID;
-	// 	this.nurseID = nurseID;
-	// 	this.sickID = null;
-	// 	this.sickLevel = null;
-	// }
-	
 	public MedicalRecord(Date inputDay, Date outputDay, String type, String patientID,
 			String sickID, String sickLevel, String healthcareWorkerID) {
 		MedicalRecord.countMedicalRecordCreated++;
@@ -170,7 +160,120 @@ public abstract class MedicalRecord {
         String postfix = String.format("%05d", MedicalRecord.countMedicalRecordCreated);
         return "MER" + postfix;
     }
-	// - Hàm lấy ra thông tinn của Bệnh án
+	// - Hàm gán thông tin cho Bệnh án
+	public void setInfoWithNoPatient(String condition) {
+		Scanner sc = new Scanner(System.in);
+
+		// Nhập ngày lập Hồ sơ Bệnh án
+        System.out.print(" - Nhập ngày lập Hồ sơ Bệnh án (dd-mm-yyyy hoặc ddmmyyyy): ");
+        String inputDayStr = sc.nextLine();
+        while(!Date.getInstance().isDateFormat(inputDayStr)
+                || !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()) {
+            System.out.println("----- -----");
+            System.out.println("! - NGÀY LẬP HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+            inputDayStr = sc.nextLine();
+           System.out.println("----- -----");
+        }
+        Date inputDayObj = Date.getInstance().getDateFromDateFormat(inputDayStr);
+        // Nhập ngày khoá Hồ sơ Bệnh án
+        System.out.print(" - Nhập ngày khoá Hồ sơ Bệnh án (dd-mm-yyyy hoặc ddmmyyyy): ");
+        String outputDayStr = sc.nextLine();
+        while(!Date.getInstance().isDateFormat(outputDayStr)
+                || !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()
+				|| !Date.getInstance().checkBeforeAfterDay(inputDayObj, Date.getInstance().getDateFromDateFormat(outputDayStr))) {
+            System.out.println("----- -----");
+            System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+            outputDayStr = sc.nextLine();
+           System.out.println("----- -----");
+        }
+        Date outputDayObj = Date.getInstance().getDateFromDateFormat(outputDayStr);
+        // Chọn Bệnh cho Bệnh nhân đang mắc phải
+        System.out.println(" - Chọn loại Bệnh)");
+        int numberList1 = 1;
+        for(Sick sick : SickManager.getInstance().getList()) {
+            System.out.println(numberList1++ + " - " + sick.getId() + " | " + sick.getName());
+        }
+        System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
+        String info1 = sc.nextLine();
+        while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
+                    && SickManager.getInstance().findObjectById(info1) == null)
+                || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
+                    && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
+            System.out.println("----- -----");
+            System.out.println("! - BỆNH KHÔNG HỢP LỆ");
+            System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
+            info1 = sc.nextLine();
+            System.out.println("----- -----");
+        }
+        String sickID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
+            ? SickManager.getInstance().findObjectById(info1).getId()
+            : SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1).getId();
+        // Nhập mức độ Bệnh cho Bệnh vừa chọn
+        System.out.print(" - Nhập mức độ Bệnh (Nhẹ, Vừa hoặc Nặng): ");
+        String sickLevel = sc.nextLine();
+        while(!sickLevel.equals("Nhẹ") && !sickLevel.equals("Vừa") && !sickLevel.equals("Nặng")) {
+            System.out.println("----- -----");
+            System.out.println("! - MỨC ĐỘ BỆNH KHÔNG HỢP LỆ");
+            System.out.print("?! - Chọn lại: ");
+            sickLevel = sc.nextLine();
+            System.out.println("----- -----");
+        }
+        // Chọn Nhân viên Y tế khám/chữa cho Bệnh nhân này (vì phải biết Bệnh mới biết cần Nhân viên thuộc Khoa nào khám)
+        // - Nếu là Khám bệnh thì có thể là Bác sĩ hoặc Y tá khám
+        // - Nếu là Chữa bệnh thì chỉ có thể Bác sĩ chữa
+        System.out.println(" - Chọn Nhân viên Y tế");
+        int numberList2 = 1;
+		int healthcareWorkerFiltered = 1;
+        if(condition.equals("is test")) {
+            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
+                if(healthcareWorker.getMedicalRecordID() == null
+                        && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
+                    System.out.println(numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
+					healthcareWorkerFiltered++;
+                }
+                numberList2++;
+            }
+        } else if(condition.equals("is not test")) {
+            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
+                if(healthcareWorker.getType().equals("Bác sĩ") && healthcareWorker.getMedicalRecordID() == null
+                        && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
+                    System.out.println(numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
+					healthcareWorkerFiltered++;
+                }
+                numberList2++;
+            }
+        }
+		if(healthcareWorkerFiltered > 1) {
+			System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
+			String info2 = sc.nextLine();
+			while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
+						&& HealthcareWorkerManager.getInstance().findObjectById(info2) == null)
+					|| (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
+						&& HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)) {
+				System.out.println("----- -----");
+				System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
+				System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
+				info2 = sc.nextLine();
+				System.out.println("----- -----");
+			}
+			String healthcareWorkerID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
+				? HealthcareWorkerManager.getInstance().findObjectById(info2).getId()
+				: HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1).getId();
+
+			// Gán dữ liệu đã nhập cho Bệnh án
+			countMedicalRecordCreated++;
+			this.id = getFormatId();
+			this.inputDay = inputDayObj;
+			this.outputDay = outputDayObj;
+			this.type = condition.equals("is test") ? "Khám bệnh" : "Chữa bệnh";
+			this.sickID = sickID;
+			this.sickLevel = sickLevel;
+			this.healthcareWorkerID = healthcareWorkerID;
+		}
+	}
+	// - Hàm lấy ra thông tin của Bệnh án
     public String getInfo() {
         return this.id + " | " + this.inputDay.getDateFormatByCondition("has cross")
 			+ " | " + this.outputDay.getDateFormatByCondition("has cross") + " | " + this.type

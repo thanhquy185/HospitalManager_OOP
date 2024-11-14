@@ -2,13 +2,14 @@ package Department;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
-import Common.CRUD;
+import Common.*;
 import HealthcareWorker.*;
 
 public class DepartmentManager implements CRUD<Department> {
@@ -50,6 +51,19 @@ public class DepartmentManager implements CRUD<Department> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+    public Department findObjectByIndex(int index){
+        if(index < 0 || index > DepartmentManager.numbers - 1) return null;
+        return DepartmentManager.list.get(index);
+    }
+    @Override
+    public Department findObjectById(String id){
+        if(DepartmentManager.numbers == 0) return null;
+        for(Department department : DepartmentManager.list) {
+            if(department.getId().equals(id)) return department;
+        }
+        return null;
+    }
+    @Override
     public String getInfoByIndex(int index) {
         Department department = findObjectByIndex(index);
         if(department == null) return null;
@@ -82,43 +96,84 @@ public class DepartmentManager implements CRUD<Department> {
 
     }
     @Override
-    public int findIndexById(String id){
-        for(int i = 0; i < DepartmentManager.numbers; i++){
-            if(DepartmentManager.list.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    @Override
-    public Department findObjectById(String id){
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return DepartmentManager.list.get(index);
-    }
-    @Override
-    public Department findObjectByIndex(int index){
-        if(index < 0 || index > DepartmentManager.numbers - 1) return null;
-        return DepartmentManager.list.get(index);
-    }
-    @Override
     public void add(Department Department){
         DepartmentManager.list.add(Department);
         DepartmentManager.numbers++;
     }
     @Override
-    public void update(Department Department){
-        DepartmentManager.list.set(findIndexById(Department.getId()), Department);
+    public void update(Department departmentUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+        if(choice == 1 || choice == 4) {
+            System.out.print(" - Nhập tên mới: ");
+            String newName = sc.nextLine();
+            departmentUpdate.setName(newName);
+        }
+        if(choice == 2 || choice == 4) {
+            // Chọn Bác sĩ cần làm trưởng Khoa từ danh sách (phải cùng Khoa hiện tại và là Bác sĩ)
+            // - Lọc ra các Bác sĩ cùng Khoa, chưa là trưởng Khoa và là Bác sĩ
+            ArrayList<HealthcareWorker> doctorSearchList = new ArrayList<>();
+            for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
+                if(healthcareWorker.getDepartmentID().equals(departmentUpdate.getId())
+                    && healthcareWorker.getIsManagerDepartment().equals("Không")
+                    && healthcareWorker.getType().equals("Bác sĩ")) doctorSearchList.add(healthcareWorker);
+            }
+            if(doctorSearchList.size() == 0) {
+                System.out.println("Hiện tại Khoa " + departmentUpdate.getId() + " - " + departmentUpdate.getName() 
+                    + " không có Bác sĩ cùng Khoa nào để có thể bổ nhiểm làm trưởng Khoa");
+            } else {
+                // Thiết lập lại trưởng Khoa cũ
+                HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID()).setIsManagerDepartment("Không");
+
+                // - Chọn Bác sĩ từ danh sách
+                System.out.println(" - Chọn Bác sĩ cần bổ nhiệm");
+                // 1 - HEW00001 | Thanh Quy
+                // 2 - HEW00002 | Đức Quý An
+                // ...
+                int numberList = 1;
+                for(HealthcareWorker healthcareWorker : doctorSearchList) {
+                    System.out.println(numberList++ + " - " + healthcareWorker.getId() 
+                        + " | " + healthcareWorker.getFullname() + " | " + healthcareWorker.getType());
+                }
+                // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC00001)
+                System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
+                String info = sc.nextLine();
+                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                            && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
+                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                            && doctorSearchList.get(Integer.parseInt(info) - 1) == null)) {
+                    System.out.println("----- -----");
+                    System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
+                    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
+                    info = sc.nextLine();
+                }
+                // Lấy thông tin của Bác sĩ bổ nhiệm làm trưởng Khoa
+                HealthcareWorker doctorSelect = null;
+                if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                    doctorSelect = HealthcareWorkerManager.getInstance().findObjectById(info);
+                } else {
+                    doctorSelect =  doctorSearchList.get(Integer.parseInt(info) - 1);
+                }
+
+                // Thiết lập trưởng Khoa mới
+                departmentUpdate.setManagerID(doctorSelect.getId());
+                doctorSelect.setIsManagerDepartment("Có");
+            }
+        }
+        if(choice == 3 || choice == 4) {
+            System.out.print(" - Nhập số phòng mới: ");
+            String newRoom = sc.nextLine();
+            departmentUpdate.setRoom(newRoom);
+        }
     }
     @Override
-    public void removeOne(String id){
-        DepartmentManager.list.remove(findIndexById(id));
-        DepartmentManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        DepartmentManager.list.clear();
-        DepartmentManager.numbers = 0;
+    public void remove(String id){
+        if(DepartmentManager.numbers == 0) return;
+        for(int i = 0; i < DepartmentManager.numbers; i++) {
+            if(DepartmentManager.list.get(i).equals(id)) {
+                DepartmentManager.list.remove(i);
+                DepartmentManager.numbers--;
+            }
+        }
     }
     @Override
     public void sort(String condition){

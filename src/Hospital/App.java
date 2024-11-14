@@ -138,11 +138,12 @@ public class App {
                         System.out.println("5 - Quản lý Nhân viên Y tế");
                         System.out.println("6 - Quản lý Bệnh nhân");
                         System.out.println("7 - Quản lý Bệnh án");
-                        System.out.println("8 - Truy xuất dữ liệu Bệnh viện");
-                        System.out.println("9 - Sao lưu dữ liệu Bệnh viện");
+                        System.out.println("8 - Quản lý Hành động trong Bệnh viện");
+                        System.out.println("9 - Truy xuất dữ liệu Bệnh viện");
+                        System.out.println("10 - Sao lưu dữ liệu Bệnh viện");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
-                        while(!isValidChoice(subChoice1, 0, 9)) {
+                        while(!isValidChoice(subChoice1, 0, 10)) {
                             System.out.println("---------- ----------");
                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                             System.out.print("?! - Chọn lại: ");
@@ -210,24 +211,11 @@ public class App {
                                     System.out.println("Đã chọn Thêm một tài khoản (Người dùng mới)");
 
                                     // Thêm một tài khoản mới, tài khoản này là Tài khoản mới
-                                    System.out.print(" - Nhập tên tài khoản: ");
-                                    String newUsername = sc.nextLine();
-                                    System.out.print(" - Nhập mật khẩu: ");
-                                    String newPassword = sc.nextLine();
-                                    while(!AccountManager.getInstance().canRegister(newUsername, newPassword)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - KHÔNG THỂ ĐĂNG KÝ");
-                                        System.out.print(" - Nhập lại tên tài khoản: ");
-                                        newUsername = sc.nextLine();
-                                        System.out.print(" - Nhập lại mật khẩu: ");
-                                        newPassword = sc.nextLine();
-                                    }
-
-                                    // Tạo một tài khoản mới
-                                    Account newAccount = new Account(newUsername, newPassword, "Người dùng mới");
+                                    Account newAccount = new Account();
+                                    newAccount.setInfo();
                                     AccountManager.getInstance().add(newAccount);
 
-                                    // Thông báo đã thêm một tài khoản thành công
+                                    // Thông báo đã thêm một tài khoản Người dùng mới
                                     System.out.println("! - Đã thêm Tài khoản: " + newAccount.getInfo());
 
                                     // Thông báo hỏi có tiếp tục hay không
@@ -271,7 +259,7 @@ public class App {
                                     System.out.print("? - Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
                                     while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && AccountManager.getInstance().findAccountByUsername(info) == null)
+                                                && AccountManager.getInstance().findObjectById(info) == null)
                                             || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
                                                 && newUserList.get(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
@@ -283,7 +271,7 @@ public class App {
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountUpdate = null;
                                     if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
-                                        accountUpdate = AccountManager.getInstance().findAccountByUsername(info);
+                                        accountUpdate = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountUpdate =  newUserList.get(Integer.parseInt(info) - 1);
                                     }
@@ -316,52 +304,17 @@ public class App {
                                             }
                                             case 1: {
                                                 System.out.println("Đã chọn cập nhật Tên tài khoản");
-                                                System.out.print(" - Nhập tên tài khoản mới: ");
-                                                String newUsername = sc.nextLine();
-                                                while(!AccountManager.getInstance().isUsernameOrPassword(newUsername)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHÔNG THỂ THAY ĐỔI");
-                                                    System.out.print(" - Nhập lại tên tài khoản mới: ");
-                                                    newUsername = sc.nextLine();
-                                                }
-                                                accountUpdate.setUsername(newUsername);
+                                                AccountManager.getInstance().update(accountUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
                                                 System.out.println("Đã chọn cập nhật Mật khẩu");
-                                                System.out.print(" - Nhập mật khẩu mới: ");
-                                                String newPassword = sc.nextLine();
-                                                while(!AccountManager.getInstance().isUsernameOrPassword(newPassword)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHÔNG THỂ THAY ĐỔI");
-                                                    System.out.print(" - Nhập lại mật khẩu mới: ");
-                                                    newPassword = sc.nextLine();
-                                                }
-                                                accountUpdate.setPassword(newPassword);
+                                                AccountManager.getInstance().update(accountUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-
-                                                System.out.print(" - Nhập tên tài khoản mới: ");
-                                                String newUsername = sc.nextLine();
-                                                while(!AccountManager.getInstance().isUsernameOrPassword(newUsername)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHÔNG THỂ THAY ĐỔI");
-                                                    System.out.print(" - Nhập lại tên tài khoản mới: ");
-                                                    newUsername = sc.nextLine();
-                                                }
-                                                accountUpdate.setUsername(newUsername);
-
-                                                System.out.print(" - Nhập mật khẩu mới: ");
-                                                String newPassword = sc.nextLine();
-                                                while(!AccountManager.getInstance().isUsernameOrPassword(newPassword)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHÔNG THỂ THAY ĐỔI");
-                                                    System.out.print(" - Nhập lại mật khẩu mới: ");
-                                                    newPassword = sc.nextLine();
-                                                }
-                                                accountUpdate.setPassword(newPassword);
+                                                AccountManager.getInstance().update(accountUpdate, 3);
                                             }
                                         }
 
@@ -398,7 +351,7 @@ public class App {
                                     System.out.print("? -- Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
                                     while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && AccountManager.getInstance().findAccountByUsername(info) == null)
+                                                && AccountManager.getInstance().findObjectById(info) == null)
                                             || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
                                                 && newUserList.get(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
@@ -410,7 +363,7 @@ public class App {
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountRemove = null;
                                     if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
-                                        accountRemove = AccountManager.getInstance().findAccountByUsername(info);
+                                        accountRemove = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountRemove =  newUserList.get(Integer.parseInt(info) - 1);
                                     }
@@ -583,14 +536,13 @@ public class App {
                                 System.out.println("3 - Thêm một Khoa");
                                 System.out.println("4 - Sửa một Khoa");
                                 System.out.println("5 - Xoá một Khoa");
-                                System.out.println("6 - Xoá tất cả Khoa");
-                                System.out.println("7 - Tìm kiếm Khoa");
-                                System.out.println("8 - Sắp xếp danh sách các Khoa");
-                                System.out.println("9 - Truy xuất dữ liệu Khoa");
-                                System.out.println("10 - Sao lưu dữ liệu Khoa");
+                                System.out.println("6 - Tìm kiếm Khoa");
+                                System.out.println("7 - Sắp xếp danh sách các Khoa");
+                                System.out.println("8 - Truy xuất dữ liệu Khoa");
+                                System.out.println("9 - Sao lưu dữ liệu Khoa");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 10)) {
+                                while(!isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -625,103 +577,37 @@ public class App {
                                 } else if(subChoice2.equals("3")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Thêm một Khoa");
-
-                                    // Nhập tên Khoa
-                                    System.out.print(" - Nhập tên Khoa: ");
-                                    String name = sc.nextLine();
-                                    // Mã trưởng Khoa sẽ có sau
-                                    // Nhập số phòng Khoa
-                                    System.out.print(" - Nhập số phòng (tối đa 5 ký tự): ");
-                                    String room = sc.nextLine();
-                                    while(room.length() > 5) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (tối đa 5 ký tự): ");
-                                        room = sc.nextLine();
-                                    }
                                     
-                                    // Thêm Khoa mới
-                                    Department newDepartment = new Department(name, null, room);
+                                    // Tạo một Khoa mới
+                                    Department newDepartment = new Department();
+                                    newDepartment.setInfoWithNoManager();
                                     DepartmentManager.getInstance().add(newDepartment);
 
-                                    // Lấy ra mã Khoa mới được để xử lý việc bổ nhiệm một Bác sĩ mới làm trưởng Khoa
-                                    String newDepartmentID = newDepartment.getId();
+                                    // Hỏi xem có cần tạo một Bác sĩ làm trưởng Khoa mới tạo này
+                                    System.out.println("Bạn có muốn tạo một Nhân viên Y tế mới là Bác sĩ để làm trưởng Khoa trên ?");
+                                    System.out.print(" - Nhập 'YES' để chấp nhận: ");
+                                    String conform = sc.nextLine();
+                                    if(!conform.equals("YES")) {
+                                        clearTerminal();
+                                        System.out.println("Bạn đã không nhập 'YES' nên Khoa mới được tạo chưa có trưởng Khoa");
+                                        continue subLoop2;
+                                    }
                                     
-                                    // Tạo một Bác sĩ mới là Trưởng khoa (Khoa mới được tạo luôn phải có một trưởng Khoa)
-                                    System.out.println(" - Nhập thông tin Trưởng Khoa (Khoa mới được tạo nên cần một Bác sĩ để quản lý)");
-                                    // - Nhập tên Trưởng Khoa
-                                    System.out.print(" -+ Nhập họ tên: ");
-                                    String fullname = sc.nextLine();
-                                    // - Nhập ngày sinh Trưởng Khoa
-                                    System.out.print(" -+ Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                    String birthdayStr = sc.nextLine();
-                                    while(!Date.getInstance().isDateFormat(birthdayStr)
-                                            || !Date.getInstance().getDateFromDateFormat(birthdayStr).isDate()) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -+ NGÀY SINH KHÔNG HỢP LỆ");
-                                        System.out.print("?! -+ Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                        birthdayStr = sc.nextLine();
-                                       System.out.println("----- -----");
-                                    }
-                                    Date birthdayObj = Date.getInstance().getDateFromDateFormat(birthdayStr);
-                                    // - Nhập giới tính Trưởng Khoa
-                                    System.out.print(" -+ Nhập giới tính (Nam / Nữ): ");
-                                    String gender = sc.nextLine();
-                                    while(!gender.equals("Nam") && !gender.equals("Nữ")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -+ GIỚI TÍNH KHÔNG HỢP LỆ");
-                                        System.out.print("?! -+ Nhập lại (Nam / Nữ): ");
-                                        gender = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    // - Nhập số điện thoại Trưởng Khoa
-                                    System.out.print(" -+ Nhập số điện thoại (10 số): ");
-                                    String phone = sc.nextLine();
-                                    while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -+ SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                        System.out.print("?! -+ Nhập lại (10 số): ");
-                                        phone = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    // - Nhập quốc tịch Trưởng Khoa
-                                    System.out.print(" -+ Nhập quốc tịch: ");
-                                    String country = sc.nextLine();
-                                    // - Nhập số năm kinh nghiệm Trưởng Khoa
-                                    System.out.print(" -+ Nhập số năm kinh nghiệm (từ 2 năm trở lên): ");
-                                    String yearsOfExperienceStr = sc.nextLine();
-                                    while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
-                                            || Integer.parseInt(yearsOfExperienceStr) < 2) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -+ SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
-                                        System.out.print("?! -+ Nhập lại (từ 2 năm trở lên): ");
-                                        yearsOfExperienceStr = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    int yearsOfExperienceInt = Integer.parseInt(yearsOfExperienceStr);
-                                    // - Nhập tiền lương Trưởng khoa
-                                    System.out.print(" -+ Nhập tiền lương (tối thiểu là 1000): ");
-                                    String salaryStr = sc.nextLine();
-                                    while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(salaryStr)
-                                            || Integer.parseInt(salaryStr) < 1000) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -+ TIỀN LƯƠNG KHÔNG HỢP LỆ");
-                                        System.out.print("?! -+ Nhập lại (tối thiểu là 1000): ");
-                                        salaryStr = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    int salaryInt = Integer.parseInt(salaryStr);
-
-                                    // Tạo một Bác sĩ mới
-                                    HealthcareWorker newHealthcareWorker = new HealthcareWorker(fullname, birthdayObj, gender, phone,
-                                        country, "Bác sĩ", yearsOfExperienceInt, salaryInt, newDepartmentID, "Có");
+                                    // Tạo một Bác sĩ mới là Trưởng khoa 
+                                    System.out.println("Nhập thông tin trưởng Khoa cho Khoa mới được tạo");
+                                    HealthcareWorker newHealthcareWorker = new HealthcareWorker();
+                                    newHealthcareWorker.setInfo("is manager");
                                     HealthcareWorkerManager.getInstance().add(newHealthcareWorker);
 
-                                    // Lấy ra mã Bác sĩ mới được để xử lý việc thiết lập mã trưởng Khoa
-                                    String newHealthcareWorkerID = newHealthcareWorker.getId();
+                                    // Tạo tài khoản đăng nhập riêng cho trưởng Khoa mới tạo đó
+                                    String newUsername = newHealthcareWorker.getId();
+                                    String newPassword = newHealthcareWorker.getBirthday().getDateFormatByCondition("has not cross");
+                                    Account newAccount = new Account(newUsername, newPassword, "Nhân viên");
+                                    AccountManager.getInstance().add(newAccount);
 
-                                    // Thiết lập mã trưởng Khoa (vì đã hoàn tất việc tạo một Bác sĩ)
-                                    DepartmentManager.getInstance().findObjectById(newDepartmentID).setManagerID(newHealthcareWorkerID);
+                                    // Thiết lập Trưởng Khoa (vì đã hoàn tất việc tạo một Bác sĩ)
+                                    newDepartment.setManagerID(newHealthcareWorker.getId());
+                                    newHealthcareWorker.setDepartmentID(newDepartment.getId());
 
                                     // Thông báo đã thêm một Khoa
                                     System.out.println("! - Đã thêm Khoa: " + newDepartment.getInfo());
@@ -737,7 +623,6 @@ public class App {
                                         System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
                                         break mainLoop;
                                     }
-                                    
                                 } else if(subChoice2.equals("4")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sửa một Khoa");
@@ -810,138 +695,22 @@ public class App {
                                             }
                                             case 1: {
                                                 System.out.println("Đã chọn cập nhật Tên");
-                                                System.out.print(" - Nhập tên mới: ");
-                                                String newName = sc.nextLine();
-                                                departmentUpdate.setName(newName);
+                                                DepartmentManager.getInstance().update(departmentUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
                                                 System.out.println("Đã chọn cập nhật Trưởng Khoa");
-                                                // Chọn Bác sĩ cần làm trưởng Khoa từ danh sách (phải cùng Khoa hiện tại và là Bác sĩ)
-                                                // - Lọc ra các Bác sĩ cùng Khoa, chưa là trưởng Khoa và là Bác sĩ
-                                                ArrayList<HealthcareWorker> doctorSearchList = new ArrayList<>();
-                                                for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                                    if(healthcareWorker.getDepartmentID().equals(departmentUpdate.getId())
-                                                        && healthcareWorker.getIsManagerDepartment().equals("Không")
-                                                        && healthcareWorker.getType().equals("Bác sĩ")) doctorSearchList.add(healthcareWorker);
-                                                }
-                                                if(doctorSearchList.size() == 0) {
-                                                    System.out.println("Hiện tại Khoa " + departmentUpdate.getId() + " - " + departmentUpdate.getName() 
-                                                        + " không có Bác sĩ cùn Khoa nào để có thể bổ nhiểm làm trưởng Khoa");
-                                                } else {
-                                                    // Thiết lập lại trưởng Khoa cũ
-                                                    HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID()).setIsManagerDepartment("Không");
-
-                                                    // - Chọn Bác sĩ từ danh sách
-                                                    System.out.println(" - Chọn Bác sĩ cần bổ nhiệm");
-                                                    // 1 - HEW00001 | Thanh Quy
-                                                    // 2 - HEW00002 | Đức Quý An
-                                                    // ...
-                                                    int subNumberList = 1;
-                                                    for(HealthcareWorker healthcareWorker : doctorSearchList) {
-                                                        System.out.println(subNumberList++ + " - " + healthcareWorker.getId() 
-                                                            + " | " + healthcareWorker.getFullname() + " | " + healthcareWorker.getType());
-                                                    }
-                                                    // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC00001)
-                                                    System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
-                                                    String subInfo = sc.nextLine();
-                                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                                && HealthcareWorkerManager.getInstance().findObjectById(subInfo) == null)
-                                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                                && doctorSearchList.get(Integer.parseInt(subInfo) - 1) == null)) {
-                                                        System.out.println("----- -----");
-                                                        System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
-                                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
-                                                        subInfo = sc.nextLine();
-                                                    }
-                                                    // Lấy thông tin của Bác sĩ bổ nhiệm làm trưởng Khoa
-                                                    HealthcareWorker doctorSelect = null;
-                                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)) {
-                                                        doctorSelect = HealthcareWorkerManager.getInstance().findObjectById(subInfo);
-                                                    } else {
-                                                        doctorSelect =  doctorSearchList.get(Integer.parseInt(subInfo) - 1);
-                                                    }
-
-                                                    // Thiết lập trưởng Khoa mới
-                                                    departmentUpdate.setManagerID(doctorSelect.getId());
-                                                    doctorSelect.setIsManagerDepartment("Có");
-                                                }
+                                                DepartmentManager.getInstance().update(departmentUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
                                                 System.out.println("Đã chọn cập nhật Số phòng");
-                                                System.out.print(" - Nhập số phòng mới: ");
-                                                String newRoom = sc.nextLine();
-                                                departmentUpdate.setRoom(newRoom);
+                                                DepartmentManager.getInstance().update(departmentUpdate, 3);
                                                 break;
                                             }
                                             case 4: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-
-                                                // Nhập tên Khoa mới
-                                                System.out.print(" - Nhập tên mới: ");
-                                                String newName = sc.nextLine();
-                                                departmentUpdate.setName(newName);
-
-                                                // Chọn Bác sĩ cần làm trưởng Khoa từ danh sách (phải cùng Khoa hiện tại và là Bác sĩ)
-                                                // - Lọc ra các Bác sĩ cùng Khoa, chưa là trưởng Khoa và là Bác sĩ
-                                                ArrayList<HealthcareWorker> doctorSearchList = new ArrayList<>();
-                                                for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                                    if(healthcareWorker.getDepartmentID().equals(departmentUpdate.getId())
-                                                        && healthcareWorker.getIsManagerDepartment().equals("Không")
-                                                        && healthcareWorker.getType().equals("Bác sĩ")) doctorSearchList.add(healthcareWorker);
-                                                }
-                                                if(doctorSearchList.size() == 0) {
-                                                    System.out.println("Hiện tại Khoa " + departmentUpdate.getId() + " - " + departmentUpdate.getName() 
-                                                        + " không có Bác sĩ cùn Khoa nào để có thể bổ nhiểm làm trưởng Khoa");
-                                                } else {
-                                                    // - Chọn Bác sĩ từ danh sách
-                                                    System.out.println(" - Chọn Bác sĩ cần bổ nhiệm");
-                                                    // 1 - HEW00001 | Thanh Quy
-                                                    // 2 - HEW00002 | Đức Quý An
-                                                    // ...
-                                                    int subNumberList = 1;
-                                                    for(HealthcareWorker healthcareWorker : doctorSearchList) {
-                                                        System.out.println(subNumberList++ + " - " + healthcareWorker.getId() 
-                                                            + " | " + healthcareWorker.getFullname() + " | " + healthcareWorker.getType());
-                                                    }
-                                                    // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC00001)
-                                                    System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
-                                                    String subInfo = sc.nextLine();
-                                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                                && HealthcareWorkerManager.getInstance().findObjectById(subInfo) == null)
-                                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                                && doctorSearchList.get(Integer.parseInt(subInfo) - 1) == null)) {
-                                                        System.out.println("----- -----");
-                                                        System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
-                                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
-                                                        subInfo = sc.nextLine();
-                                                    }
-                                                    // Lấy thông tin của Bác sĩ bổ nhiệm làm trưởng Khoa
-                                                    HealthcareWorker doctorSelect = null;
-                                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)) {
-                                                        doctorSelect = HealthcareWorkerManager.getInstance().findObjectById(subInfo);
-                                                    } else {
-                                                        doctorSelect =  doctorSearchList.get(Integer.parseInt(subInfo) - 1);
-                                                    }
-
-                                                    // Thiết lập lại trưởng Khoa cũ
-                                                    HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID()).setIsManagerDepartment("Không");
-                                                    // Thiết lập trưởng Khoa mới
-                                                    departmentUpdate.setManagerID(doctorSelect.getId());
-                                                    doctorSelect.setIsManagerDepartment("Có");
-                                                }
-
-                                                // Nhập số phòng mới
-                                                System.out.print(" - Nhập số phòng mới (tối đa 5 ký tự): ");
-                                                String newRoom = sc.nextLine();
-                                                while(newRoom.length() > 5) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (tối đa 5 ký tự): ");
-                                                    newRoom = sc.nextLine();
-                                                }
-                                                departmentUpdate.setName(newRoom);
+                                                DepartmentManager.getInstance().update(departmentUpdate, 4);
                                             }
                                         }
 
@@ -993,27 +762,28 @@ public class App {
                                     // Lấy ra mã Khoa sắp được xoá để xử lý những việc bên dưới
                                     String departmentRemoveID = departmentRemove.getId();
 
-                                    // Tìm những đối tượng có liên quan đến Khoa để xoá sự liên kết
-                                    // - Đối tượng Bệnh
+                                    // Tìm những đối tượng có liên quan đến Khoa để kiểm tra sự liên kết
+                                    // - Nếu có quản lý ít nhất một Bệnh thì không thể xoá
                                     for(Sick sick : SickManager.getInstance().getList()) {
                                         if(sick.getDepartmentID() == null) continue;
                                         if(sick.getDepartmentID().equals(departmentRemoveID)) {
-                                            sick.setDepartmentID(null);
-                                            break;
+                                            clearTerminal();
+                                            System.out.println("! - Vì Khoa " + departmentRemoveID +  " có quản lý ít nhất một Bệnh nên không thể xoá");
+                                            continue subLoop2;
                                         }
                                     }
-                                    // - Đối tượng Nhân viên Y tế
+                                    // - Nếu có quản lý ít nhất một Nhân viên Y tế thì không thể xoá
                                     for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
                                         if(healthcareWorker.getDepartmentID() == null) continue;
                                         if(healthcareWorker.getDepartmentID().equals(departmentRemoveID)) {
-                                            healthcareWorker.setDepartmentID(null);
-                                            healthcareWorker.setIsManagerDepartment(null);
-                                            break;
+                                            clearTerminal();
+                                            System.out.println("! - Vì Khoa " + departmentRemoveID +  " có quản lý ít nhất một Nhân viên Y tế nên không thể xoá");
+                                            continue subLoop2;
                                         }
                                     }
 
                                     // Xoá Khoa đã tìm
-                                    DepartmentManager.getInstance().removeOne(departmentRemoveID);
+                                    DepartmentManager.getInstance().remove(departmentRemoveID);
 
                                     // Thông báo thông tin của Khoa đã xoá
                                     System.out.println("! - Đã xoá một Khoa: " + departmentRemove.getInfo());
@@ -1029,48 +799,7 @@ public class App {
                                         System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
                                         break mainLoop;
                                     }
-
                                 } else if(subChoice2.equals("6")) {
-                                    clearTerminal();
-                                    System.out.println("Đã chọn Xoá tất cả Khoa");
-
-                                    // Nếu không có Khoa nào được tạo thì không thể xoá bất cứ Khoa nào
-                                    if(DepartmentManager.getInstance().getNumbers() == 0) {
-                                        clearTerminal();
-                                        System.out.println("Hiện tại Bệnh viện chưa có Khoa, cần tạo ít nhất một Khoa");
-                                        continue subLoop2;
-                                    }
-
-                                    // Tìm những đối tượng có liên quan đến Khoa để xoá sự liên kết
-                                    // - Đối tượng Bệnh
-                                    for(Sick sick : SickManager.getInstance().getList()) {
-                                        sick.setDepartmentID(null);
-                                    }
-                                    // - Đối tượng Nhân viên Y tế
-                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                        healthcareWorker.setDepartmentID(null);
-                                        healthcareWorker.setIsManagerDepartment(null);
-                                    }
-
-                                    // Xoá tất cả Khoa hiện có
-                                    DepartmentManager.getInstance().removeAll();
-
-                                    // Thông báo là đã xoá hết
-                                    System.out.println("! - Đã xoá tất cả Khoa");
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Tìm kiếm Khoa");
 
@@ -1112,7 +841,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("8")) {
+                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sắp xếp danh sách các Khoa");
 
@@ -1176,7 +905,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("9")) {
+                                } else if(subChoice2.equals("8")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Khoa ");
 
@@ -1198,7 +927,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("10")) {
+                                } else if(subChoice2.equals("9")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sao lưu dữ liệu Khoa ");
 
@@ -1235,14 +964,13 @@ public class App {
                                 System.out.println("3 - Thêm một Bệnh");
                                 System.out.println("4 - Sửa một Bệnh");
                                 System.out.println("5 - Xoá một Bệnh");
-                                System.out.println("6 - Xoá tất cả Bệnh");
-                                System.out.println("7 - Tìm kiếm Bệnh");
-                                System.out.println("8 - Sắp xếp danh sách các Bệnh");
-                                System.out.println("9 - Truy xuất dữ liệu Bệnh");
-                                System.out.println("10 - Sao lưu dữ liệu Bệnh");
+                                System.out.println("6 - Tìm kiếm Bệnh");
+                                System.out.println("7 - Sắp xếp danh sách các Bệnh");
+                                System.out.println("8 - Truy xuất dữ liệu Bệnh");
+                                System.out.println("9 - Sao lưu dữ liệu Bệnh");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 10)) {
+                                while(!isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -1285,38 +1013,9 @@ public class App {
                                         continue subLoop2;
                                     }
 
-                                    // Nếu đã có Khoa được tạo
-                                    System.out.print(" - Nhập tên Bệnh: ");
-                                    String name = sc.nextLine();
-
-                                    // Chọn Khoa sẽ quản lý Bệnh được tạo
-                                    System.out.println(" - Chọn Khoa thuộc về");
-                                    // 1 - DEP00001 | Tai-Mũi-Họng
-                                    // 2 - DEP00002 | Thận
-                                    // ...
-                                    int numberList = 1;
-                                    for(Department department : DepartmentManager.getInstance().getList()) {
-                                        System.out.println(numberList++ + " - " + department.getId() + " | " + department.getName());
-                                    }
-                                    // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
-                                    System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                    String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                        info = sc.nextLine();
-                                    }
-                                    // Lấy mã Khoa đã được chọn
-                                    String departmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                        ? DepartmentManager.getInstance().findObjectById(info).getId()
-                                        : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
-
                                     // Thêm một bệnh, Sick(name, departmentID), vì id sẽ tự tạo
-                                    Sick newSick = new Sick(name, departmentID);
+                                    Sick newSick = new Sick();
+                                    newSick.setInfo();
                                     SickManager.getInstance().add(newSick);
 
                                     // Thông báo đã thêm một Bệnh mới
@@ -1401,76 +1100,17 @@ public class App {
                                             }
                                             case 1: {
                                                 System.out.println("Đã chọn cập nhật Tên");
-                                                System.out.print(" - Nhập tên mới: ");
-                                                String newName = sc.nextLine();
-                                                sickUpdate.setName(newName);
+                                                SickManager.getInstance().update(sickUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
                                                 System.out.println("Đã chọn cập nhật Khoa");
-                                                System.out.println(" - Chọn Khoa quản lý mới");
-                                                // 1 - DEP00001 | Tai-Mũi-Họng
-                                                // 2 - DEP00002 | Thận
-                                                // ...
-                                                int subNumberList = 1;
-                                                for(Department department : DepartmentManager.getInstance().getList()) {
-                                                    System.out.println(subNumberList++ + " - "
-                                                        + department.getId() + " | " + department.getName());
-                                                }
-                                                // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                                String subInfo = sc.nextLine();
-                                                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectById(subInfo) == null)
-                                                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                                    subInfo = sc.nextLine();
-                                                }
-                                                // Lấy mã Khoa đã được chọn
-                                                String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                    ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
-                                                    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                sickUpdate.setDepartmentID(newDepartmentID);
+                                                SickManager.getInstance().update(sickUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-
-                                                // Nhập tên Khoa mới
-                                                System.out.print(" - Nhập tên mới: ");
-                                                String newName = sc.nextLine();
-                                                sickUpdate.setName(newName);
-
-                                                // Chọn Khoa quản lí mới
-                                                System.out.println(" - Chọn Khoa thuộc về");
-                                                // 1 - DEP00001 | Tai-Mũi-Họng
-                                                // 2 - DEP00002 | Thận
-                                                // ...
-                                                int subNumberList = 1;
-                                                for(Department department : DepartmentManager.getInstance().getList()) {
-                                                    System.out.println(subNumberList++ + " - "
-                                                        + department.getId() + " | " + department.getName());
-                                                }
-                                                // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                                String subInfo = sc.nextLine();
-                                                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectById(subInfo) == null)
-                                                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                                    subInfo = sc.nextLine();
-                                                }
-                                                // Lấy mã Khoa đã được chọn
-                                                String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                    ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
-                                                    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                sickUpdate.setDepartmentID(newDepartmentID);
+                                                SickManager.getInstance().update(sickUpdate, 3);
                                             }
                                         }
 
@@ -1522,20 +1162,18 @@ public class App {
                                     // Lấy ra mã Bệnh sắp được xoá để xử lý những việc sau
                                     String sickRemoveID = sickRemove.getId();
 
-                                    // Huỷ liên với các đối tượng liên quan
-                                    // - Bệnh án
+                                    // Nếu Bệnh nằm trong Bệnh án bất kỳ thì không thể xoá
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
-                                        if(medicalRecord.getSickID() == null 
-                                            && medicalRecord.getSickLevel() == null) continue;
+                                        if(medicalRecord.getSickID() == null) continue;
                                         if(medicalRecord.getSickID().equals(sickRemoveID)) {
-                                            medicalRecord.setSickID(null);
-                                            medicalRecord.setSickLevel(null);
-                                            break;
+                                            clearTerminal();
+                                            System.out.println("! - Vì Bệnh " + sickRemoveID + " đang nằm trong ít nhất một Hồ sơ Bệnh án nên không thể xoá");
+                                            continue subLoop2;
                                         }
                                     }
 
                                     // Xoá Bệnh
-                                    SickManager.getInstance().removeOne(sickRemoveID);
+                                    SickManager.getInstance().remove(sickRemoveID);
 
                                     // Thông báo thông tin của bệnh đã xoá
                                     System.out.println("! -- Đã xoá một Bệnh: " + sickRemove.getInfo());
@@ -1553,42 +1191,6 @@ public class App {
                                     }
 
                                 } else if(subChoice2.equals("6")) {
-                                    clearTerminal();
-                                    System.out.println("Đã chọn Xoá tất cả Bệnh");
-
-                                    // Nếu không có Bệnh nào được tạo thì không thể xoá Bệnh
-                                    if(SickManager.getInstance().getNumbers() == 0) {
-                                        clearTerminal();
-                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh, cần tạo ít nhất một Bệnh");
-                                        continue subLoop2;
-                                    }
-
-                                    // Huỷ liên với các đối tượng liên quan
-                                    // -- Bệnh án
-                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
-                                        medicalRecord.setSickID(null);
-                                        medicalRecord.setSickLevel(null);
-                                    }
-
-                                    // Xoá tất cả Bệnh
-                                    SickManager.getInstance().removeAll();
-
-                                    // Thông báo đã xoá hết Bệnh trong danh sách
-                                    System.out.println("! - Đã xoá tất cả Bệnh");
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Tìm kiếm Bệnh");
 
@@ -1630,7 +1232,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("8")) {
+                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sắp xếp danh sách các Bệnh");
 
@@ -1686,7 +1288,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("9")) {
+                                } else if(subChoice2.equals("8")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Bệnh");
 
@@ -1708,7 +1310,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("10")) {
+                                } else if(subChoice2.equals("9")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sao lưu dữ liệu Bệnh");
 
@@ -1745,14 +1347,13 @@ public class App {
                                 System.out.println("3 - Thêm một Nhân viên Y tế");
                                 System.out.println("4 - Sửa một Nhân viên Y tế");
                                 System.out.println("5 - Xoá một Nhân viên Y tế");
-                                System.out.println("6 - Xoá tất cả Nhân viên Y tế");
-                                System.out.println("7 - Tìm kiếm Nhân viên Y tế");
-                                System.out.println("8 - Sắp xếp danh sách các Nhân viên Y tế");
-                                System.out.println("9 - Truy xuất dữ liệu Nhân viên Y tế");
-                                System.out.println("10 - Sao lưu dữ liệu Nhân viên Y tế");
+                                System.out.println("6 - Tìm kiếm Nhân viên Y tế");
+                                System.out.println("7 - Sắp xếp danh sách các Nhân viên Y tế");
+                                System.out.println("8 - Truy xuất dữ liệu Nhân viên Y tế");
+                                System.out.println("9 - Sao lưu dữ liệu Nhân viên Y tế");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 10)) {
+                                while(!isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -1795,115 +1396,9 @@ public class App {
                                         continue subLoop1;
                                     }
 
-                                    // Nhập tên
-                                    System.out.print(" - Nhập họ tên: ");
-                                    String fullname = sc.nextLine();
-
-                                    // Nhập ngày sinh
-                                    System.out.print(" - Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                    String birthdayStr = sc.nextLine();
-                                    while(!Date.getInstance().isDateFormat(birthdayStr)
-                                            || !Date.getInstance().getDateFromDateFormat(birthdayStr).isDate()) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                        birthdayStr = sc.nextLine();
-                                       System.out.println("----- -----");
-                                    }
-                                    Date birthdayObj = Date.getInstance().getDateFromDateFormat(birthdayStr);
-
-                                    // Nhập giới tính
-                                    System.out.print(" - Nhập giới tính (Nam / Nữ): ");
-                                    String gender = sc.nextLine();
-                                    while(!gender.equals("Nam") && !gender.equals("Nữ")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (Nam / Nữ): ");
-                                        gender = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-
-                                    // Nhập số điện thoại 
-                                    System.out.print(" - Nhập số điện thoại (10 số): ");
-                                    String phone = sc.nextLine();
-                                    while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (10 số): ");
-                                        phone = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-
-                                    // Nhập quốc tịch 
-                                    System.out.print(" - Nhập quốc tịch: ");
-                                    String country = sc.nextLine();
-
-                                    // Chọn loại Bác sĩ
-                                    System.out.print(" - Nhập loại Nhân viên (Bác sĩ hoặc Y tá): ");
-                                    String type = sc.nextLine();
-                                    while(!type.equals("Bác sĩ") && !type.equals("Y tá")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - LOẠI NHÂN VIÊN KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (Bác sĩ hoặc Y tá): ");
-                                        type = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-
-                                    // Nhập số năm kinh nghiệm 
-                                    System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
-                                    String yearsOfExperienceStr = sc.nextLine();
-                                    while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
-                                            || Integer.parseInt(yearsOfExperienceStr) < 0) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (từ 0 trở lên): ");
-                                        yearsOfExperienceStr = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    int yearsOfExperienceInt = Integer.parseInt(yearsOfExperienceStr);
-
-                                    // Nhập tiền lương
-                                    System.out.print(" - Nhập tiền lương (tối thiểu là 1000): ");
-                                    String salaryStr = sc.nextLine();
-                                    while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(salaryStr)
-                                            || Integer.parseInt(salaryStr) < 1000) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - TIỀN LƯƠNG KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (tối thiểu là 1000): ");
-                                        salaryStr = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    int salaryInt = Integer.parseInt(salaryStr);
-
-                                    // Chọn Khoa quản lí Nhân viên mới được tạo này
-                                    System.out.println(" - Chọn Khoa thuộc về");
-                                    // 1 - DEP00001 | Tai-Mũi-Họng
-                                    // 2 - DEP00002 | Thận
-                                    // ...
-                                    int numberList = 1;
-                                    for(Department department : DepartmentManager.getInstance().getList()) {
-                                        System.out.println(numberList++ + " - " + department.getId() + " | " + department.getName());
-                                    }
-                                    // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
-                                    System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                    String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                        info = sc.nextLine();
-                                    }
-                                    // Lấy mã Khoa đã được chọn
-                                    String departmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                        ? DepartmentManager.getInstance().findObjectById(info).getId()
-                                        : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
-
                                     // Tạo một Nhân viên Y tế mới
-                                    HealthcareWorker newHealthcareWorker = new HealthcareWorker(fullname, birthdayObj, gender, phone, country,
-                                        type, yearsOfExperienceInt, salaryInt, departmentID, "Không");
+                                    HealthcareWorker newHealthcareWorker = new HealthcareWorker();
+                                    newHealthcareWorker.setInfo("is not manager");
                                     HealthcareWorkerManager.getInstance().add(newHealthcareWorker);
 
                                     // Tạo tài khoản đăng nhập riêng cho Nhân viên Y tế mới tạo đó
@@ -2006,166 +1501,53 @@ public class App {
                                             }
                                             case 1: {
                                                 System.out.println("Đã chọn cập nhật Họ tên");
-                                                System.out.print(" - Nhập họ và tên mới: "); 
-                                                String newFullname = sc.nextLine();
-                                                healthcareWorkerUpdate.setFullname(newFullname);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
                                                 System.out.println("Đã chọn cập nhật Ngày sinh");
-                                                System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): "); 
-                                                String newBirthdayStr = sc.nextLine();
-                                                while(!Date.getInstance().isDateFormat(newBirthdayStr)
-                                                        || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                                    newBirthdayStr = sc.nextLine();
-                                                System.out.println("----- -----");
-                                                }
-                                                Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
-                                                healthcareWorkerUpdate.setBirthday(newBirthdayObj);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
                                                 System.out.println("Đã chọn cập nhật Giới tính");
-                                                System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
-                                                String newGender = sc.nextLine();
-                                                while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
-                                                    newGender = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                healthcareWorkerUpdate.setGender(newGender);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 3);
                                                 break;
                                             }
                                             case 4: {
                                                 System.out.println("Đã chọn cập nhật Số điện thoại");
-                                                System.out.print(" - Nhập số điện thoại mới (10 số): ");
-                                                String newPhone = sc.nextLine();
-                                                while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (10 số): ");
-                                                    newPhone = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                healthcareWorkerUpdate.setPhone(newPhone);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 4);
                                                 break;
                                             }
                                             case 5: {
                                                 System.out.println("Đã chọn cập nhật Quốc tịch");
-                                                System.out.print(" - Nhập quốc tịch mới: ");
-                                                String newCountry = sc.nextLine();
-                                                healthcareWorkerUpdate.setCountry(newCountry);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 5);
                                                 break;
                                             }
                                             case 6: {
                                                 System.out.println("Đã chọn cập nhật Loại Nhân viên");
-                                                String type = healthcareWorkerUpdate.getType();
-                                                String typeReverse = null;
-
-                                                if(type.equals("Bác sĩ")) typeReverse = "Y tá";
-                                                else typeReverse = "Bác sĩ";
-
-                                                System.out.printf(" - Công việc hiện tại là %s. Bạn có muốn chuyển sang công việc %s hay không ?\n", type, typeReverse);
-                                                System.out.print("Nhập 'YES' để xác nhận: ");
-                                                String confirm = sc.nextLine();
-                                                if(confirm.equals("YES")) {
-                                                    healthcareWorkerUpdate.setType(typeReverse);
-                                                    System.out.println(" - Đã đổi công việc Nhân viên sang " + typeReverse);
-
-                                                    if(typeReverse.equals("Y tá") && healthcareWorkerUpdate.getIsManagerDepartment().equals("Có")) {
-                                                        healthcareWorkerUpdate.setIsManagerDepartment("Không");
-                                                        DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID()).setManagerID(null);
-                                                    }
-                                                } else {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên không cập nhật Loại bệnh nhân");
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 6);
+                                                System.out.print(" - Nhập 'YES' để tiếp tục: ");
+                                                String wantContinue = sc.nextLine();
+                                                if(!wantContinue.equals("YES")) {
+                                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
+                                                    break mainLoop;
                                                 }
                                                 break;
                                             }
                                             case 7: {
                                                 System.out.println("Đã chọn cập nhật Số năm kinh nghiệm");
-                                                System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
-                                                String yearsOfExperienceStr = sc.nextLine();
-                                                while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
-                                                        || Integer.parseInt(yearsOfExperienceStr) < 0) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (từ 0 trở lên): ");
-                                                    yearsOfExperienceStr = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                int yearsOfExperienceInt = Integer.parseInt(yearsOfExperienceStr);
-                                                healthcareWorkerUpdate.setYearsOfExperience(yearsOfExperienceInt);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 7);
                                                 break;
                                             }
                                             case 8: {
                                                 System.out.println("Đã chọn cập nhật Khoa quản lý");
-
-                                                // Xử lý những vấn đề chưa hợp logic ở Khoa cũ
-                                                Department oldDepartment = DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID());
-                                                if(oldDepartment != null) {
-                                                    if(oldDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
-                                                        oldDepartment.setManagerID(null);
-                                                        healthcareWorkerUpdate.setIsManagerDepartment("Không");
-                                                    }
-                                                }
-
-                                                // Chọn Khoa quản lý mới
-                                                System.out.println(" - Chọn Khoa thuộc về");
-                                                // 1 - DEP00001 | Tai-Mũi-Họng
-                                                // 2 - DEP00002 | Thận
-                                                // ...
-                                                int subNumberList = 1;
-                                                for(Department department : DepartmentManager.getInstance().getList()) {
-                                                    System.out.println(subNumberList++ + " - " + department.getId() + " | " + department.getName());
-                                                }
-                                                // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                                String subInfo = sc.nextLine();
-                                                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectById(subInfo) == null)
-                                                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                                    subInfo = sc.nextLine();
-                                                }
-                                                // Lấy mã Khoa đã được chọn
-                                                String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                    ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
-                                                    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 8);
                                                 break;
                                             }
                                             case 9: {
                                                 System.out.println("Đã chọn cập nhật Làm trưởng Khoa");
-                                                // Lấy ra mã Khoa quản lí Nhân viên Y tế hiện tại
-                                                String departmentID = healthcareWorkerUpdate.getDepartmentID();
-                                                // Nếu Khoa quản lí hiện tại chưa có trưởng Khoa thì có thể thiết lập trưởng Khoa
-                                                if(DepartmentManager.getInstance().findObjectById(departmentID).getManagerID() != null) {
-                                                    System.out.println("Khoa " + departmentID + " hiện tại đã có trưởng Khoa");
-                                                } else {
-                                                    System.out.println("Vì Khoa " + departmentID + " hiện tại chưa có trưởng Khoa");
-                                                    System.out.println("Bạn có muốn bổ nhiệm Nhân viên này làm trưởng Khoa ?");
-                                                    System.out.print(" - Nhập 'YES' để xác nhận: ");
-                                                    String conform = sc.nextLine();
-                                                    if(conform.equals("YES")) {
-                                                        if(healthcareWorkerUpdate.getType().equals("Bác sĩ")) {
-                                                            DepartmentManager.getInstance().findObjectById(departmentID).setManagerID(healthcareWorkerUpdate.getId());
-                                                            healthcareWorkerUpdate.setIsManagerDepartment("Có");
-                                                            System.out.println(" - Đã bổ nhiểm Nhân viên Y tế làm trưởng Khoa");
-                                                        } else {
-                                                            System.out.println(" - Vì Nhân viên Y tế hiện tại là Y tá nên không thể bổ nhiệm làm trưởng Khoa");
-                                                        }
-                                                    } else {
-                                                        System.out.println("Bạn đã không nhập 'YES' nên không bổ nhiệm");
-                                                    }
-                                                }
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 9);
                                                 System.out.print(" - Nhập 'YES' để tiếp tục: ");
                                                 String wantContinue = sc.nextLine();
                                                 if(!wantContinue.equals("YES")) {
@@ -2176,147 +1558,7 @@ public class App {
                                             }
                                             case 10: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-
-                                                // Nhập lại họ tên mới
-                                                System.out.print(" - Nhập lại họ và tên mới: "); 
-                                                String newFullname = sc.nextLine();
-                                                healthcareWorkerUpdate.setFullname(newFullname);
-
-                                                // Nhập lại ngày sinh mới
-                                                System.out.print(" - Nhập lại ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): "); 
-                                                String newBirthdayStr = sc.nextLine();
-                                                while(!Date.getInstance().isDateFormat(newBirthdayStr)
-                                                        || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                                    newBirthdayStr = sc.nextLine();
-                                                System.out.println("----- -----");
-                                                }
-                                                Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
-                                                healthcareWorkerUpdate.setBirthday(newBirthdayObj);
-
-                                                // Nhập lại giới tính mới
-                                                System.out.print(" - Nhập lại giới tính mới (Nam hoặc Nữ): "); 
-                                                String newGender = sc.nextLine();
-                                                while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
-                                                    newGender = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                healthcareWorkerUpdate.setGender(newGender);
-
-                                                // Nhập lại số điện thoại mới
-                                                System.out.print(" - Nhập lại số điện thoại mới (10 số): ");
-                                                String newPhone = sc.nextLine();
-                                                while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (10 số): ");
-                                                    newPhone = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                healthcareWorkerUpdate.setPhone(newPhone);
-
-                                                // Nhập lại quốc tịch mới
-                                                System.out.print(" - Nhập lại quốc tịch mới: ");
-                                                String newCountry = sc.nextLine();
-                                                healthcareWorkerUpdate.setCountry(newCountry);
-
-                                                // Nhập lại loại Nhân viên mới
-                                                String type = healthcareWorkerUpdate.getType();
-                                                String typeReverse = null;
-                                                String newType = null;
-                                                if(type.equals("Bác sĩ")) typeReverse = "Y tá";
-                                                else typeReverse = "Bác sĩ";
-                                                System.out.printf(" - Loại hiện tại %s. Bạn có muốn chuyển sang loại %s hay không ?\n", type, typeReverse);
-                                                System.out.print("Nhập 'YES' để xác nhận: ");
-                                                String confirm = sc.nextLine();
-                                                if(confirm.equals("YES")) {
-                                                    newType = typeReverse;
-                                                    System.out.println("! - Đã đổi loại Nhân viên");
-                                                } else {
-                                                    System.out.println("! - Bạn đã không nhập 'YES' nên không cập nhật Loại bệnh nhân");
-                                                }
-                                                healthcareWorkerUpdate.setType(newType);
-
-                                                // Nhập lại số năm kinh nghiệm mới
-                                                System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
-                                                String newYearsOfExperienceStr = sc.nextLine();
-                                                while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newYearsOfExperienceStr)
-                                                        || Integer.parseInt(newYearsOfExperienceStr) < 0) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (từ 0 trở lên): ");
-                                                    newYearsOfExperienceStr = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                int newYearsOfExperienceInt = Integer.parseInt(newYearsOfExperienceStr);
-                                                healthcareWorkerUpdate.setYearsOfExperience(newYearsOfExperienceInt);
-
-                                                // Xử lý những vấn đề chưa hợp logic ở Khoa cũ
-                                                Department oldDepartment = DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID());
-                                                if(oldDepartment != null) {
-                                                    if(oldDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
-                                                        oldDepartment.setManagerID(null);
-                                                        healthcareWorkerUpdate.setIsManagerDepartment("Không");
-                                                    }
-                                                }
-                                                System.out.println(" - Chọn Khoa thuộc về");
-                                                // 1 - DEP00001 | Tai-Mũi-Họng
-                                                // 2 - DEP00002 | Thận
-                                                // ...
-                                                int subNumberList = 1;
-                                                for(Department department : DepartmentManager.getInstance().getList()) {
-                                                    System.out.println(subNumberList++ + " - "
-                                                        + department.getId() + " | " + department.getName());
-                                                }
-                                                // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-                                                String subInfo = sc.nextLine();
-                                                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectById(subInfo) == null)
-                                                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - KHOA KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                                                    subInfo = sc.nextLine();
-                                                }
-                                                // Lấy mã Khoa đã được chọn
-                                                String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                    ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
-                                                    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
-
-                                                // Nếu Khoa quản lí mới chưa có trưởng Khoa thì có thể thiết lập trưởng Khoa
-                                                if(DepartmentManager.getInstance().findObjectById(newDepartmentID).getManagerID() != null) {
-                                                    System.out.println("Khoa " + newDepartmentID + " hiện tại đã có trưởng Khoa");
-                                                } else {
-                                                    System.out.println("Vì Khoa " + newDepartmentID + " hiện tại chưa có trưởng Khoa");
-                                                    System.out.println("Bạn có muốn bổ nhiệm Nhân viên này làm trưởng Khoa ?");
-                                                    System.out.print(" - Nhập 'YES' để xác nhận: ");
-                                                    String conform = sc.nextLine();
-                                                    if(conform.equals("YES")) {
-                                                        if(healthcareWorkerUpdate.getType().equals("Bác sĩ")) {
-                                                            DepartmentManager.getInstance().findObjectById(newDepartmentID).setManagerID(healthcareWorkerUpdate.getId());
-                                                            healthcareWorkerUpdate.setIsManagerDepartment("Có");
-                                                            System.out.println(" - Đã bổ nhiểm Nhân viên Y tế làm trưởng Khoa");
-                                                        } else {
-                                                            System.out.println(" - Vì Nhân viên Y tế hiện tại là Y tá nên không thể bổ nhiệm làm trưởng Khoa");
-                                                        }
-                                                    } else {
-                                                        System.out.println("Bạn đã không nhập 'YES' nên không bổ nhiệm");
-                                                    }
-                                                }
-                                                System.out.print(" - Nhập 'YES' để tiếp tục: ");
-                                                String wantContinue = sc.nextLine();
-                                                if(!wantContinue.equals("YES")) {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                                    break mainLoop;
-                                                }
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 10);
                                             }
                                         }
 
@@ -2368,6 +1610,16 @@ public class App {
                                     // Lấy ra mã Nhân viên Y tế sắp được xoá để xử lý những việc sau
                                     String healthcareWorkerRemoveID = healthcareWorkerRemove.getId();
 
+                                    // Nếu Nhân viên sắp xoá nằm trong Bệnh án bất kỳ thì không thể xoá
+                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
+                                        if(medicalRecord.getHealthcareWorkerID() == null) continue;
+                                        if(medicalRecord.getHealthcareWorkerID().equals(healthcareWorkerRemoveID)) {
+                                            clearTerminal();
+                                            System.out.println("! - Vì Nhân viên Y tế " + healthcareWorkerRemoveID + " đã nằm trong Hồ sơ Bệnh án " + medicalRecord.getId() + " nên không thể xoá");
+                                            continue subLoop2;
+                                        }
+                                    }
+
                                     // Huỷ liên với các đối tượng liên quan
                                     // - Tài khoản
                                     AccountManager.getInstance().remove(healthcareWorkerRemoveID);
@@ -2377,15 +1629,9 @@ public class App {
                                         if(HealthcareWorkerManager.getInstance().findObjectById(healthcareWorkerRemoveID).getIsManagerDepartment().equals("Có")
                                             && department.getManagerID().equals(healthcareWorkerRemoveID))  department.setManagerID(null);
                                     }
-                                    // - Bệnh án
-                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
-                                        if(medicalRecord.getHealthcareWorkerID() == null) continue;
-                                        if(medicalRecord.getHealthcareWorkerID().equals(healthcareWorkerRemoveID)) 
-                                            medicalRecord.setHealthcareWorkerID(null);
-                                    }
 
                                     // Xoá Nhân viên Y tế
-                                    HealthcareWorkerManager.getInstance().removeOne(healthcareWorkerRemoveID);
+                                    HealthcareWorkerManager.getInstance().remove(healthcareWorkerRemoveID);
 
                                     // Thông báo thông tin của Nhân viên Y tế đã xoá
                                     System.out.println("! - Đã xoá một Nhân viên Y tế: " + healthcareWorkerRemove.getInfo());
@@ -2404,60 +1650,13 @@ public class App {
 
                                 } else if(subChoice2.equals("6")) {
                                     clearTerminal();
-                                    System.out.println("Đã chọn Xoá tất cả Nhân viên Y tế");
-
-                                    // Nếu Bệnh viện không có Nhân viên Y tế nào thì không thể xoá tất cả Nhân viên Y tế
-                                    if(HealthcareWorkerManager.getInstance().getNumbers() == 0) {
-                                        clearTerminal();
-                                        System.out.println("Hiện tại Bệnh viện chưa có Nhân viên Y tế, cần tạo ít nhất một Nhân viên Y tế");
-                                        continue subLoop1;
-                                    }
-
-                                    // Tìm những đối tượng có liên quan đến Nhân viên Y tế để xoá sự liên kết
-                                    // - Tài khoản
-                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                        AccountManager.getInstance().remove(healthcareWorker.getId());
-                                    }
-                                    // - Đối tượng Khoa
-                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                        if(healthcareWorker.getIsManagerDepartment().equals("Có")) {
-                                            DepartmentManager.getInstance().findObjectById(healthcareWorker.getId()).setManagerID(null);;
-                                        }
-                                    }
-                                    // - Đối tượng Bệnh án
-                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                        if(healthcareWorker.getMedicalRecordID() != null) {
-                                            MedicalRecordManager.getInstance().findObjectById(healthcareWorker.getMedicalRecordID()).setHealthcareWorkerID(null);
-                                        }
-                                    }
-
-                                    // Xoá tất cả Nhân viên Y tế hiện có
-                                    HealthcareWorkerManager.getInstance().removeAll();
-
-                                    // Thông báo là đã xoá hết Nhân viên Y tế
-                                    System.out.println("! - Đã xoá tất cả Nhân viên Y tế");
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("7")) {
-                                    clearTerminal();
                                     System.out.println("Đã chọn Tìm kiếm Nhân viên Y tế");
 
                                     // Nếu Bệnh viện không có Nhân viên Y tế nào thì không thể tìm kiếm Nhân viên Y tế
                                     if(HealthcareWorkerManager.getInstance().getNumbers() == 0) {
                                         clearTerminal();
                                         System.out.println("Hiện tại Bệnh viện chưa có Nhân viên Y tế, cần tạo ít nhất một Nhân viên Y tế");
-                                        continue subLoop1;
+                                        continue subLoop2;
                                     }
 
                                     // Tìm kiếm bằng mã Nhân viên Y tế hay tên Nhân viên Y tế đều được phép
@@ -2491,7 +1690,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("8")) {
+                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sắp xếp danh sách các Nhân viên Y tế");
 
@@ -2571,7 +1770,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("9")) {
+                                } else if(subChoice2.equals("8")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Nhân viên Y tế");
 
@@ -2593,7 +1792,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("10")) {
+                                } else if(subChoice2.equals("9")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sao lưu dữ liệu Nhân viên Y tế");
 
@@ -2630,14 +1829,13 @@ public class App {
                                 System.out.println("3 - Thêm một Bệnh nhân");
                                 System.out.println("4 - Sửa một Bệnh nhân");
                                 System.out.println("5 - Xoá một Bệnh nhân");
-                                System.out.println("6 - Xoá tất cả Bệnh nhân");
-                                System.out.println("7 - Tìm kiếm Bệnh nhân");
-                                System.out.println("8 - Sắp xếp danh sách các Bệnh nhân");
-                                System.out.println("9 - Truy xuất dữ liệu Bệnh nhân");
-                                System.out.println("10 - Sao lưu dữ liệu Bệnh nhân");
+                                System.out.println("6 - Tìm kiếm Bệnh nhân");
+                                System.out.println("7 - Sắp xếp danh sách các Bệnh nhân");
+                                System.out.println("8 - Truy xuất dữ liệu Bệnh nhân");
+                                System.out.println("9 - Sao lưu dữ liệu Bệnh nhân");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 10)) {
+                                while(!isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -2672,63 +1870,10 @@ public class App {
                                 } else if(subChoice2.equals("3")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Thêm một Bệnh nhân");
-                                    
-                                    // Nhập tên Bệnh nhân
-                                    System.out.print(" -+ Nhập họ tên: ");
-                                    String fullname = sc.nextLine();
-
-                                    // Nhập ngày sinh Bệnh nhân
-                                    System.out.print(" -+ Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                    String birthdayStr = sc.nextLine();
-                                    while(!Date.getInstance().isDateFormat(birthdayStr)
-                                            || !Date.getInstance().getDateFromDateFormat(birthdayStr).isDate()) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                        birthdayStr = sc.nextLine();
-                                       System.out.println("----- -----");
-                                    }
-                                    Date birthdayObj = Date.getInstance().getDateFromDateFormat(birthdayStr);
-
-                                    // Nhập giới tính Bệnh nhân
-                                    System.out.print(" -+ Nhập giới tính (Nam / Nữ): ");
-                                    String gender = sc.nextLine();
-                                    while(!gender.equals("Nam") && !gender.equals("Nữ")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (Nam / Nữ): ");
-                                        gender = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-
-                                    // Nhập số điện thoại Bệnh nhân
-                                    System.out.print(" -+ Nhập số điện thoại (10 số): ");
-                                    String phone = sc.nextLine();
-                                    while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (10 số): ");
-                                        phone = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-
-                                    // Nhập quốc tịch Bệnh nhân
-                                    System.out.print(" -+ Nhập quốc tịch: ");
-                                    String country = sc.nextLine();
-
-                                    // Nhập loại chăm sóc Bệnh nhân
-                                    System.out.print(" -+ Nhập loại chăm sóc (Bình thường hoặc Cao cấp): ");
-                                    String patientType = sc.nextLine();
-                                    while(!patientType.equals("Bình thường") && !patientType.equals("Cao cấp")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
-                                        patientType = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
 
                                     // Tạo một Bệnh nhân mới
-                                    Patient newPatient = new Patient(fullname, birthdayObj, gender, phone, country, patientType);
+                                    Patient newPatient = new Patient();
+                                    newPatient.setInfoWithNoMedicalRecord();
                                     PatientManager.getInstance().add(newPatient);
 
                                     // Tạo tài khoản đăng nhập riêng cho Nhân viên Y tế mới tạo đó
@@ -2737,39 +1882,13 @@ public class App {
                                     Account newAccount = new Account(newUsername, newPassword, "Bệnh nhân");
                                     AccountManager.getInstance().add(newAccount);
 
-                                    // Lấy ra mã Bệnh nhân để làm những việc sau
-                                    String patientID = newPatient.getId();
-
                                     // Thông báo đã thêm một Bệnh nhân
                                     clearTerminal();
                                     System.out.println("! - Đã thêm Bệnh nhân: " + newPatient.getInfo());
 
                                     // Tạo một Hồ sơ Bệnh án cho Bệnh nhân vừa mới được tạo
                                     System.out.println("Bạn cần tạo Hồ sơ Bệnh án cho Bệnh nhân " + newPatient.getId() + " - " + newPatient.getFullname());
-                                    // - Nhập ngày mở Hồ sơ
-                                    System.out.print(" - Nhập ngày mở Hồ sơ (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                    String inputDayStr = sc.nextLine();
-                                    while(!Date.getInstance().isDateFormat(inputDayStr)
-                                            || !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - NGÀY MỞ HỒ SƠ KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                        inputDayStr = sc.nextLine();
-                                       System.out.println("----- -----");
-                                    }
-                                    Date inputDayObj = Date.getInstance().getDateFromDateFormat(inputDayStr);
-                                    // - Nhập ngày đóng Hồ sơ
-                                    System.out.print(" - Nhập ngày đóng Hồ sơ (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                    String outputDayStr = sc.nextLine();
-                                    while(!Date.getInstance().isDateFormat(outputDayStr)
-                                            || !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - NGÀY ĐÓNG HỒ SƠ KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                        outputDayStr = sc.nextLine();
-                                       System.out.println("----- -----");
-                                    }
-                                    Date outputDayObj = Date.getInstance().getDateFromDateFormat(outputDayStr);
+                                    MedicalRecord newMedicalRecord = null;
                                     // - Nhập loại Hồ sơ Bệnh án (Hồ sơ Chữa bệnh hoặc Hồ sơ Khám bệnh)
                                     System.out.print(" - Nhập loại Hồ sơ (Khám bệnh hoặc Chữa bệnh): ");
                                     String medicalRecordType = sc.nextLine();
@@ -2780,88 +1899,29 @@ public class App {
                                         medicalRecordType = sc.nextLine();
                                         System.out.println("----- -----");
                                     }
-                                    // - Chọn Bệnh cho Bệnh nhân đang mắc phải
-                                    System.out.println(" - Chọn loại Bệnh)");
-                                    int numberList1 = 1;
-                                    for(Sick sick : SickManager.getInstance().getList()) {
-                                        System.out.println(numberList1++ + " - " + sick.getId() + " | " + sick.getName());
-                                    }
-                                    System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
-                                    String info1 = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
-                                                && SickManager.getInstance().findObjectById(info1) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
-                                                && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - BỆNH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
-                                        info1 = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    String sickID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
-                                        ? SickManager.getInstance().findObjectById(info1).getId()
-                                        : SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1).getId();
-                                    // - Nhập mức độ Bệnh cho Bệnh vừa chọn
-                                    System.out.print(" - Nhập mức độ Bệnh (Nhẹ, Vừa hoặc Nặng): ");
-                                    String sickLevel = sc.nextLine();
-                                    while(!sickLevel.equals("Nhẹ") && !sickLevel.equals("Vừa") && !sickLevel.equals("Nặng")) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - MỨC ĐỘ BỆNH KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Chọn lại: ");
-                                        sickLevel = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    // - Chọn Nhân viên Y tế khám/chữa cho Bệnh nhân này (vì phải biết Bệnh mới biết cần Nhân viên thuộc Khoa nào khám)
-                                    // -- Nếu là Chữa bệnh thì chỉ có thể Bác sĩ chữa
-                                    // -- Nếu là Khám bệnh thì có thể là Bác sĩ hoặc Y tá khám
-                                    System.out.println(" - Chọn Nhân viên Y tế");
-                                    int numberList2 = 1;
+                                    // - Nhập các thông tin khác khi đã biết loại Hồ sơ
                                     if(medicalRecordType.equals("Khám bệnh")) {
-                                        for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                            if(healthcareWorker.getMedicalRecordID() == null
-                                                    && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
-                                                System.out.println(numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-                                            }
-                                            numberList2++;
-                                        }
-                                    } else {
-                                        for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                            if(healthcareWorker.getType().equals("Bác sĩ") && healthcareWorker.getMedicalRecordID() == null
-                                                    && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
-                                                System.out.println(numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-                                            }
-                                            numberList2++;
-                                        }
+                                        newMedicalRecord = new TestRecord();
+                                        newMedicalRecord.setInfoWithNoPatient("is test");
+                                    } else if(medicalRecordType.equals("Chữa bệnh")) {
+                                        newMedicalRecord = new TreatmentRecord();
+                                        newMedicalRecord.setInfoWithNoPatient("is not test");
                                     }
-                                    System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
-                                    String info2 = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
-                                                && HealthcareWorkerManager.getInstance().findObjectById(info2) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
-                                                && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
-                                        System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
-                                        info2 = sc.nextLine();
-                                        System.out.println("----- -----");
-                                    }
-                                    String healthcareWorkerID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
-                                        ? HealthcareWorkerManager.getInstance().findObjectById(info2).getId()
-                                        : HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1).getId();
-
-                                    // Tạo một Bệnh án mới
-                                    MedicalRecord newMedicalRecord = null;
-                                    if(medicalRecordType.equals("Khám bệnh")) {
-                                        newMedicalRecord = new TestRecord(inputDayObj, outputDayObj, medicalRecordType, patientID, sickID, sickLevel, healthcareWorkerID);
-                                    } else {
-                                        newMedicalRecord = new TreatmentRecord(inputDayObj, outputDayObj, medicalRecordType, patientID, sickID, sickLevel, healthcareWorkerID);
+                                    // - Nếu không có mã Bệnh án thì biết là đang thiếu Nhân viên để có thể chữa bệnh mà Bệnh nhân đang mắc phải
+                                    if(newMedicalRecord.getId() == null) {
+                                        clearTerminal();
+                                        System.out.println("! - Tạo Bệnh án không thành công vì Bệnh viện chúng tôi hiện không có đủ Nhân viên Y tế để chữa bệnh mà Bệnh nhân mắc phải");
+                                        System.out.println("! - Vì thế Bệnh viện sẽ xoá dữ liệu mà đã được nhập từ trước đó");
+                                        PatientManager.getInstance().remove(newPatient.getId());
+                                        AccountManager.getInstance().remove(newPatient.getId());
+                                        continue subLoop2;
                                     }
                                     MedicalRecordManager.getInstance().add(newMedicalRecord);
-
-                                    // Thiết lập Bệnh nhân mới vừa được tạo thuộc về Bệnh án cũng mới vừa được tạo này
+                                    
+                                    // Thiết lập sự liên kết
                                     newPatient.setMedicalRecordID(newMedicalRecord.getId());
-                                    // Thiết lập Nhân viên Y tế thuộc về Bệnh án mới vừa được tạo
-                                    HealthcareWorkerManager.getInstance().findObjectById(healthcareWorkerID).setMedicalRecordID(newMedicalRecord.getId());
+                                    HealthcareWorkerManager.getInstance().findObjectById(newMedicalRecord.getHealthcareWorkerID()).setMedicalRecordID(newMedicalRecord.getId());
+                                    newMedicalRecord.setPatientID(newPatient.getId());
 
                                     // Thông báo đã tạo Hồ sơ Bệnh án cho Bệnh nhân mới vừa tạo
                                     System.out.println("! - Đã tạo thành công Bệnh án " + newMedicalRecord.getId() + " cho Bệnh nhân " + newPatient.getId() + " - " + newPatient.getFullname());
@@ -2956,162 +2016,37 @@ public class App {
                                             }
                                             case 1: {
                                                 System.out.println("Đã chọn cập nhật Họ tên");
-                                                System.out.print(" - Nhập họ và tên mới: ");
-                                                String newFullname = sc.nextLine();
-                                                patientUpdate.setFullname(newFullname);
+                                                PatientManager.getInstance().update(patientUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
                                                 System.out.println("Đã chọn cập nhật Ngày sinh");
-                                                System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                                String newBirthdayStr = sc.nextLine();
-                                                while(!Date.getInstance().isDateFormat(newBirthdayStr)
-                                                        || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                                    newBirthdayStr = sc.nextLine();
-                                                System.out.println("----- -----");
-                                                }
-                                                Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
-                                                patientUpdate.setBirthday(newBirthdayObj);
+                                                PatientManager.getInstance().update(patientUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
                                                 System.out.println("Đã chọn cập nhật Giới tính");
-                                                System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
-                                                String newGender = sc.nextLine();
-                                                while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
-                                                    newGender = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                patientUpdate.setGender(newGender);
+                                                PatientManager.getInstance().update(patientUpdate, 3);
                                                 break;
                                             }
                                             case 4: {
                                                 System.out.println("Đã chọn cập nhật Số điện thoại");
-                                                System.out.print(" - Nhập số điện thoại mới (10 số): ");
-                                                String newPhone = sc.nextLine();
-                                                while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (10 số): ");
-                                                    newPhone = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                patientUpdate.setPhone(newPhone);
+                                                PatientManager.getInstance().update(patientUpdate, 4);
                                                 break;
                                             }
                                             case 5: {
                                                 System.out.println("Đã chọn cập nhật Quốc tịch");
-                                                System.out.print(" - Nhập quốc tịch mới: ");
-                                                String newCountry = sc.nextLine();
-                                                patientUpdate.setCountry(newCountry);
+                                                PatientManager.getInstance().update(patientUpdate, 5);
                                                 break;
                                             }
                                             case 6: {
                                                 System.out.println("Đã chọn cập nhật Loại chăm sóc");
-
-                                                String type = patientUpdate.getType();
-                                                String typeReverse = null;
-                                                if(type.equals("Bình thường")) typeReverse = "Cao cấp";
-                                                else typeReverse = "Bình thường";
-
-                                                System.out.printf(" - Loại chăm sóc hiện tại %s. Bạn có muốn chuyển sang loại chăm sóc %s hay không ?\n", type, typeReverse);
-                                                System.out.print("Nhập 'YES' để xác nhận: ");
-                                                String confirm = sc.nextLine();
-                                                if(confirm.equals("YES")) {
-                                                    patientUpdate.setType(typeReverse);
-                                                    System.out.println(" - Đã đổi loại chăm sóc sang " + typeReverse);
-                                                } else {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên không cập nhật Loại chăm sóc");
-                                                }
-
-                                                System.out.print(" - Nhập 'YES' để tiếp tục: ");
-                                                String wantContinue = sc.nextLine();
-                                                if(!wantContinue.equals("YES")) {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                                    break mainLoop;
-                                                }
+                                                PatientManager.getInstance().update(patientUpdate, 6);
                                                 break;
                                             }
                                             case 7: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-
-                                                // Nhập họ tên mới
-                                                System.out.print(" - Nhập họ và tên mới: "); 
-                                                String newFullname = sc.nextLine();
-                                                patientUpdate.setFullname(newFullname);
-
-                                                // Nhập ngày sinh mới
-                                                System.out.print(" - Nhập ngày sinh mới: "); 
-                                                String newBirthdayStr = sc.nextLine();
-                                                while(!Date.getInstance().isDateFormat(newBirthdayStr)
-                                                        || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-                                                    newBirthdayStr = sc.nextLine();
-                                                System.out.println("----- -----");
-                                                }
-                                                Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
-                                                patientUpdate.setBirthday(newBirthdayObj);
-
-                                                // Nhập giới tính mới
-                                                System.out.print(" - Nhập giới tính mới (Nam hoặc Nữ): "); 
-                                                String newGender = sc.nextLine();
-                                                while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
-                                                    newGender = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                patientUpdate.setGender(newGender);
-
-                                                // Nhập số điện thoại mới
-                                                System.out.print(" - Nhập số điện thoại mới (10 số): ");
-                                                String newPhone = sc.nextLine();
-                                                while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Nhập lại (10 số): ");
-                                                    newPhone = sc.nextLine();
-                                                    System.out.println("----- -----");
-                                                }
-                                                patientUpdate.setPhone(newPhone);
-
-                                                // Nhập quốc tịch mới
-                                                System.out.print(" - Nhập quốc tịch mới: ");
-                                                String newCountry = sc.nextLine();
-                                                patientUpdate.setCountry(newCountry);
-
-                                                // Nhập loại chăm sóc mới
-                                                String type = patientUpdate.getType();
-                                                String typeReverse = null;
-                                                String newType = null;
-                                                if(type.equals("Bình thường")) typeReverse = "Cao cấp";
-                                                else typeReverse = "Bình thường";
-                                                System.out.printf(" - Loại chăm sóc hiện tại %s. Bạn có muốn chuyển sang loại chăm sóc %s hay không ?\n", type, typeReverse);
-                                                System.out.print("Nhập 'YES' để xác nhận: ");
-                                                String confirm = sc.nextLine();
-                                                if(confirm.equals("YES")) {
-                                                    newType = typeReverse;
-                                                    System.out.println(" - Đã đổi loại chăm sóc sang " + typeReverse);
-                                                } else {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên không cập nhật Loại chăm sóc");
-                                                }
-                                                patientUpdate.setType(newType);
-
-                                                System.out.print(" - Nhập 'YES' để tiếp tục: ");
-                                                String wantContinue = sc.nextLine();
-                                                if(!wantContinue.equals("YES")) {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                                    break mainLoop;
-                                                }
+                                                PatientManager.getInstance().update(patientUpdate, 7);
                                             }
                                         }
 
@@ -3170,13 +2105,13 @@ public class App {
                                     // - Bệnh án thì xoá luôn
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         if(medicalRecord.getPatientID().equals(patientRemoveID)) {
-                                            MedicalRecordManager.getInstance().removeOne(medicalRecord.getId());
+                                            MedicalRecordManager.getInstance().remove(medicalRecord.getId());
                                             break;
                                         }
                                     }
 
                                     // Xoá Bệnh nhân đã tìm
-                                    PatientManager.getInstance().removeOne(patientRemoveID);
+                                    PatientManager.getInstance().remove(patientRemoveID);
 
                                     // Thông báo thông tin của Bệnh nhân đã xoá
                                     System.out.println("! - Đã xoá một Khoa: " + patientRemove.getInfo());
@@ -3194,41 +2129,6 @@ public class App {
                                     }
 
                                 } else if(subChoice2.equals("6")) {
-                                    clearTerminal();
-                                    System.out.println("Đã chọn Xoá tất cả Bệnh nhân");
-
-                                    // Nếu không có Bệnh nhân nào được tạo thì không thể xoá bất cứ Bệnh nhân nào
-                                    if(PatientManager.getInstance().getNumbers() == 0) {
-                                        clearTerminal();
-                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh nhân, cần tạo ít nhất một Bệnh nhân");
-                                        continue subLoop2;
-                                    }
-
-                                    // Tìm những đối tượng có liên quan đến Bệnh nhân để xoá sự liên kết
-                                    // - Bệnh án
-                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
-                                        MedicalRecordManager.getInstance().removeOne(medicalRecord.getId());
-                                    }
-
-                                    // Xoá tất cả Bệnh nhân hiện có
-                                    PatientManager.getInstance().removeAll();
-
-                                    // Thông báo là đã xoá hết
-                                    System.out.println("! - Đã xoá tất cả Khoa");
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Tìm kiếm Bệnh nhân");
 
@@ -3270,7 +2170,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("8")) {
+                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sắp xếp danh sách các Bệnh nhân");
 
@@ -3334,7 +2234,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("9")) {
+                                } else if(subChoice2.equals("8")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Bệnh nhân");
 
@@ -3356,7 +2256,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("10")) {
+                                } else if(subChoice2.equals("9")) {
                                     System.out.println("Đã chọn Sao lưu dữ liệu Bệnh nhân");
 
                                     // Sao lưu dữ liệu từ Bệnh nhân
@@ -3389,17 +2289,14 @@ public class App {
                                 System.out.println("0 - Kết thúc");
                                 System.out.println("1 - Quay lại");
                                 System.out.println("2 - Danh sách thông tin các Bệnh án");
-                                System.out.println("3 - Thêm một Bệnh án");
-                                System.out.println("4 - Sửa một Bệnh án");
-                                System.out.println("5 - Xoá một Bệnh án");
-                                System.out.println("6 - Xoá tất cả Bệnh án");
-                                System.out.println("7 - Tìm kiếm Bệnh án");
-                                System.out.println("8 - Sắp xếp danh sách các Bệnh án");
-                                System.out.println("9 - Truy xuất dữ liệu Bệnh án");
-                                System.out.println("10 - Sao lưu dữ liệu Bệnh án");
+                                System.out.println("3 - Sửa một Bệnh án");
+                                System.out.println("4 - Tìm kiếm Bệnh án");
+                                System.out.println("5 - Sắp xếp danh sách các Bệnh án");
+                                System.out.println("6 - Truy xuất dữ liệu Bệnh án");
+                                System.out.println("7 - Sao lưu dữ liệu Bệnh án");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 10)) {
+                                while(!isValidChoice(subChoice2, 0, 7)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -3433,24 +2330,6 @@ public class App {
 
                                 } else if(subChoice2.equals("3")) {
                                     clearTerminal();
-                                    System.out.println("Đã chọn Thêm một Bệnh án");
-
-                                    
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("4")) {
-                                    clearTerminal();
                                     System.out.println("Đã chọn Sửa một Bệnh án");
 
                                     // Nếu không có Bệnh án nào được tạo thì không thể sửa Bệnh án
@@ -3469,7 +2348,7 @@ public class App {
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         System.out.println(numberList++ + " -- "
                                             + medicalRecord.getId() + " | " + medicalRecord.getPatientID() + " - "
-                                            + PatientManager.getInstance().findObjectById( medicalRecord.getPatientID()));
+                                            + PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).getFullname());
                                     }
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn MER00001)
                                     System.out.print("? -- Chọn: ");
@@ -3494,11 +2373,10 @@ public class App {
                                     while(true) {
                                         System.out.println("! - Chọn thông tin cần sửa");
                                         System.out.println("0 - Quay lại");
-                                        System.out.println("1 - Loại hồ sơ");
-                                        System.out.println("2 - Bác sĩ");
-                                        System.out.println("3 - Bệnh");
-                                        System.out.println("4 - Mức độ Bệnh");
-                                        System.out.println("5 - Tất cả");
+                                        System.out.println("1 - Ngày mở Hồ sơ Bệnh án");
+                                        System.out.println("2 - Ngày đóng Hồ sơ Bệnh án");
+                                        System.out.println("3 - Mức độ Bệnh");
+                                        System.out.println("4 - Tất cả");
                                         System.out.print("? - Chọn: ");
                                         String subChoice3 = sc.nextLine();
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
@@ -3516,82 +2394,23 @@ public class App {
                                                 continue subLoop2;
                                             }
                                             case 1: {
-                                                System.out.println("Đã chọn cập nhật Loại hồ sơ");
-                                                
+                                                System.out.println("Đã chọn cập nhật Ngày lập Hồ sơ Bệnh án");
+                                                MedicalRecordManager.getInstance().update(medicalRecordUpdate, 1);
                                                 break;
                                             }
                                             case 2: {
-                                                // System.out.println("Đã chọn cập nhật Bác sĩ");
-                                                // System.out.println(" - Chọn Bác sĩ mới để chữa bệnh");
-                                                // // 1 - DEP00001 | Tai-Mũi-Họng
-                                                // // 2 - DEP00002 | Thận
-                                                // // ...
-                                                // int subNumberList = 1;
-                                                // for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                                //     if(healthcareWorker.getType().equals("Bác sĩ")
-                                                //             && healthcareWorker.getId().equals(medicalRecordUpdate.getHealthcareWorkerID())) {
-                                                //         System.out.println(subNumberList++ + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-                                                //     }
-                                                // }
-                                                // // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                // System.out.print("? - Chọn: ");
-                                                // String subInfo = sc.nextLine();
-                                                // while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                //             && HealthcareWorkerManager.getInstance().findObjectById(subInfo) == null)
-                                                //         || HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null) {
-                                                //     System.out.println("----- -----");
-                                                //     System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
-                                                //     System.out.print("?! - Chọn lại: ");
-                                                //     subInfo = sc.nextLine();
-                                                // }
-                                                // // Lấy mã Khoa đã được chọn
-                                                // String newHealthcareWorkerID = subInfo.length() == 1
-                                                //     ? HealthcareWorkerManager.getInstance().findObjectById(subInfo).getId()
-                                                //     : HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                // medicalRecordUpdate.setHealthcareWorkerID(newHealthcareWorkerID);
+                                                System.out.println("Đã chọn cập nhật Ngày khoá Hồ sơ Bệnh án");
+                                                MedicalRecordManager.getInstance().update(medicalRecordUpdate, 2);
                                                 break;
                                             }
                                             case 3: {
-                                                System.out.println("Đã chọn cập nhật Bệnh");
-                                                System.out.println(" - Chọn Bác sĩ mới để chữa bệnh");
-                                                // 1 - SICK00001 | Đau bệnh
-                                                // 2 - SICK00002 | Đau mắt
-                                                // ...
-                                                int subNumberList = 1;
-                                                for(Sick sick : SickManager.getInstance().getList()) {
-                                                    System.out.println(subNumberList++ + " - " + sick.getId() + " | " + sick.getName());
-                                                }
-                                                // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
-                                                System.out.print("? - Chọn: ");
-                                                String subInfo = sc.nextLine();
-                                                while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                                                            && SickManager.getInstance().findObjectById(subInfo) == null)
-                                                        || SickManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - BỆNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại: ");
-                                                    subInfo = sc.nextLine();
-                                                }
-                                                // Lấy mã Khoa đã được chọn
-                                                String newSickID = subInfo.length() == 1
-                                                    ? SickManager.getInstance().findObjectById(subInfo).getId()
-                                                    : SickManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
-                                                medicalRecordUpdate.setSickID(newSickID);
+                                                System.out.println("Đã chọn cập nhật Mức độ Bệnh");
+                                                MedicalRecordManager.getInstance().update(medicalRecordUpdate, 3);
+                                                break;
                                             }
                                             case 4: {
-                                                System.out.println("Đã chọn cập nhật Mức độ Bệnh");
-                                                System.out.print(" - Nhập mức độ Bệnh mới (Nhẹ. Vừa hoặc Nặng):");
-                                                String newSickLevel = sc.nextLine();
-                                                while(!newSickLevel.equals("Nhẹ") || !!newSickLevel.equals("Vừa") || !newSickLevel.equals("Nặng")) {
-                                                    System.out.println("----- -----");
-                                                    System.out.println("! - MỨC ĐỘ BỆNH KHÔNG HỢP LỆ");
-                                                    System.out.print("?! - Chọn lại: ");
-                                                    newSickLevel = sc.nextLine();
-                                                }
-                                                medicalRecordUpdate.setSickLevel(newSickLevel);
-                                            }
-                                            case 5: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
+                                                MedicalRecordManager.getInstance().update(medicalRecordUpdate, 4);
                                             }
                                         }
 
@@ -3599,110 +2418,7 @@ public class App {
                                         System.out.println("! - Thông tin của Khoa sau khi sửa: " + medicalRecordUpdate.getInfo());
                                     }
 
-                                } else if(subChoice2.equals("5")) { 
-                                    clearTerminal();
-                                    System.out.println("Đã chọn Xoá một Bệnh án");
-
-                                    if (MedicalRecordManager.getInstance().getNumbers() == 0) {
-										clearTerminal();
-										System.out.println("Hiện tại bệnh viện chưa cập nhật bệnh án, cần tạo ít nhất một bệnh án");
-									}
-									// Chọn bệnh án cần xóa
-									System.out.println("Danh sách các Bệnh án");
-									int numberList = 1;
-									for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
-										System.out.println(numberList++ + " -- " + medicalRecord.getId() + " | "
-												+ medicalRecord.getPatientID());
-									}
-									System.out.print("? -- Chọn (số thứ tự hoặc mã Bệnh án): ");
-									String info = sc.nextLine();
-									while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && MedicalRecordManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
-										System.out.println("----- -----");
-										System.out.println("! -- BỆNH ÁN KHÔNG HỢP LỆ");
-										System.out.print("?! -- Chọn lại (số thứ tự hoặc mã Bệnh án): ");
-										info = sc.nextLine();
-									}
-									MedicalRecord medicalRecordRemove = null;
-									if(info.length() != 1) {
-										medicalRecordRemove = MedicalRecordManager.getInstance().findObjectById(info);
-									} else {
-										medicalRecordRemove = MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
-									}
-
-                                    // Lấy ra mã Bệnh án sắp được xoá để thực hiện những việc sau
-                                    String medicalRecordIDRemove = medicalRecordRemove.getId();
-
-									// Tìm những đối tượng có liên quan đến Khoa để xoá sự liên kết
-                                    // - Bệnh nhân
-									for(Patient patient : PatientManager.getInstance().getList()) {
-										if(patient.getMedicalRecordID() == null) continue;
-										if(patient.getMedicalRecordID().equals(medicalRecordIDRemove)) {
-											patient.setMedicalRecordID(null);
-										}
-									}
-									// - Nhân viên Y tế
-									for (HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-										if(healthcareWorker.getMedicalRecordID() == null) continue;
-										if(healthcareWorker.getMedicalRecordID().equals(medicalRecordIDRemove)) {
-											healthcareWorker.setMedicalRecordID(null);
-										}
-									}
-
-									// Xóa bệnh án
-									MedicalRecordManager.getInstance().removeOne(medicalRecordIDRemove);
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("6")) {
-                                    clearTerminal();
-                                    System.out.println("Đã chọn Xoá tất cả Bệnh án");
-
-                                    if(MedicalRecordManager.getInstance().getNumbers() == 0) {
-										clearTerminal();
-										System.out.println("Hiện tại bệnh viện chưa cập nhật bệnh án, cần tạo ít nhất một bệnh án");
-									}
-									// Tìm những đối tượng có liên quan đến Bệnh án để xoá sự liên kết
-									// - Bệnh nhân
-									for(Patient patient : PatientManager.getInstance().getList()) {
-										patient.setMedicalRecordID(null);
-									}
-									// - Nhân viên Y tế
-                                    for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                        healthcareWorker.setMedicalRecordID(null);
-                                    }
-
-									// Xóa tất cả bệnh án
-									MedicalRecordManager.getInstance().removeAll();
-
-									// Thông báo là đã xoá hết
-									System.out.println("! -- Đã xoá tất cả Bệnh án");
-
-                                    // Thông báo hỏi có tiếp tục hay không
-                                    System.out.print("Nhập 'YES' để tiếp tục: ");
-                                    String wantContinue = sc.nextLine();
-                                    if(wantContinue.equals("YES")) {
-                                        clearTerminal();
-                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                        continue subLoop2;
-                                    } else {
-                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                        break mainLoop;
-                                    }
-
-                                } else if(subChoice2.equals("7")) {
+                                } else if(subChoice2.equals("4")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Tìm kiếm Bệnh án");
 
@@ -3746,7 +2462,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("8")) {
+                                } else if(subChoice2.equals("5")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sắp xếp danh sách các Bệnh án");
 
@@ -3802,7 +2518,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("9")) {
+                                } else if(subChoice2.equals("6")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Bệnh án");
 
@@ -3824,7 +2540,7 @@ public class App {
                                         break mainLoop;
                                     }
 
-                                } else if(subChoice2.equals("10")) {
+                                } else if(subChoice2.equals("7")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Sao lưu Bệnh án");
 
@@ -3850,6 +2566,169 @@ public class App {
                                 clearTerminal();
                             }
                         } else if(subChoice1.equals("8")) {
+                            clearTerminal();
+                            System.out.println("Đã chọn Quản lý hành động trong Bệnh viện");
+                            subLoop2:
+                            while(true) {
+                                System.out.println("/********** QUẢN LÝ HÀNH ĐỘNG TRONG BỆNH VIỆN **********/");
+                                System.out.println("0 - Kết thúc");
+                                System.out.println("1 - Quay lại");
+                                System.out.println("2 - Khám các Bệnh nhân");
+                                System.out.println("3 - Đưa các Bệnh nhân khẩu phần ăn (đang được chữa bệnh)");
+                                System.out.println("4 - Đưa các Bệnh nhân thuốc uống (đang được chữa bệnh, mức độ Bệnh: Nhẹ hoặc Vừa)");
+                                System.out.println("5 - Tiêm thuốc cho các Bệnh nhân (đang được chữa bệnh, mức độ Bệnh: Nặng)");
+                                System.out.print("? - Chọn: ");
+                                String subChoice2 = sc.nextLine();
+                                while(!isValidChoice(subChoice2, 0, 5)) {
+                                    System.out.println("---------- ----------");
+                                    System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
+                                    System.out.print("?! - Chọn lại: ");
+                                    subChoice2 = sc.nextLine();
+                                }
+                                if(subChoice2.equals("0")) {
+                                    System.out.println("Đã chọn Kết thúc");
+                                    break mainLoop;
+                                } else if(subChoice2.equals("1")) {
+                                    clearTerminal();
+                                    System.out.println("Đã chọn Quay lại");
+                                    continue subLoop1;
+                                } else if(subChoice2.equals("2")) {
+                                    clearTerminal();
+                                    System.out.println("Đã chọn Khám các Bệnh nhân");
+
+                                    // Nếu không có Khoa nào được tạo thì không thể tìm kiếm Bệnh án
+                                    if(MedicalRecordManager.getInstance().getNumbers() == 0) {
+                                        clearTerminal();
+                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh án, cần tạo ít nhất một Bệnh án");
+                                        continue subLoop2;
+                                    }
+
+                                    // Thực hiện công việc Khám
+                                    int numberList = 1;
+                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
+                                        System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
+                                        medicalRecord.testPatient();
+                                        HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).testPatient();
+                                        PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).testPatient();
+                                    }
+
+                                    // Thông báo hỏi có tiếp tục hay không
+                                    System.out.print("Nhập 'YES' để tiếp tục: ");
+                                    String wantContinue = sc.nextLine();
+                                    if(wantContinue.equals("YES")) {
+                                        clearTerminal();
+                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
+                                        continue subLoop2;
+                                    } else {
+                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
+                                        break mainLoop;
+                                    }
+
+                                } else if(subChoice2.equals("3")) {
+                                    clearTerminal();
+                                    System.out.println("Đã chọn Đưa các Bệnh nhân khẩu phần ăn (đang được chữa bệnh)");
+
+                                    // Nếu không có Khoa nào được tạo thì không thể tìm kiếm Bệnh án
+                                    if(MedicalRecordManager.getInstance().getNumbers() == 0) {
+                                        clearTerminal();
+                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh án, cần tạo ít nhất một Bệnh án");
+                                        continue subLoop2;
+                                    }
+
+                                    // Thực hiện công việc Khám
+                                    int numberList = 1;
+                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
+                                        System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
+                                        medicalRecord.giveFoodToPatient();
+                                        if(medicalRecord.getType().equals("Chữa bệnh")) {
+                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveFoodToPatient();
+                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveFoodToPatient();
+                                        }
+                                    }
+
+                                    // Thông báo hỏi có tiếp tục hay không
+                                    System.out.print("Nhập 'YES' để tiếp tục: ");
+                                    String wantContinue = sc.nextLine();
+                                    if(wantContinue.equals("YES")) {
+                                        clearTerminal();
+                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
+                                        continue subLoop2;
+                                    } else {
+                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
+                                        break mainLoop;
+                                    }
+
+                                } else if(subChoice2.equals("4")) {
+                                    clearTerminal();
+                                    System.out.println("Đã chọn Đưa các Bệnh nhân thuốc uống (đang được chữa bệnh, mức độ Bệnh: Nhẹ hoặc Vừa)");
+
+                                    // Nếu không có Khoa nào được tạo thì không thể tìm kiếm Bệnh án
+                                    if(MedicalRecordManager.getInstance().getNumbers() == 0) {
+                                        clearTerminal();
+                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh án, cần tạo ít nhất một Bệnh án");
+                                        continue subLoop2;
+                                    }
+
+                                    // Thực hiện công việc Khám
+                                    int numberList = 1;
+                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
+                                        System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
+                                        medicalRecord.giveCurativeToPatient();
+                                        if(medicalRecord.getType().equals("Chữa bệnh") && (medicalRecord.getSickLevel().equals("Nhẹ") || medicalRecord.getSickLevel().equals("Vừa"))) {
+                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveCurativeToPatient();
+                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveCurativeToPatient();
+                                        }
+                                    }
+
+                                    // Thông báo hỏi có tiếp tục hay không
+                                    System.out.print("Nhập 'YES' để tiếp tục: ");
+                                    String wantContinue = sc.nextLine();
+                                    if(wantContinue.equals("YES")) {
+                                        clearTerminal();
+                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
+                                        continue subLoop2;
+                                    } else {
+                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
+                                        break mainLoop;
+                                    }
+
+                                } else if(subChoice2.equals("5")) {
+                                    clearTerminal();
+                                    System.out.println("Đã chọn Tiêm thuốc cho các Bệnh nhân (đang được chữa bệnh, mức độ Bệnh: Nặng)");
+
+                                    // Nếu không có Khoa nào được tạo thì không thể tìm kiếm Bệnh án
+                                    if(MedicalRecordManager.getInstance().getNumbers() == 0) {
+                                        clearTerminal();
+                                        System.out.println("Hiện tại Bệnh viện chưa có Bệnh án, cần tạo ít nhất một Bệnh án");
+                                        continue subLoop2;
+                                    }
+
+                                    // Thực hiện công việc Khám
+                                    int numberList = 1;
+                                    for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
+                                        System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
+                                        medicalRecord.injectCurativePatient();
+                                        if(medicalRecord.getType().equals("Chữa bệnh") && medicalRecord.getSickLevel().equals("Nặng")) {
+                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).injectCurativePatient();
+                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).injectCurativePatient();
+                                        }
+                                    }
+
+                                    // Thông báo hỏi có tiếp tục hay không
+                                    System.out.print("Nhập 'YES' để tiếp tục: ");
+                                    String wantContinue = sc.nextLine();
+                                    if(wantContinue.equals("YES")) {
+                                        clearTerminal();
+                                        System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
+                                        continue subLoop2;
+                                    } else {
+                                        System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
+                                        break mainLoop;
+                                    }
+                                }
+                            }
+
+                        } else if(subChoice1.equals("9")) {
                             System.out.println("Đã chọn Truy xuất dữ liệu Bệnh viện");
 
                             // Truy xuất dữ liệu từ cả các file
@@ -3875,7 +2754,7 @@ public class App {
                                 break mainLoop;
                             }
 
-                        } else if(subChoice1.equals("9")) {
+                        } else if(subChoice1.equals("10")) {
                             System.out.println("Đã chọn Sao lưu dữ liệu Bệnh viện");
 
                             // Sao lưu dữ liệu từ cả các file
@@ -3906,7 +2785,7 @@ public class App {
                     clearTerminal();
 
                     // Biến tạm giữ thông tin tài khoản
-                    Account account = AccountManager.getInstance().findAccountByUsername(username);
+                    Account account = AccountManager.getInstance().findObjectById(username);
 
                     System.out.println("Là tài khoản người dùng trong bệnh viện");
                     if(AccountManager.getInstance().isHealthcareWorker(username)) {
@@ -4092,7 +2971,7 @@ public class App {
                     System.out.println("Là tài khoản người dùng ngoài bệnh viện");
 
                     // Biến tạm giữ thông tin tài khoản
-                    Account account = AccountManager.getInstance().findAccountByUsername(username);
+                    Account account = AccountManager.getInstance().findObjectById(username);
 
                     // Danh mục các lựa chọn
                     subLoop1:
@@ -4100,7 +2979,7 @@ public class App {
                         System.out.println("/********** TÀI KHOẢN ĐĂNG KÝ MỚI **********/");
                         System.out.println("0 - Kết thúc");
                         System.out.println("1 - Quay lại");
-                        System.out.println("2 - Đăng ký khám bệnh");
+                        System.out.println("2 - Đăng ký khám - chữa bệnh");
                         System.out.println("3 - Xoá tài khoản");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
@@ -4119,15 +2998,15 @@ public class App {
                                 continue mainLoop;
                             } else if(subChoice1.equals("2")) {
                                 clearTerminal();
-                                System.out.println("Đã chọn Đăng ký khám bệnh");
+                                System.out.println("Đã chọn Đăng ký khám - chữa bệnh");
 
-                                // Nếu không có Nhân viên Y tế nào được tạo thì không thể đăng ký khám bệnh
+                                // Nếu không có Khoa nào được tạo thì không thể đăng ký khám bệnh
                                 if(DepartmentManager.getInstance().getNumbers() == 0) {
                                     clearTerminal();
                                     System.out.println("Hiện tại Bệnh viện chưa có Khoa, cần tạo ít nhất một Khoa");
                                     continue subLoop1;
                                 }
-                                // Nếu không có Nhân viên Y tế nào được tạo thì không thể đăng ký khám bệnh
+                                // Nếu không có Bệnh nào được tạo thì không thể đăng ký khám bệnh
                                 if(SickManager.getInstance().getNumbers() == 0) {
                                     clearTerminal();
                                     System.out.println("Hiện tại Bệnh viện chưa có thông tin về các loại Bệnh, cần tạo ít nhất một Bệnh");
@@ -4140,97 +3019,59 @@ public class App {
                                     continue subLoop1;
                                 }
 
-                                // Tạo thông tin cơ bản cho một người
-                                // - Nhập họ và tên
-                                System.out.print(" - Nhập họ và tên: ");
-                                String fullname = sc.nextLine();
-                                // - Nhập ngày sinh
-                                System.out.println(" - Nhập ngày sinh: ");
-                                System.out.print(" -+ Ngày: ");
-                                int day = Integer.parseInt(sc.nextLine());
-                                System.out.print(" -+ Tháng: ");
-                                int month = Integer.parseInt(sc.nextLine());
-                                System.out.print(" -+ Năm: ");
-                                int year = Integer.parseInt(sc.nextLine());
-                                // - Nhập giới tính
-                                System.out.print(" - Nhập giới tính (Nam / Nữ): ");
-                                String gender = sc.nextLine();
-                                // - Nhập số điện thoại
-                                System.out.print(" - Nhập số điện thoại: ");
-                                String phone = sc.nextLine();
-                                // - Nhập quốc tịch
-                                System.out.print(" - Nhập quốc tịch: ");
-                                String country = sc.nextLine();
-                                // - Nhập chế độ khám bệnh
-                                System.out.print(" - Nhập chế độ khám bệnh (Thường / Cao cấp): ");
-                                String type = sc.nextLine();
-                                // - Nhập lí do đăng ký khám
-                                System.out.println(" - Chọn lí do đăng ký khám: ");
-                                int serial1 = 1;
-                                String[] sickArray;
-                                for(Sick sick : SickManager.getInstance().getList()) {
+                                // Thiết lập người đăng ký khám thành một Bệnh nhân
+                                Patient newPatient = new Patient();
+                                newPatient.setInfoWithNoMedicalRecord();
+                                PatientManager.getInstance().add(newPatient);
 
-                                    System.out.println(serial1++ + " - " + sick.getId() + " | " + sick.getName());
+                                // Người dùng mới có thể đăng ký Khám bệnh hoặc Chữa bệnh
+                                // Tạo một Hồ sơ Bệnh án cho Bệnh nhân vừa mới được tạo
+                                System.out.println("Bạn cần tạo Hồ sơ Bệnh án cho Bệnh nhân " + newPatient.getId() + " - " + newPatient.getFullname());
+                                MedicalRecord newMedicalRecord = null;
+                                // - Nhập loại Hồ sơ Bệnh án (Hồ sơ Chữa bệnh hoặc Hồ sơ Khám bệnh)
+                                System.out.print(" - Nhập loại Hồ sơ (Khám bệnh hoặc Chữa bệnh): ");
+                                String medicalRecordType = sc.nextLine();
+                                while(!medicalRecordType.equals("Khám bệnh") && !medicalRecordType.equals("Chữa bệnh")) {
+                                    System.out.println("----- -----");
+                                    System.out.println("! - LOẠI HỒ SƠ KHÔNG HỢP LỆ");
+                                    System.out.print("?! - Nhập lại (Khám bệnh hoặc Chữa bệnh): ");
+                                    medicalRecordType = sc.nextLine();
+                                    System.out.println("----- -----");
                                 }
-                                String reason = null;
-                                
-                                // - Chọn Bác sĩ hoặc Y tá ở khoa có bệnh tương ứng muốn khám
-                                System.out.println(" - Chọn Bác sĩ hoặc Y tá mà bạn muốn được khám");
-                                int serial2 = 1;
-                                for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
-                                    if(DepartmentManager.getInstance().findObjectById(healthcareWorker.getDepartmentID()).getName().equals("Nội")) {
-                                        System.out.println(serial2++ + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-                                    }
+                                // - Nhập các thông tin khác khi đã biết loại Hồ sơ
+                                if(medicalRecordType.equals("Khám bệnh")) {
+                                    newMedicalRecord = new TestRecord();
+                                    newMedicalRecord.setInfoWithNoPatient("is test");
+                                } else if(medicalRecordType.equals("Chữa bệnh")) {
+                                    newMedicalRecord = new TreatmentRecord();
+                                    newMedicalRecord.setInfoWithNoPatient("is not test");
                                 }
-                                if(serial2 == 1) {
-                                    System.out.println("! - Hiện tại, Bệnh viện không có Bác sĩ hay Y tá thuộc khoa Nội có thể khám cho bạn.");
-                                    System.out.println("! - Bệnh viện chúng tôi xin lỗi bạn vì đã điều này xảy ra. Mong bạn sẽ đăng ký lại ở lần sau.");
-                                } else {
-                                    System.out.print("? - Chọn: ");
-                                    String subChoice2 = sc.nextLine();
-                                    while(subChoice2.length() == 1
-                                            ? (int) subChoice2.charAt(0) < 49
-                                                || (int) subChoice2.charAt(0) > (int) String.valueOf(serial2).charAt(0)
-                                            : DepartmentManager.getInstance().findObjectById(subChoice2) == null) {
-                                        System.out.println("----- -----");
-                                        System.out.println("! -- LỰA CHỌN KHÔNG HỢP LỆ");
-                                        System.out.print("?! -- Chọn lại: ");
-                                        subChoice2 = sc.nextLine();
-                                    }
-                                    String idHealthcareWorker = (subChoice2.length() == 1
-                                    ? HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(subChoice2) - 1).getId()
-                                    : HealthcareWorkerManager.getInstance().findObjectById(subChoice2).getId());
-                                    // - Tạo một Bệnh nhân đăng ký khám
-                                    Patient patient = null;
-                                    if(type.equals("Thường")) {
-                                        patient = new NormalPatient(fullname, new Date(day, month, year), gender, phone, country, type);
-                                    } else {
-                                        patient = new PremiumPatient(fullname, new Date(day, month, year), gender, phone, country, type);
-                                    }
-                                    
-                                    // Tạo một hồ sơ Bệnh án với các thông tin đã được nhập từ phía người dùng
-                                    // - Lấy ngày hiện tại là ngày đăng ký, còn ngày khám xong tuỳ thuộc vào Quản lý Bệnh án
-                                    String date = sc.nextLine();
-                                    while(Date.getInstance().isDateFormat(date)) {
-
-                                    }
-                                    Date inputDay = new Date(Integer.parseInt(date.substring(0, 2)),
-                                    Integer.parseInt(date.substring(3, 5)), Integer.parseInt(date.substring(6)));
-                                    Date outputDay = new Date(inputDay);
-                                    // - Tạo Bệnh án
-                                    MedicalRecord testRecord = null;
-                                    if(idHealthcareWorker.substring(0, 3).equals("DOC")) {
-                                        testRecord = new TestRecord(inputDay, outputDay, "Khám bệnh", patient.getId(), idHealthcareWorker, null, null);
-                                    } else {
-                                        testRecord = new TestRecord(inputDay, outputDay, "Khám bệnh", patient.getId(), idHealthcareWorker, null, null);
-                                    }
-                                    
-                                    // Thông báo người dùng đã đăng ký khám bệnh thành công
+                                // - Nếu không có mã Bệnh án thì biết là đang thiếu Nhân viên để có thể chữa bệnh mà Bệnh nhân đang mắc phải
+                                if(newMedicalRecord.getId() == null) {
                                     clearTerminal();
-                                    System.out.println("Đã đăng ký khám bệnh thành công");
-                                    System.out.println(" - Thông tin Bệnh nhân: " + patient.getInfo());
-                                    System.out.println(" - Thông tin Bệnh án: " + testRecord.getInfo());
+                                    System.out.println("! - Đăng ký không thành công vì Bệnh viện chúng tôi hiện không có đủ Nhân viên Y tế để chữa bệnh đang mắc phải");
+                                    System.out.println("! - Vì thế Bệnh viện sẽ xoá dữ liệu mà đã được nhập từ trước đó");
+                                    PatientManager.getInstance().remove(newPatient.getId());
+                                    continue subLoop1;
                                 }
+                                MedicalRecordManager.getInstance().add(newMedicalRecord);
+                                
+                                // Thiết lập sự liên kết
+                                newPatient.setMedicalRecordID(newMedicalRecord.getId());
+                                HealthcareWorkerManager.getInstance().findObjectById(newMedicalRecord.getHealthcareWorkerID()).setMedicalRecordID(newMedicalRecord.getId());
+                                newMedicalRecord.setPatientID(newPatient.getId());
+
+                                // Tạo tài khoản người dùng trong Bệnh viện khi đã đăng ký khám thành công
+                                AccountManager.getInstance().remove(account.getUsername());
+                                String newUsername = newPatient.getId();
+                                String newPassword = newPatient.getBirthday().getDateFormatByCondition("has not cross");
+                                Account newAccount = new Account(newUsername, newPassword, "Bệnh nhân");
+                                AccountManager.getInstance().add(newAccount);
+
+                                // Thông báo đã đăng ký khám thành công
+                                System.out.println("! - Bạn đã đăng ký thành công");
+                                System.out.println("! - Chúng tôi xin xoá tài khoản hiện tại và cấp cho bạn tài khoản mới");
+                                System.out.println("! - Bạn có thể sử dụng tài khoản sau để kiểm tra thông tin: " + newUsername + " - " + newPassword);
                                 
                                 // Thông báo hỏi có tiếp tục hay không
                                 System.out.print("Nhập 'YES' để tiếp tục: ");
@@ -4254,8 +3095,9 @@ public class App {
                                 if(wantRemove.equals("YES")) {
                                     // Xoá tài khoản
                                     AccountManager.getInstance().remove(account.getUsername());
-                                    
                                     // Vì xoá tài khoản nên đưa về trang Đăng nhập - Đăng ký
+                                    clearTerminal();
+                                    System.out.println("Tài khoản đã được xoá. Bạn có thể tạo tài khoản mới nếu muốn");
                                     continue mainLoop;
                                 } else {
                                     System.out.println("Bạn đã không nhập 'YES' nên tài khoản chưa được xoá");
@@ -4265,7 +3107,6 @@ public class App {
 
                             }
                         }
-                        
                     }
             } else if(mainChoice.equals("2")) {
                 clearTerminal();
@@ -4284,8 +3125,10 @@ public class App {
                     System.out.print(" -! Nhập lại mật khẩu: ");
                     newPassword = sc.nextLine();
                 }
-                System.out.println("Đã đăng ký tài khoản mới - " + newUsername);
                 AccountManager.getInstance().add(new Account(newUsername, newPassword, "Người dùng mới"));
+
+                // Thông báo đã đăng ký thành công
+                System.out.println("Đã đăng ký tài khoản mới - " + newUsername);
             }
             clearTerminal();
         }

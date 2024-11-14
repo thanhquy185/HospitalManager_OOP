@@ -2,6 +2,7 @@ package Account;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,7 +10,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
-public class AccountManager {
+import Common.CRUD;
+
+public class AccountManager implements CRUD<Account> {
     // Properties
     private static ArrayList<Account> list;
     private static int numbers;
@@ -97,7 +100,7 @@ public class AccountManager {
     public boolean isUserInHospital(String username) {
         for(Account account : AccountManager.list) {
             if(account.getUsername().equals(username)
-                    && account.getType().equals("Tài khoản mới"))
+                    && account.getType().equals("Người dùng mới"))
                 return false;
         }
         return true;
@@ -116,25 +119,22 @@ public class AccountManager {
     }
     // - CRUD (Thêm sửa xoá với các tài khoản trong lớp quản lý)
     // -- Tìm kiếm vị trị của một tài khoản trong danh sách thông qua thông tin đã cho
-    private int findIndexByUsername(String username) {
-        for(int i = 0; i < AccountManager.numbers; i++) {
-            Account accountExisting = AccountManager.list.get(i);
-            if(accountExisting.getUsername().equals(username)) return i;
-        }
-        return -1;
-    }
-    public Account findAccountByIndex(int index) {
+    
+    @Override
+    public Account findObjectByIndex(int index) {
         if(index < 1 || index > AccountManager.numbers) return null;
         return AccountManager.list.get(index);
     }
-    public Account findAccountByUsername(String username) {
+    @Override   // username = id
+    public Account findObjectById(String username) {
+        if(AccountManager.numbers == 1) return null;
         for(Account account : AccountManager.list) {
             if(account.getUsername().equals(username))
                 return account;
         }
         return null;
     }
-    // -- In danh sách các tài khoản
+    @Override
     public void show() {
         System.out.println("+-------------------------------------------------------+");
 	    System.out.println("| TÊN TÀI KHOẢN |       MẬT KHẨU       |      LOẠI      |");
@@ -148,19 +148,61 @@ public class AccountManager {
 		if(AccountManager.numbers >= 1)
             System.out.println("+-------------------------------------------------------+");
     }
-    // -- Thêm một tài khoản
-    public void add(Account account) {
-        AccountManager.list.add(account);
+    @Override
+    public String getInfoByIndex(int index) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInfoByIndex'");
+    }
+    @Override
+    public String getInfoById(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInfoById'");
+    }
+    @Override
+    public void add(Account newAccount) {
+        // Thêm một tài khoản vào danh sách
+        AccountManager.list.add(newAccount);
         AccountManager.numbers++;
+    } 
+    @Override
+    public void update(Account accountUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+        
+        if(choice == 1 || choice == 3) {
+            System.out.print(" - Nhập tên tài khoản mới: ");
+            String newUsername = sc.nextLine();
+            while(!AccountManager.getInstance().isUsernameOrPassword(newUsername)) {
+                System.out.println("----- -----");
+                System.out.println("! - KHÔNG THỂ THAY ĐỔI");
+                System.out.print(" - Nhập lại tên tài khoản mới: ");
+                newUsername = sc.nextLine();
+            }
+            accountUpdate.setUsername(newUsername);;
+        }
+        if(choice == 2 || choice == 3) {
+            System.out.print(" - Nhập mật khẩu mới: ");
+            String newPassword = sc.nextLine();
+            while(!AccountManager.getInstance().isUsernameOrPassword(newPassword)) {
+                System.out.println("----- -----");
+                System.out.println("! - KHÔNG THỂ THAY ĐỔI");
+                System.out.print(" - Nhập lại mật khẩu mới: ");
+                newPassword = sc.nextLine();
+            }
+            accountUpdate.setPassword(newPassword);;
+        }
     }
-    // -- Cập nhật một tài khoản (đã tồn tại, tài khoản Người dùng ngoài Bệnh viện)
-    public void update(Account account) {}
-    // -- Xoá một tài khoản (đã tồn tại)
+    @Override
     public void remove(String username) {
-        AccountManager.list.remove(findIndexByUsername(username));
-        AccountManager.numbers--;
+        if(AccountManager.numbers == 0) return;
+        for(int i = 0; i < AccountManager.numbers; i++) {
+            if(AccountManager.list.get(i).getUsername().equals(username)) {
+                AccountManager.list.remove(i);
+                AccountManager.numbers--;
+                return;
+            }
+        }
     }
-    // -- Sắp xếp danh sách tài khoản
+    @Override
     public void sort(String condition) {
         // AccountManager.getInstance().getList().sort(Comparator.comparing(()));
         // asc: Sắp xếp tăng dần
@@ -175,6 +217,7 @@ public class AccountManager {
             }
         }
     }
+    @Override
     public void loadFromFile() {
         File file = new File("src/Database/AccountDatabase.txt");
         if(!file.exists()) {
@@ -192,7 +235,9 @@ public class AccountManager {
                 String password = info[1];
                 String type = info[2];
                 Account account = new Account(username, password, type);
-                add(account);
+                // Thêm một tài khoản vào danh sách
+                AccountManager.list.add(account);
+                AccountManager.numbers++;
             }
             bufferedReader.close();
             fileReader.close();
@@ -201,6 +246,7 @@ public class AccountManager {
         }
 
     }
+    @Override
     public void saveToFile() {
         File file = new File("src/Database/AccountDatabase.txt");
         if(!file.exists()) {
@@ -222,4 +268,5 @@ public class AccountManager {
             e.printStackTrace();
         }
     }
+
 }

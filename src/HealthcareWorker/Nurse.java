@@ -21,4 +21,24 @@ public class Nurse extends HealthcareWorker {
     }
 
     //Methods
+    @Override
+    public void testPatient() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testPatient'");
+    }
+    @Override
+    public void giveFoodToPatient() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'giveFoodToPatient'");
+    }
+    @Override
+    public void giveCurativeToPatient() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'giveCurativeToPatient'");
+    }
+    @Override
+    public void injectCurativePatient() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'injectCurativePatient'");
+    }
 }

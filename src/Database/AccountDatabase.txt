@@ -1,3 +1,4 @@
+admin|1|Quản lý
 PAT00001|02071995|Bệnh nhân
 PAT00002|27101995|Bệnh nhân
 PAT00003|17061995|Bệnh nhân

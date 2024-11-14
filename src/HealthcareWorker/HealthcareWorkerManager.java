@@ -2,17 +2,15 @@ package HealthcareWorker;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
-import Common.CRUD;
-import Common.Date;
-import Patient.Patient;
-import Patient.PatientManager;
-// import Common.Date;
+import Common.*;
+import Department.*;
 public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Properties
     private static HealthcareWorkerManager instance;
@@ -52,6 +50,19 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+    public HealthcareWorker findObjectByIndex(int index){
+        if(index < 0 || index > HealthcareWorkerManager.numbers - 1) return null;
+        return HealthcareWorkerManager.list.get(index);
+    }
+    @Override
+    public HealthcareWorker findObjectById(String id){
+        if(HealthcareWorkerManager.numbers == 0) return null;
+        for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
+            if(healthcareWorker.getId().equals(id)) return healthcareWorker;
+        }
+        return null;
+    }
+    @Override
     public String getInfoByIndex(int index) {
         if(index < 0 || index > HealthcareWorkerManager.numbers - 1) return null;
         return HealthcareWorkerManager.list.get(index).getInfo();
@@ -87,43 +98,162 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
 	        System.out.println("*------------------------------------------------------------------------------------------------------------------------------------------------------------*");
     }
     @Override
-    public int findIndexById(String id){
-        for(int i = 0; i < HealthcareWorkerManager.numbers; i++){
-            if(HealthcareWorkerManager.list.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    @Override
-    public HealthcareWorker findObjectByIndex(int index){
-        if(index < 0 || index > HealthcareWorkerManager.numbers - 1) return null;
-        return HealthcareWorkerManager.list.get(index);
-    }
-    @Override
-    public HealthcareWorker findObjectById(String id){
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return HealthcareWorkerManager.list.get(index);
-    }
-    @Override
     public void add(HealthcareWorker healthcareWorker){
         HealthcareWorkerManager.list.add(healthcareWorker);
         HealthcareWorkerManager.numbers++;
     }
     @Override
-    public void update(HealthcareWorker healthcareWorker){
-        HealthcareWorkerManager.list.set(findIndexById(healthcareWorker.getId()), healthcareWorker);
+    public void update(HealthcareWorker healthcareWorkerUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+        if(choice == 1 || choice == 10) {
+            System.out.print(" - Nhập họ và tên mới: "); 
+            String newFullname = sc.nextLine();
+            healthcareWorkerUpdate.setFullname(newFullname);
+        }
+        if(choice == 2 || choice == 10) {
+            System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): "); 
+            String newBirthdayStr = sc.nextLine();
+            while(!Date.getInstance().isDateFormat(newBirthdayStr)
+                    || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
+                System.out.println("----- -----");
+                System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+                newBirthdayStr = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
+            healthcareWorkerUpdate.setBirthday(newBirthdayObj);
+        }
+        if(choice == 3 || choice == 10) {
+            System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
+            String newGender = sc.nextLine();
+            while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
+                System.out.println("----- -----");
+                System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
+                newGender = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            healthcareWorkerUpdate.setGender(newGender);
+        }
+        if(choice == 4 || choice == 10) {
+            System.out.print(" - Nhập số điện thoại mới (10 số): ");
+            String newPhone = sc.nextLine();
+            while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
+                System.out.println("----- -----");
+                System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (10 số): ");
+                newPhone = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            healthcareWorkerUpdate.setPhone(newPhone);
+        }
+        if(choice == 5 || choice == 10) {
+            System.out.print(" - Nhập quốc tịch mới: ");
+            String newCountry = sc.nextLine();
+            healthcareWorkerUpdate.setCountry(newCountry);
+        }
+        if(choice == 6 || choice == 10) {
+            System.out.print(" - Nhập loại công việc mới (Bác sĩ hoặc Y tá): ");
+            if(healthcareWorkerUpdate.getIsManagerDepartment().equals("Có")) {
+                System.out.println("! - Vì Nhân viên này là Bác sĩ và cũng là trưởng một Khoa trong Bệnh viện nên không thể đổi");
+            } else {
+                String newType = sc.nextLine();
+                while(newType.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newType)) {
+                    System.out.println("----- -----");
+                    System.out.println("! - LOẠI CÔNG VIỆC KHÔNG HỢP LỆ");
+                    System.out.print("?! - Nhập lại (Bác sĩ hoặc Y tá): ");
+                    newType = sc.nextLine();
+                    System.out.println("----- -----");
+                }
+                healthcareWorkerUpdate.setType(newType);
+            }
+        }
+        if(choice == 7 || choice == 10) {
+            System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
+            String yearsOfExperienceStr = sc.nextLine();
+            while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
+                    || Integer.parseInt(yearsOfExperienceStr) < 0) {
+                System.out.println("----- -----");
+                System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (từ 0 trở lên): ");
+                yearsOfExperienceStr = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            int yearsOfExperienceInt = Integer.parseInt(yearsOfExperienceStr);
+            healthcareWorkerUpdate.setYearsOfExperience(yearsOfExperienceInt);
+        }
+        if(choice == 8 || choice == 10) {
+            // Xử lý những vấn đề chưa hợp logic ở Khoa cũ
+            Department oldDepartment = DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID());
+            if(oldDepartment != null) {
+                if(oldDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
+                    oldDepartment.setManagerID(null);
+                    healthcareWorkerUpdate.setIsManagerDepartment("Không");
+                }
+            }
+
+            // Chọn Khoa quản lý mới
+            System.out.println(" - Chọn Khoa thuộc về");
+            // 1 - DEP00001 | Tai-Mũi-Họng
+            // 2 - DEP00002 | Thận
+            // ...
+            int subNumberList = 1;
+            for(Department department : DepartmentManager.getInstance().getList()) {
+                System.out.println(subNumberList++ + " - " + department.getId() + " | " + department.getName());
+            }
+            // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
+            System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
+            String subInfo = sc.nextLine();
+            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
+                        && DepartmentManager.getInstance().findObjectById(subInfo) == null)
+                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
+                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
+                System.out.println("----- -----");
+                System.out.println("! - KHOA KHÔNG HỢP LỆ");
+                System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
+                subInfo = sc.nextLine();
+            }
+            // Lấy mã Khoa đã được chọn
+            String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
+                ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
+                : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
+            healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
+        }
+        if(choice == 9 || choice == 10) {
+            // Lấy ra mã Khoa quản lí Nhân viên Y tế hiện tại
+            String departmentID = healthcareWorkerUpdate.getDepartmentID();
+            // Nếu Khoa quản lí hiện tại chưa có trưởng Khoa thì có thể thiết lập trưởng Khoa
+            if(DepartmentManager.getInstance().findObjectById(departmentID).getManagerID() != null) {
+                System.out.println("Khoa " + departmentID + " hiện tại đã có trưởng Khoa");
+            } else {
+                System.out.println("Vì Khoa " + departmentID + " hiện tại chưa có trưởng Khoa");
+                System.out.println("Bạn có muốn bổ nhiệm Nhân viên này làm trưởng Khoa ?");
+                System.out.print(" - Nhập 'YES' để xác nhận: ");
+                String conform = sc.nextLine();
+                if(conform.equals("YES")) {
+                    if(healthcareWorkerUpdate.getType().equals("Bác sĩ")) {
+                        DepartmentManager.getInstance().findObjectById(departmentID).setManagerID(healthcareWorkerUpdate.getId());
+                        healthcareWorkerUpdate.setIsManagerDepartment("Có");
+                        System.out.println(" - Đã bổ nhiểm Nhân viên Y tế làm trưởng Khoa");
+                    } else {
+                        System.out.println(" - Vì Nhân viên Y tế hiện tại là Y tá nên không thể bổ nhiệm làm trưởng Khoa");
+                    }
+                } else {
+                    System.out.println("Bạn đã không nhập 'YES' nên không bổ nhiệm");
+                }
+            }
+        }
     }
     @Override
-    public void removeOne(String id){
-        HealthcareWorkerManager.list.remove(findIndexById(id));
-        HealthcareWorkerManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        HealthcareWorkerManager.list.clear();
-        HealthcareWorkerManager.numbers = 0;
+    public void remove(String id){
+        for(int i = 0; i < HealthcareWorkerManager.numbers; i++) {
+            if(HealthcareWorkerManager.list.get(i).equals(id)) {
+                HealthcareWorkerManager.list.remove(i);
+                HealthcareWorkerManager.numbers--;
+                return;
+            }
+        }
     }
     @Override
     public void sort(String condition){

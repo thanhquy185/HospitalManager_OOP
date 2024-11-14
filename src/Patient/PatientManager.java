@@ -2,15 +2,14 @@ package Patient;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
-import Common.CRUD;
-import Common.Date;
-
+import Common.*;
 public class PatientManager implements CRUD<Patient> {
     //Properties
     /* Không phải tạo đối tượng khi sử dụng:
@@ -51,6 +50,19 @@ public class PatientManager implements CRUD<Patient> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+    public Patient findObjectByIndex(int index){
+        if(index < 0  || index > PatientManager.numbers - 1) return null;
+        return PatientManager.list.get(index);
+    }
+    @Override
+    public Patient findObjectById(String id){
+        if(PatientManager.numbers == 0) return null;
+        for(Patient patient : PatientManager.list) {
+            if(patient.getId().equals(id)) return patient;
+        }
+        return null;
+    }
+    @Override
     public String getInfoByIndex(int index) {
         if(index < 0  || index > PatientManager.numbers - 1) return null;
         return PatientManager.list.get(index).getInfo();
@@ -82,43 +94,83 @@ public class PatientManager implements CRUD<Patient> {
             System.out.println("*-------------------------------------------------------------------------------------------------------------------------*");
     }
     @Override
-    public int findIndexById(String id){
-        for(int i = 0; i < PatientManager.numbers; i++){
-            if(PatientManager.list.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    @Override
-    public Patient findObjectByIndex(int index){
-        if(index < 0  || index > PatientManager.numbers - 1) return null;
-        return PatientManager.list.get(index);
-    }
-    @Override
-    public Patient findObjectById(String id){
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return PatientManager.list.get(index);
-    }
-    @Override
     public void add(Patient patient){
         PatientManager.list.add(patient);
         PatientManager.numbers++;
     }
     @Override
-    public void update(Patient patient){
-        PatientManager.list.set(findIndexById(patient.getId()), patient);
+    public void update(Patient patientUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+        if(choice == 1 || choice == 7) {
+            System.out.print(" - Nhập họ và tên mới: ");
+            String newFullname = sc.nextLine();
+            patientUpdate.setFullname(newFullname);
+        }
+        if(choice == 2 || choice == 7) {
+            System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): ");
+            String newBirthdayStr = sc.nextLine();
+            while(!Date.getInstance().isDateFormat(newBirthdayStr)
+                    || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
+                System.out.println("----- -----");
+                System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+                newBirthdayStr = sc.nextLine();
+            System.out.println("----- -----");
+            }
+            Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
+            patientUpdate.setBirthday(newBirthdayObj);
+        }
+        if(choice == 3 || choice == 7) {
+            System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
+            String newGender = sc.nextLine();
+            while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
+                System.out.println("----- -----");
+                System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
+                newGender = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setGender(newGender);
+        }
+        if(choice == 4 || choice == 7) {
+            System.out.print(" - Nhập số điện thoại mới (10 số): ");
+            String newPhone = sc.nextLine();
+            while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
+                System.out.println("----- -----");
+                System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (10 số): ");
+                newPhone = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setPhone(newPhone);
+        }
+        if(choice == 5 || choice == 7) {
+            System.out.print(" - Nhập quốc tịch mới: ");
+            String newCountry = sc.nextLine();
+            patientUpdate.setCountry(newCountry);
+        }
+        if(choice == 6 || choice == 7) {
+            System.out.print(" - Nhập loại chăm sóc mới (Bình thường hoặc Cao cấp): ");
+            String newType = sc.nextLine();
+            while(!newType.equals("Bình thường") && !newType.equals("Cao cấp")) {
+                System.out.println("----- -----");
+                System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
+                newType = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setType(newType);
+        }
     }
     @Override
-    public void removeOne(String id){
-        PatientManager.list.remove(findIndexById(id));
-        PatientManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        PatientManager.list.clear();
-        PatientManager.numbers = 0;
+    public void remove(String id){
+        if(PatientManager.numbers == 0) return;
+        for(int i = 0; i < PatientManager.numbers; i++) {
+            if(PatientManager.list.get(i).equals(id)) {
+                PatientManager.list.remove(i);
+                PatientManager.numbers--;
+            }
+        }
     }
     @Override
     public void sort(String condition){

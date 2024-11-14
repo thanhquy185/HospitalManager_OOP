@@ -2,6 +2,7 @@ package Sick;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,7 +10,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 import Common.CRUD;
-import Department.DepartmentManager;
+import Common.myCharacterClass;
+import Department.*;
 
 public class SickManager implements CRUD<Sick> {
     // Properties
@@ -50,6 +52,19 @@ public class SickManager implements CRUD<Sick> {
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
     @Override
+   public Sick findObjectByIndex(int index){
+       if(index < 0 || index > SickManager.numbers - 1) return null;
+       return SickManager.list.get(index);
+   }
+    @Override
+    public Sick findObjectById(String id){
+        if(SickManager.numbers == 0) return null;
+        for(Sick sick : SickManager.list) {
+            if(sick.getId().equals(id)) return sick;
+        }
+        return null;
+    }
+    @Override
     public String getInfoByIndex(int index) {
         if(index < 0 || index > SickManager.numbers - 1) return null;
         return SickManager.list.get(index).getInfo();
@@ -79,43 +94,56 @@ public class SickManager implements CRUD<Sick> {
             System.out.println("*----------------------------------------------------------------------------------*");
     }
     @Override
-    public int findIndexById(String id){
-        for(int i = 0; i < SickManager.numbers; i++){
-            if(SickManager.list.get(i).getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    @Override
-    public Sick findObjectById(String id){
-        int index = findIndexById(id);
-        if(index == -1) return null;
-        return SickManager.list.get(index);
-    }
-     @Override
-    public Sick findObjectByIndex(int index){
-        if(index < 0 || index > SickManager.numbers - 1) return null;
-        return SickManager.list.get(index);
-    }
-    @Override
     public void add(Sick Sick){
         SickManager.list.add(Sick);
         SickManager.numbers++;
     }
     @Override
-    public void update(Sick Sick){
-        SickManager.list.set(findIndexById(Sick.getId()), Sick);
+    public void update(Sick sickUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+
+        if(choice == 1 || choice == 3) {
+            System.out.print(" - Nhập tên mới: ");
+            String newName = sc.nextLine();
+            sickUpdate.setName(newName);
+        }
+        if(choice == 2 || choice == 3) {
+            System.out.println(" - Chọn Khoa quản lý mới");
+            // 1 - DEP00001 | Tai-Mũi-Họng
+            // 2 - DEP00002 | Thận
+            // ...
+            int numberList = 1;
+            for(Department department : DepartmentManager.getInstance().getList()) {
+                System.out.println(numberList++ + " - " + department.getId() + " | " + department.getName());
+            }
+            // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
+            System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
+            String info = sc.nextLine();
+            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                        && DepartmentManager.getInstance().findObjectById(info) == null)
+                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                System.out.println("----- -----");
+                System.out.println("! - KHOA KHÔNG HỢP LỆ");
+                System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
+                info = sc.nextLine();
+            }
+            // Lấy mã Khoa đã được chọn
+            String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                ? DepartmentManager.getInstance().findObjectById(info).getId()
+                : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
+            sickUpdate.setDepartmentID(newDepartmentID);
+        }
     }
     @Override
-    public void removeOne(String id){
-        SickManager.list.remove(findIndexById(id));
-        SickManager.numbers--;
-    }
-    @Override
-    public void removeAll(){
-        SickManager.list.clear();
-        SickManager.numbers = 0;
+    public void remove(String id){
+        if(SickManager.numbers == 0) return;
+        for(int i = 0; i < SickManager.numbers; i++) {
+            if(SickManager.list.get(i).equals(id)) {
+                SickManager.list.remove(i);
+                SickManager.numbers--;
+            }
+        }
     }
     @Override
     public void sort(String condition){

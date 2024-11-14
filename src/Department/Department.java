@@ -1,5 +1,7 @@
 package Department;
 
+import java.util.Scanner;
+
 public class Department {
     // Properties
     private String id;
@@ -21,7 +23,7 @@ public class Department {
         this.room = null;
     }
     public Department(String name, String managerID, String room) {
-        Department.countDepartmentCreated++;
+        countDepartmentCreated++;
         this.id = getFormatId();
         this.name = name;
         this.managerID = managerID;
@@ -97,7 +99,33 @@ public class Department {
         String postfix = String.format("%05d", Department.countDepartmentCreated);
         return "DEP" + postfix;
     }
-    // - Hàm lấy ra thông tinnn của Khoa
+    // - Hàm gán thông tin của Khoa
+    public void setInfoWithNoManager() {
+        Scanner sc = new Scanner(System.in);
+        
+        // Nhập tên Khoa
+        System.out.print(" - Nhập tên Khoa: ");
+        String name = sc.nextLine();
+        // Mã trưởng Khoa sẽ có sau
+        // Nhập số phòng Khoa
+        System.out.print(" - Nhập số phòng (tối đa 5 ký tự): ");
+        String room = sc.nextLine();
+        while(room.length() > 5) {
+            System.out.println("----- -----");
+            System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại (tối đa 5 ký tự): ");
+            room = sc.nextLine();
+        }
+
+        // Gán dữ liệu đã nhập cho đối tượng
+        countDepartmentCreated++;
+        this.id = getFormatId();
+        this.name = name;
+        this.managerID = null;
+        this.room = room;
+    }
+
+    // - Hàm lấy ra thông tin của Khoa
     public String getInfo() {
         return this.id + " | " + this.name + " | " + this.managerID + " | " + this.room;
     }
