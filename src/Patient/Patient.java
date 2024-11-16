@@ -2,13 +2,8 @@ package Patient;
 
 import java.util.Scanner;
 
-<<<<<<< HEAD
-// public abstract class Patient extends Person {
-public class Patient extends Person {
-=======
 import Common.*;
 public class Patient extends Person implements ActionsInHospital {
->>>>>>> origin/main
     // Properties
     protected String id;
     protected String type;                      // Normal | Premium
@@ -117,10 +112,6 @@ public class Patient extends Person implements ActionsInHospital {
     private String getFormatId() {
         // --
         String postfix = String.format("%05d", Patient.countPatientCreated);
-<<<<<<< HEAD
-        if(this.type.equals(("Premium"))){
-            return "PPAT" + postfix;
-=======
         return "PAT" + postfix;
     }
     // - Hàm gán thông tin cho Bệnh nhân
@@ -175,7 +166,6 @@ public class Patient extends Person implements ActionsInHospital {
             System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
             type = sc.nextLine();
             System.out.println("----- -----");
->>>>>>> origin/main
         }
 
         // Gán dữ liệu đã nhập cho đối tượng
@@ -192,11 +182,6 @@ public class Patient extends Person implements ActionsInHospital {
     // Done
     // - Hàm lấy ra thông tin của Bệnh nhân
     public String getInfo() {
-<<<<<<< HEAD
-        return  this.fullname + " | " + this.birthday + " | " + this.gender + " | " + this.phone + this.country + " | " +
-                this.id + " | " + this.type + " | " + this.medicalRecordID;    
-    }
-=======
         return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender + " | " + this.phone 
             + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
     }
@@ -227,5 +212,4 @@ public class Patient extends Person implements ActionsInHospital {
 	public void injectCurativePatient() {
 		System.out.println(" - Bệnh nhân đã được tiêm thuốc xong. Bệnh nhân đang nghỉ ngơi");
 	}
->>>>>>> origin/main
 }
