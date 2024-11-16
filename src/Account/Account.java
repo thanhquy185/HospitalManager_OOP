@@ -1,24 +1,23 @@
 package Account;
 
+import java.util.Scanner;
+
 public class Account {
     // Properties
     private String username;
     private String password;
     private String type;
-    private String objectID;
 
     // Constructors
     public Account() {
         this.username = null;
         this.password = null;
         this.type = null;
-        this.objectID = null;
     }
-    public Account(String username, String password, String type, String objectID) {
+    public Account(String username, String password, String type) {
         this.username = username;
         this.password = password;
         this.type = type;
-        this.objectID = objectID;
     }
 
     // Setter - Getter
@@ -31,9 +30,6 @@ public class Account {
     public void setType(String type) {
         this.type = type;
     }
-    public void setObjectID(String objectID) {
-        this.objectID = objectID;
-    }
     public String getUsername() {
         return this.username;
     }
@@ -43,13 +39,31 @@ public class Account {
     public String getType() {
         return this.type;
     }
-    public String getObjectID() {
-        return this.objectID;
-    }
 
     // Methods
+    public void setInfo() {
+        Scanner sc = new Scanner(System.in);
+
+        // Nhập thông tin tài khoản
+        System.out.print(" - Nhập tên tài khoản: ");
+        String newUsername = sc.nextLine();
+        System.out.print(" - Nhập mật khẩu: ");
+        String newPassword = sc.nextLine();
+        while(!AccountManager.getInstance().canRegister(newUsername, newPassword)) {
+            System.out.println("----- -----");
+            System.out.println("! - KHÔNG THỂ ĐĂNG KÝ");
+            System.out.print(" - Nhập lại tên tài khoản: ");
+            newUsername = sc.nextLine();
+            System.out.print(" - Nhập lại mật khẩu: ");
+            newPassword = sc.nextLine();
+        }
+
+        // Gán dữ liệu đã nhập cho đối tượng
+        this.username = newUsername;
+        this.password = newPassword;
+        this.type = "Người dùng mới";
+    }
     public String getInfo() {
-        return this.username + " | " + this.password
-            + " | " + this.type + " | " + this.objectID;
+        return this.username + " | " + this.password + " | " + this.type;
     }
 }

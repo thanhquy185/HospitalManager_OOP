@@ -9,9 +9,13 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
+<<<<<<< HEAD
 import Common.CRUD;
 import Common.Date;
 
+=======
+import Common.*;
+>>>>>>> origin/main
 public class PatientManager implements CRUD<Patient> {
     //Properties
     /* Không phải tạo đối tượng khi sử dụng:
@@ -51,6 +55,7 @@ public class PatientManager implements CRUD<Patient> {
 
     // Methods
     // - CRUD (Thêm sửa xoá các đối tượng trong lớp quản lý)
+<<<<<<< HEAD
 
     // String: trả về thông tin của Object với [index]
     @Override   // Done
@@ -104,6 +109,51 @@ public class PatientManager implements CRUD<Patient> {
         int index = findIndexById(id);
         if(index == -1) return null;
         return PatientManager.list.get(index);
+=======
+    @Override
+    public Patient findObjectByIndex(int index){
+        if(index < 0  || index > PatientManager.numbers - 1) return null;
+        return PatientManager.list.get(index);
+    }
+    @Override
+    public Patient findObjectById(String id){
+        if(PatientManager.numbers == 0) return null;
+        for(Patient patient : PatientManager.list) {
+            if(patient.getId().equals(id)) return patient;
+        }
+        return null;
+    }
+    @Override
+    public String getInfoByIndex(int index) {
+        if(index < 0  || index > PatientManager.numbers - 1) return null;
+        return PatientManager.list.get(index).getInfo();
+    }
+    @Override
+    public String getInfoById(String id) {
+        Patient patient = findObjectById(id);
+        if(patient == null) return null;
+        return patient.getInfo();
+    }
+    @Override
+    public void show() {
+        System.out.println("*-------------------------------------------------------------------------------------------------------------------------*");
+	    System.out.println("|     HỌ TÊN BỆNH NHÂN     |  NGÀY SINH | PHÁI | ĐIỆN THOẠI |    QUỐC TỊCH    | MÃ BỆNH NHÂN | LOẠI CHĂM SÓC | MÃ BỆNH ÁN |");
+	    System.out.println("*--------------------------+------------+------+------------+-----------------+--------------+---------------+------------*");
+        for(Patient patient : PatientManager.list) {
+            String fullname = patient.getFullname();
+            String birthday = patient.getBirthday().getDateFormatByCondition("has cross");
+            String gender = patient.getGender();
+            String phone = patient.getPhone();
+            String country = patient.getCountry();
+            String id = patient.getId();
+            String type = patient.getType();
+            String medicalRecordID = patient.getMedicalRecordID();
+            System.out.println(String.format("| %-24s | %-10s | %-4s | %-10s | %-15s | %-12s | %-13s | %-10s |",
+                fullname, birthday, gender, phone,  country, id, type, medicalRecordID));
+        }
+        if(PatientManager.numbers >= 1)
+            System.out.println("*-------------------------------------------------------------------------------------------------------------------------*");
+>>>>>>> origin/main
     }
     
     /** Thêm một Patient vào list
@@ -115,6 +165,7 @@ public class PatientManager implements CRUD<Patient> {
         PatientManager.list.add(patient);
         PatientManager.numbers++;
     }
+<<<<<<< HEAD
 
     @Override   // Ok
     public void update(Patient patient){
@@ -129,20 +180,110 @@ public class PatientManager implements CRUD<Patient> {
     public void removeAll(){
         PatientManager.list.clear();
         PatientManager.numbers = 0;
+=======
+    @Override
+    public void update(Patient patientUpdate, int choice) {
+        Scanner sc = new Scanner(System.in);
+        if(choice == 1 || choice == 7) {
+            System.out.print(" - Nhập họ và tên mới: ");
+            String newFullname = sc.nextLine();
+            patientUpdate.setFullname(newFullname);
+        }
+        if(choice == 2 || choice == 7) {
+            System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): ");
+            String newBirthdayStr = sc.nextLine();
+            while(!Date.getInstance().isDateFormat(newBirthdayStr)
+                    || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()) {
+                System.out.println("----- -----");
+                System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+                newBirthdayStr = sc.nextLine();
+            System.out.println("----- -----");
+            }
+            Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
+            patientUpdate.setBirthday(newBirthdayObj);
+        }
+        if(choice == 3 || choice == 7) {
+            System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
+            String newGender = sc.nextLine();
+            while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
+                System.out.println("----- -----");
+                System.out.println("! - GIỚI TÍNH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (Nam hoặc Nữ): ");
+                newGender = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setGender(newGender);
+        }
+        if(choice == 4 || choice == 7) {
+            System.out.print(" - Nhập số điện thoại mới (10 số): ");
+            String newPhone = sc.nextLine();
+            while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
+                System.out.println("----- -----");
+                System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (10 số): ");
+                newPhone = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setPhone(newPhone);
+        }
+        if(choice == 5 || choice == 7) {
+            System.out.print(" - Nhập quốc tịch mới: ");
+            String newCountry = sc.nextLine();
+            patientUpdate.setCountry(newCountry);
+        }
+        if(choice == 6 || choice == 7) {
+            System.out.print(" - Nhập loại chăm sóc mới (Bình thường hoặc Cao cấp): ");
+            String newType = sc.nextLine();
+            while(!newType.equals("Bình thường") && !newType.equals("Cao cấp")) {
+                System.out.println("----- -----");
+                System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
+                newType = sc.nextLine();
+                System.out.println("----- -----");
+            }
+            patientUpdate.setType(newType);
+        }
+    }
+    @Override
+    public void remove(String id){
+        if(PatientManager.numbers == 0) return;
+        for(int i = 0; i < PatientManager.numbers; i++) {
+            if(PatientManager.list.get(i).equals(id)) {
+                PatientManager.list.remove(i);
+                PatientManager.numbers--;
+            }
+        }
+>>>>>>> origin/main
     }
     // Không sử dụng vì khi sort, tạo ra một sortList(clone) để thao tác
     // không thao tác trực tiếp trên list ban đầu.
     @Override  
     public void sort(String condition){
+<<<<<<< HEAD
         switch (condition) {
             // Sắp xếp theo tên của bệnh nhân, Alphabet
             case "name":
                 // PatientManager.getInstance().getList().sort(Comparator.comparing(()));
+=======
+        // PatientManager.getInstance().getList().sort(Comparator.comparing(()));
+        // asc: Sắp xếp tăng dần
+        // desc: Sắp xếp giảm dần
+        switch (condition) {
+            case "id asc":
+                PatientManager.list.sort(Comparator.comparing((Patient patient) -> patient.getId()));
+                break;
+            case "id desc":
+                PatientManager.list.sort(Comparator.comparing((Patient patient) -> patient.getId()).reversed());
+                break;
+            case "name asc":
+>>>>>>> origin/main
                 PatientManager.list.sort(Comparator.comparing((Patient patient) -> {
                     String[] nameParts = patient.getFullname().split(" ");
                     return nameParts[nameParts.length - 1];     // Lấy tên, là phần tử cuối của nameParts
                 }));
                 break;
+<<<<<<< HEAD
             // Sắp xếp theo birthday của bệnh nhân. Năm 2000 trước 2024, tháng 1 trước tháng 2...
             case "birthday":
                 PatientManager.list.sort(
@@ -153,10 +294,32 @@ public class PatientManager implements CRUD<Patient> {
                 break;
             // Sắp xếp theo ID của bệnh nhân, vì mặc định đã được sắp xếp như thế.
             case "id":
+=======
+            case "name desc":
+                PatientManager.list.sort(Comparator.comparing((Patient patient) -> {
+                    String[] nameParts = patient.getFullname().split(" ");
+                    return nameParts[nameParts.length - 1];     // Lấy tên, là phần tử cuối của nameParts
+                }));
+                break;
+            case "birthday asc":
+                PatientManager.list.sort(
+                    Comparator.comparing((Patient patient) -> patient.getBirthday().getYear())
+                        .thenComparing(patient -> patient.getBirthday().getMonth())
+                        .thenComparing(patient -> patient.getBirthday().getDay())
+                );
+                break;
+            case "birthday desc":
+                PatientManager.list.sort(
+                    Comparator.comparing((Patient patient) -> patient.getBirthday().getYear()).reversed()
+                        .thenComparing(patient -> patient.getBirthday().getMonth()).reversed()
+                        .thenComparing(patient -> patient.getBirthday().getDay()).reversed()
+                );
+>>>>>>> origin/main
                 break;
             default:
                 System.out.println("Lựa chọn sắp xếp không hợp lệ.");
                 break;
+<<<<<<< HEAD
         } 
     }
     @Override
@@ -164,6 +327,15 @@ public class PatientManager implements CRUD<Patient> {
         File file = new File("HospitalManager/src/Database/PatientDatabase.txt");
         if(!file.exists()){
             System.out.println("Tệp tin quản lý dữ liệu về Bệnh Nhân không tồn tại");
+=======
+        }
+    }
+    @Override
+    public void loadFromFile() {
+        File file = new File("src/Database/PatientDatabase.txt");
+        if(!file.exists()){
+            System.out.println("Tệp tin quản lý dữ liệu về Bệnh nhân không tồn tại");
+>>>>>>> origin/main
             return;
         }
         try {
@@ -175,6 +347,7 @@ public class PatientManager implements CRUD<Patient> {
              * 3. Tạo Object mới với thông in đã được cắt (Lưu ý: String <=> Date)
              * 4. Thêm vào list.
              */
+<<<<<<< HEAD
             while(true){
                 String line = bufferedReader.readLine();
                 if(line == null) break;
@@ -199,6 +372,23 @@ public class PatientManager implements CRUD<Patient> {
 
                 // Add vào list toàn bộ bệnh nhân từ file
                 Patient newPatient = new Patient(fullName, birthday, gender, phone, country, type);
+=======
+            while(true) {
+                String line = bufferedReader.readLine();
+                if(line == null) break;
+                String[] info = line.split("\\|");
+                String fullName = info[0];
+                Date birthday = Date.getInstance().getDateFromDateFormat(info[1]);
+                String gender = info[2];
+                String phone = info[3];
+                String country = info[4];
+                String id = info[5];
+                String type = info[6];
+                String medicalRecordID = null;
+                if(!info[7].equals("null"))
+                    medicalRecordID = info[7];
+                Patient newPatient = new Patient(fullName, birthday, gender, phone, country, id, type, medicalRecordID);
+>>>>>>> origin/main
                 add(newPatient);
             }
             bufferedReader.close();
@@ -209,11 +399,18 @@ public class PatientManager implements CRUD<Patient> {
     }
     @Override
     public void saveToFile() {
+<<<<<<< HEAD
         // Tạo 
         File file = new File("HospitalManager/src/Database/PatientDatabase.txt");
         // Kiểm tra file có tồn tại với path ở trên.
         if(!file.exists()){
             System.out.println("Tệp tin quản lý dữ liệu về Bệnh Nhân không tồn tại");
+=======
+        File file = new File("src/Database/PatientDatabase.txt");
+        // Kiểm tra file có tồn tại với path ở trên.
+        if(!file.exists()){
+            System.out.println("Tệp tin quản lý dữ liệu về Bệnh nhân không tồn tại");
+>>>>>>> origin/main
             return;
         }
         try{
@@ -221,6 +418,7 @@ public class PatientManager implements CRUD<Patient> {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             /* 
                 Write toàn bộ list vào file (theo format xác định trước), thứ tự và dấu ngăn cách:
+<<<<<<< HEAD
                 Fullname | Birthday | Gender | Phone | Country | ID | Type | Medical Record ID  
             */
             for(Patient patient : PatientManager.list){
@@ -228,6 +426,21 @@ public class PatientManager implements CRUD<Patient> {
                         ("| %-21s | %-9s | %-9s | %-13s | %-16s | %-12s | %-8s | %-10s |\n",
                         patient.getFullname(), patient.getBirthday(), patient.getGender(), patient.getPhone(), patient.getCountry(), 
                         patient.getId(), patient.getType(), patient.getMedicalRecordID()));
+=======
+                Fullname|Birthday|Gender|Phone|Country|ID|Type|Medical Record ID  
+            */
+            for(Patient patient : PatientManager.list){
+                String fullname = patient.getFullname();
+                String birthday = patient.getBirthday().getDateFormatByCondition("has cross");
+                String gender = patient.getGender();
+                String phone = patient.getPhone();
+                String country = patient.getCountry();
+                String id = patient.getId();
+                String type = patient.getType();
+                String medicalRecordID = patient.getMedicalRecordID();
+                bufferedWriter.write(fullname + "|" + birthday + "|" + gender + "|" + phone + "|" + country
+                    + "|" + id + "|" + type + "|" + medicalRecordID + "\n");
+>>>>>>> origin/main
             }
             // Đóng bufferedWrite và fileWrite sau khi write xong.
             bufferedWriter.close();
@@ -235,8 +448,11 @@ public class PatientManager implements CRUD<Patient> {
         } catch (Exception e){
             e.printStackTrace();
         }
+<<<<<<< HEAD
         
 
+=======
+>>>>>>> origin/main
     }
 
 }
