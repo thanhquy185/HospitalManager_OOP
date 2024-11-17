@@ -142,7 +142,10 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 			System.out.print(" - Nhập ngày lập Hồ sơ Bệnh án mới (dd-mm-yyyy hoặc ddmmyyyy): ");
 			String inputDayStr = sc.nextLine();
 			while(!Date.getInstance().isDateFormat(inputDayStr)
-					|| !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()) {
+					|| !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()
+					|| !Date.getInstance().checkBeforeAfterDay(
+							PatientManager.getInstance().findObjectById(medicalRecordUpdate.getPatientID()).getBirthday(), Date.getInstance().getDateFromDateFormat(inputDayStr))
+					|| !Date.getInstance().checkBeforeAfterDay(Date.getInstance().getDateFromDateFormat(inputDayStr), medicalRecordUpdate.getOutputDay())) {
 				System.out.println("----- -----");
 				System.out.println("! - NGÀY LẬP HỒ SƠ KHÔNG HỢP LỆ");
 				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
@@ -153,21 +156,26 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 			medicalRecordUpdate.setInputDay(inputDayObj);
 		}
 		if(choice == 2 || choice == 4) {
-			System.out.print(" - Nhập ngày khoá Hồ sơ Bệnh án mới (dd-mm-yyyy hoặc ddmmyyyy): ");
-			String outputDayStr = sc.nextLine();
-			while(!Date.getInstance().isDateFormat(outputDayStr)
-					|| !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()) {
+			if(medicalRecordUpdate.getType().equals("Khám bệnh")) {
+				System.out.println(" - Là Hồ sơ Khám bệnh nên ngày mở bằng ngày đóng");
+			} else if(medicalRecordUpdate.getType().equals("Chữa bệnh")) {
+				System.out.print(" - Nhập ngày khoá Hồ sơ Bệnh án mới (dd-mm-yyyy hoặc ddmmyyyy): ");
+				String outputDayStr = sc.nextLine();
+				while(!Date.getInstance().isDateFormat(outputDayStr)
+						|| !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()
+						|| !Date.getInstance().checkBeforeAfterDay(medicalRecordUpdate.getInputDay(), Date.getInstance().getDateFromDateFormat(outputDayStr))) {
+					System.out.println("----- -----");
+					System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
+					System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
+					outputDayStr = sc.nextLine();
 				System.out.println("----- -----");
-				System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
-				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
-				outputDayStr = sc.nextLine();
-			System.out.println("----- -----");
+				}
+				Date outputDayObj = Date.getInstance().getDateFromDateFormat(outputDayStr);
+				medicalRecordUpdate.setOutputDay(outputDayObj);
 			}
-        	Date outputDayObj = Date.getInstance().getDateFromDateFormat(outputDayStr);
-			medicalRecordUpdate.setOutputDay(outputDayObj);
 		}
 		if(choice == 3 || choice == 4) {
-			System.out.print(" - Nhập mức độ Bệnh mới (Nhẹ. Vừa hoặc Nặng):");
+			System.out.print(" - Nhập mức độ Bệnh mới (Nhẹ, Vừa hoặc Nặng): ");
             String newSickLevel = sc.nextLine();
             while(!newSickLevel.equals("Nhẹ") && !newSickLevel.equals("Vừa") 
 					&& !newSickLevel.equals("Nặng")) {
@@ -178,14 +186,16 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
             }
             medicalRecordUpdate.setSickLevel(newSickLevel);
 		}
+		medicalRecordUpdate.setFee(medicalRecordUpdate.calFee());
 	}
 	@Override
 	public void remove(String id) {
 		if(MedicalRecordManager.numbers == 0) return;
         for(int i = 0; i < MedicalRecordManager.numbers; i++) {
-            if(MedicalRecordManager.list.get(i).equals(id)) {
+            if(MedicalRecordManager.list.get(i).getId().equals(id)) {
                 MedicalRecordManager.list.remove(i);
                 MedicalRecordManager.numbers--;
+				return;
             }
         }
 	}
@@ -215,6 +225,13 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 					).reversed());
 				break;
 			}
+			case "fee asc": {
+				MedicalRecordManager.list.sort(Comparator.comparing((MedicalRecord medicalRecord) -> medicalRecord.getFee()));
+				break;
+			}
+			case "fee desc": {
+				MedicalRecordManager.list.sort(Comparator.comparing((MedicalRecord medicalRecord) -> medicalRecord.getFee()).reversed());
+			}
 		}
 	}
     @Override
@@ -235,9 +252,7 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 				String inputDay = info[1];
 				String outputDay = info[2];
 				String type = info[3];
-				Double fee = null;
-				if(!info[4].equals("null"))
-					fee = Double.parseDouble(info[4]);
+				Double fee = Double.parseDouble(info[4]);
 				String patientID = null;
 				if(!info[5].equals("null")) {
 					patientID = info[5];

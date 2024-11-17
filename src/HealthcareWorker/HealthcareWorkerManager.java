@@ -3,6 +3,9 @@ package HealthcareWorker;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
+
+import Account.AccountManager;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -75,9 +78,9 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     }
     @Override
     public void show() {
-        System.out.println("*------------------------------------------------------------------------------------------------------------------------------------------------------------*");
-	    System.out.println("|     HỌ TÊN NHÂN VIÊN     |  NGÀY SINH | PHÁI | ĐIỆN THOẠI |    QUỐC TỊCH    | MÃ NHÂN VIÊN | LOẠI NHÂN VIÊN | KN | LƯƠNG |  MÃ KHOA  | TRKHOA | MÃ BỆNH ÁN |");
-	    System.out.println("*--------------------------+------------+------+------------+-----------------+--------------+----------------+----+-------+-----------+--------+------------*");
+        System.out.println("*-----------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+	    System.out.println("|     HỌ TÊN NHÂN VIÊN     |  NGÀY SINH | PHÁI | ĐIỆN THOẠI |    QUỐC TỊCH    | MÃ NHÂN VIÊN | LOẠI NHÂN VIÊN | KN | TIỀN LƯƠNG |  MÃ KHOA  | TRKHOA | MÃ BỆNH ÁN |");
+	    System.out.println("*--------------------------+------------+------+------------+-----------------+--------------+----------------+----+------------+-----------+--------+------------*");
         for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.list) {
             String fullname = healthcareWorker.getFullname();
             String birthday = healthcareWorker.getBirthday().getDateFormatByCondition("has cross");
@@ -87,15 +90,15 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             String id = healthcareWorker.getId();
             String type = healthcareWorker.getType();
             int yearsOfExperience = healthcareWorker.getYearsOfExperience();
-            int salary = healthcareWorker.getSalary();
+            double salary = healthcareWorker.getSalary();
             String departmentID = healthcareWorker.getDepartmentID();
             String isManagerDepartment = healthcareWorker.getIsManagerDepartment();
             String medicalRecordID = healthcareWorker.getMedicalRecordID();
-            System.out.println(String.format("| %-24s | %-10s | %-4s | %-10s | %-15s | %-12s | %-14s | %-2s | %-5s | %-9s | %-6s | %-10s |",
+            System.out.println(String.format("| %-24s | %-10s | %-4s | %-10s | %-15s | %-12s | %-14s | %-2s | %-10s | %-9s | %-6s | %-10s |",
                 fullname, birthday, gender, phone, country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID));
         }
         if(HealthcareWorkerManager.numbers >= 1)
-	        System.out.println("*------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+            System.out.println("*-----------------------------------------------------------------------------------------------------------------------------------------------------------------*");
     }
     @Override
     public void add(HealthcareWorker healthcareWorker){
@@ -105,12 +108,12 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     @Override
     public void update(HealthcareWorker healthcareWorkerUpdate, int choice) {
         Scanner sc = new Scanner(System.in);
-        if(choice == 1 || choice == 10) {
+        if(choice == 1 || choice == 9) {
             System.out.print(" - Nhập họ và tên mới: "); 
             String newFullname = sc.nextLine();
             healthcareWorkerUpdate.setFullname(newFullname);
         }
-        if(choice == 2 || choice == 10) {
+        if(choice == 2 || choice == 9) {
             System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): "); 
             String newBirthdayStr = sc.nextLine();
             while(!Date.getInstance().isDateFormat(newBirthdayStr)
@@ -123,9 +126,10 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             Date newBirthdayObj = Date.getInstance().getDateFromDateFormat(newBirthdayStr);
             healthcareWorkerUpdate.setBirthday(newBirthdayObj);
+            AccountManager.getInstance().findObjectById(healthcareWorkerUpdate.getId()).setPassword(newBirthdayObj.getDateFormatByCondition("has not cross"));
         }
-        if(choice == 3 || choice == 10) {
-            System.out.print(" - Nhập giới tính mới (Nam hoặc nữ): "); 
+        if(choice == 3 || choice == 9) {
+            System.out.print(" - Nhập giới tính mới (Nam hoặc Nữ): "); 
             String newGender = sc.nextLine();
             while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
                 System.out.println("----- -----");
@@ -136,7 +140,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setGender(newGender);
         }
-        if(choice == 4 || choice == 10) {
+        if(choice == 4 || choice == 9) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
             while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
@@ -148,28 +152,12 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setPhone(newPhone);
         }
-        if(choice == 5 || choice == 10) {
+        if(choice == 5 || choice == 9) {
             System.out.print(" - Nhập quốc tịch mới: ");
             String newCountry = sc.nextLine();
             healthcareWorkerUpdate.setCountry(newCountry);
         }
-        if(choice == 6 || choice == 10) {
-            System.out.print(" - Nhập loại công việc mới (Bác sĩ hoặc Y tá): ");
-            if(healthcareWorkerUpdate.getIsManagerDepartment().equals("Có")) {
-                System.out.println("! - Vì Nhân viên này là Bác sĩ và cũng là trưởng một Khoa trong Bệnh viện nên không thể đổi");
-            } else {
-                String newType = sc.nextLine();
-                while(newType.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newType)) {
-                    System.out.println("----- -----");
-                    System.out.println("! - LOẠI CÔNG VIỆC KHÔNG HỢP LỆ");
-                    System.out.print("?! - Nhập lại (Bác sĩ hoặc Y tá): ");
-                    newType = sc.nextLine();
-                    System.out.println("----- -----");
-                }
-                healthcareWorkerUpdate.setType(newType);
-            }
-        }
-        if(choice == 7 || choice == 10) {
+        if(choice == 6 || choice == 9) {
             System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
             String yearsOfExperienceStr = sc.nextLine();
             while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
@@ -182,12 +170,13 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             int yearsOfExperienceInt = Integer.parseInt(yearsOfExperienceStr);
             healthcareWorkerUpdate.setYearsOfExperience(yearsOfExperienceInt);
+            healthcareWorkerUpdate.setSalary(healthcareWorkerUpdate.calSalary());
         }
-        if(choice == 8 || choice == 10) {
+        if(choice == 7 || choice == 9) {
             // Xử lý những vấn đề chưa hợp logic ở Khoa cũ
             Department oldDepartment = DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID());
             if(oldDepartment != null) {
-                if(oldDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
+                if(oldDepartment.getManagerID() != null && oldDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
                     oldDepartment.setManagerID(null);
                     healthcareWorkerUpdate.setIsManagerDepartment("Không");
                 }
@@ -198,34 +187,41 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             // 1 - DEP00001 | Tai-Mũi-Họng
             // 2 - DEP00002 | Thận
             // ...
-            int subNumberList = 1;
+            int numberList = 0;
             for(Department department : DepartmentManager.getInstance().getList()) {
-                System.out.println(subNumberList++ + " - " + department.getId() + " | " + department.getName());
+                System.out.println(++numberList + " - " + department.getId() + " | " + department.getName());
             }
-            // Cho phép chọn subNumberList - id (chọn 1 hoặc chọn DEP00001)
+            // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
-            String subInfo = sc.nextLine();
-            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                        && DepartmentManager.getInstance().findObjectById(subInfo) == null)
-                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1) == null)) {
+            String info = sc.nextLine();
+            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                        && DepartmentManager.getInstance().findObjectById(info) == null)
+                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
                 System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
-                subInfo = sc.nextLine();
+                info = sc.nextLine();
             }
             // Lấy mã Khoa đã được chọn
-            String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(subInfo)
-                ? DepartmentManager.getInstance().findObjectById(subInfo).getId()
-                : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(subInfo) - 1).getId();
+            String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                ? DepartmentManager.getInstance().findObjectById(info).getId()
+                : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
             healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
         }
-        if(choice == 9 || choice == 10) {
+        if(choice == 8 || choice == 9) {
             // Lấy ra mã Khoa quản lí Nhân viên Y tế hiện tại
             String departmentID = healthcareWorkerUpdate.getDepartmentID();
             // Nếu Khoa quản lí hiện tại chưa có trưởng Khoa thì có thể thiết lập trưởng Khoa
-            if(DepartmentManager.getInstance().findObjectById(departmentID).getManagerID() != null) {
+            Department currentDepartment = DepartmentManager.getInstance().findObjectById(departmentID);
+            if(currentDepartment.getManagerID() != null) {
                 System.out.println("Khoa " + departmentID + " hiện tại đã có trưởng Khoa");
+                if(currentDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
+                    System.out.println("Trưởng Khoa chính là Nhân viên Y tế đang được sửa");
+                }
+                else {
+                    System.out.println("Trưởng Khoa không phải là Nhân viên Y tế đang được sửa");
+                }
             } else {
                 System.out.println("Vì Khoa " + departmentID + " hiện tại chưa có trưởng Khoa");
                 System.out.println("Bạn có muốn bổ nhiệm Nhân viên này làm trưởng Khoa ?");
@@ -248,7 +244,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     @Override
     public void remove(String id){
         for(int i = 0; i < HealthcareWorkerManager.numbers; i++) {
-            if(HealthcareWorkerManager.list.get(i).equals(id)) {
+            if(HealthcareWorkerManager.list.get(i).getId().equals(id)) {
                 HealthcareWorkerManager.list.remove(i);
                 HealthcareWorkerManager.numbers--;
                 return;
@@ -319,7 +315,6 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
                 HealthcareWorkerManager.list.sort(Comparator.comparing(
                         (HealthcareWorker healthcareWorker) -> healthcareWorker.getSalary()
                     ).reversed());
-                break;
             }
         }
     }
@@ -345,7 +340,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
                 String id = info[5];
                 String type = info[6];
                 int yearsOfExperience = Integer.parseInt(info[7]);
-                int salary = Integer.parseInt(info[8]);
+                double salary = Double.parseDouble(info[8]);
                 String departmentID = null;
                 if(!info[9].equals("null")) {
                     departmentID = info[9];
@@ -357,8 +352,13 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
                 String medicalRecordID = null;
                 if(!info[11].equals("null"))
                     medicalRecordID = info[11];
-                HealthcareWorker newHealthcareWorker = new HealthcareWorker(fullName, birthday, gender, phone,
-                    country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
+                HealthcareWorker newHealthcareWorker = null;
+                if(type.equals("Y tá"))
+                    newHealthcareWorker = new Nurse(fullName, birthday, gender, phone,
+                        country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
+                else if(type.equals("Bác sĩ"))
+                    newHealthcareWorker = new Doctor(fullName, birthday, gender, phone,
+                        country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
                 add(newHealthcareWorker);
             }
             bufferedReader.close();
@@ -387,7 +387,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
                 String id = healthcareWorker.getId();
                 String type = healthcareWorker.getType();
                 int yearsOfExperience = healthcareWorker.getYearsOfExperience();
-                int salary = healthcareWorker.getSalary();
+                double salary = healthcareWorker.getSalary();
                 String departmentID = healthcareWorker.getDepartmentID();
                 String isManagerDepartment = healthcareWorker.getIsManagerDepartment();
                 String medicalRecordID = healthcareWorker.getMedicalRecordID();

@@ -112,9 +112,9 @@ public class SickManager implements CRUD<Sick> {
             // 1 - DEP00001 | Tai-Mũi-Họng
             // 2 - DEP00002 | Thận
             // ...
-            int numberList = 1;
+            int numberList = 0;
             for(Department department : DepartmentManager.getInstance().getList()) {
-                System.out.println(numberList++ + " - " + department.getId() + " | " + department.getName());
+                System.out.println(++numberList + " - " + department.getId() + " | " + department.getName());
             }
             // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
@@ -139,9 +139,10 @@ public class SickManager implements CRUD<Sick> {
     public void remove(String id){
         if(SickManager.numbers == 0) return;
         for(int i = 0; i < SickManager.numbers; i++) {
-            if(SickManager.list.get(i).equals(id)) {
+            if(SickManager.list.get(i).getId().equals(id)) {
                 SickManager.list.remove(i);
                 SickManager.numbers--;
+                return;
             }
         }
     }

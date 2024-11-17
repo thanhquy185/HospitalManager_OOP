@@ -77,7 +77,6 @@ public class Department {
     }
 
     // Methods
-    // Methods
 	 // - Kiểm tra có đúng định dạng DEPxxxxx
 	private boolean isFormatId(String id) {
         // -- Nếu không phải là chuỗi 8 ký tự
@@ -124,7 +123,6 @@ public class Department {
         this.managerID = null;
         this.room = room;
     }
-
     // - Hàm lấy ra thông tin của Khoa
     public String getInfo() {
         return this.id + " | " + this.name + " | " + this.managerID + " | " + this.room;

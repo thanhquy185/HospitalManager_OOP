@@ -66,7 +66,7 @@ public class Date {
 		for(int i = 1; i < month; i++) {
 			switch(i) {
 				case 2: {
-					days += leapYear(year) == true ? 29 : 28;
+					days += leapYear(year) ? 29 : 28;
 					break;
 				}
 				case 4: case 6: case 9: case 11: {
@@ -131,7 +131,7 @@ public class Date {
 			if (dateBefore.getMonth() > dateAfter.getMonth()) {
 				return false;
 			} else if(dateBefore.getMonth() == dateAfter.getMonth()) {
-				if(dateBefore.getDay() > dateAfter.getDay()) return false;
+				if(dateBefore.getDay() >= dateAfter.getDay()) return false;
 			}
 		}
 		return true;
@@ -139,7 +139,6 @@ public class Date {
 	// - Tạo đối tượng Date thông qua chuỗi hiển thị ngày dd-mm-yyyy, ddmmyyyy
 	public Date getDateFromDateFormat(String dateFormat) {
 		if(dateFormat.length() != 8 && dateFormat.length() != 10) return null;
-		Date date = null;
 		int day = 0; int month = 0; int year = 0;
 		if(dateFormat.length() == 8) {
 			day = Integer.parseInt(dateFormat.substring(0, 2));
@@ -150,7 +149,7 @@ public class Date {
 			month = Integer.parseInt(dateFormat.substring(3, 5));
 			year = Integer.parseInt(dateFormat.substring(6));
 		}
-		date = new Date(day, month, year);
+		Date date = new Date(day, month, year);
 		return date;
 	}
 	// - Thay đổi việc hiển thị với đối tượng Date ở đối tượng
@@ -159,9 +158,9 @@ public class Date {
 	public String getDateFormatByCondition(String condition) {
 		if(!isDate()) return "Ngày sinh không hợp lệ";
 		String day = String.valueOf(this.day);
-			if(this.day<=9) day = "0" + day;
+			if(this.day <= 9) day = "0" + day;
 		String month = String.valueOf(this.month);
-			if(this.month<=9) month = "0" + month;
+			if(this.month <= 9) month = "0" + month;
 		String year = String.valueOf(this.year);
 		//Lấy được định dạng "dd/mm/yyyy"
 		if(condition == "has cross")

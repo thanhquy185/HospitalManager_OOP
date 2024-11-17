@@ -20,10 +20,8 @@ public class AccountManager implements CRUD<Account> {
 
     // Constructors
     public AccountManager() {
-        // - Mặc định sẽ luôn có duy nhất một tài khoản admin quản lý bệnh viện
         AccountManager.list = new ArrayList<>();
-        AccountManager.list.add(new Account("admin", "1", "Quản lý"));
-        AccountManager.numbers = 1;
+        AccountManager.numbers = 0;
     }
 
     // Setter - Getter

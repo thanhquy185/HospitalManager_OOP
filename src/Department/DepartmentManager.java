@@ -129,18 +129,19 @@ public class DepartmentManager implements CRUD<Department> {
                 // 1 - HEW00001 | Thanh Quy
                 // 2 - HEW00002 | Đức Quý An
                 // ...
-                int numberList = 1;
+                int numberList = 0;
                 for(HealthcareWorker healthcareWorker : doctorSearchList) {
-                    System.out.println(numberList++ + " - " + healthcareWorker.getId() 
+                    System.out.println(++numberList + " - " + healthcareWorker.getId() 
                         + " | " + healthcareWorker.getFullname() + " | " + healthcareWorker.getType());
                 }
                 // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC00001)
                 System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
                 String info = sc.nextLine();
                 while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                            && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                            && doctorSearchList.get(Integer.parseInt(info) - 1) == null)) {
+                            && (HealthcareWorkerManager.getInstance().findObjectById(info) == null
+                                || !HealthcareWorkerManager.getInstance().findObjectById(info).getDepartmentID().equals(departmentUpdate.getId())))
+                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info) && (Integer.parseInt(info) < 1 || Integer.parseInt(info) > numberList
+                            || doctorSearchList.get(Integer.parseInt(info) - 1) == null))) {
                     System.out.println("----- -----");
                     System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
                     System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
@@ -169,9 +170,10 @@ public class DepartmentManager implements CRUD<Department> {
     public void remove(String id){
         if(DepartmentManager.numbers == 0) return;
         for(int i = 0; i < DepartmentManager.numbers; i++) {
-            if(DepartmentManager.list.get(i).equals(id)) {
+            if(DepartmentManager.list.get(i).getId().equals(id)) {
                 DepartmentManager.list.remove(i);
                 DepartmentManager.numbers--;
+                return;
             }
         }
     }

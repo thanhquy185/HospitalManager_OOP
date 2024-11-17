@@ -10,8 +10,12 @@ public class Nurse extends HealthcareWorker {
         super();
     }
     public Nurse(String fullname, Date birthday, String gender, String phone, String country,
-            String type, int yearsOfExperience, int salary, String idDepartment, String isManagerDepartment) {
-        super(fullname, birthday, gender, phone, country, type, yearsOfExperience, salary, idDepartment, isManagerDepartment);
+            String type, int yearsOfExperience, String departmentID, String isManagerDepartment, String medicalRecordID) {
+        super(fullname, birthday, gender, phone, country, type, yearsOfExperience, departmentID, isManagerDepartment, medicalRecordID);
+    }
+    public Nurse(String fullname, Date birthday, String gender, String phone, String country, String id,
+            String type, int yearsOfExperience, double salary, String departmentID, String isManagerDepartment, String medicalRecordID) {
+        super(fullname, birthday, gender, phone, country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
     }
     public Nurse(Nurse nurse) {
         super(nurse.getFullname(), nurse.getBirthday(), nurse.getGender(), nurse.getPhone(),
@@ -22,23 +26,24 @@ public class Nurse extends HealthcareWorker {
 
     //Methods
     @Override
-    public void testPatient() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'testPatient'");
-    }
+	public double calSalary() {
+		double basicSalary = 1000, salaryCoefficient = 0.1;
+		return basicSalary + basicSalary * this.yearsOfExperience * salaryCoefficient;
+	}
     @Override
-    public void giveFoodToPatient() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'giveFoodToPatient'");
-    }
-    @Override
-    public void giveCurativeToPatient() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'giveCurativeToPatient'");
-    }
-    @Override
-    public void injectCurativePatient() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'injectCurativePatient'");
-    }
+	public void testPatient() {
+		System.out.println(" - Y tá chuẩn bị các thiết bị. Tiến hành công việc khám");
+	}
+	@Override
+	public void giveFoodToPatient() {
+		System.out.println(" - Y tá chuẩn bị khẩu phần ăn. Đưa cho Bệnh nhân");
+	}
+	@Override
+	public void giveCurativeToPatient() {
+		System.out.println(" - Y tá chuẩn bị thuốc uống và một số thứ khác. Đưa cho Bệnh nhân");
+	}
+	@Override
+	public void injectCurativePatient() {
+		System.out.println(" - Y tá chuẩn bị ông tiếm. Tiến hành công việc tiêm thuốc");
+	}
 }

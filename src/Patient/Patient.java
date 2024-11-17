@@ -3,7 +3,7 @@ package Patient;
 import java.util.Scanner;
 
 import Common.*;
-public class Patient extends Person implements ActionsInHospital {
+public abstract class Patient extends Person implements ActionsInHospital {
     // Properties
     protected String id;
     protected String type;
@@ -100,14 +100,14 @@ public class Patient extends Person implements ActionsInHospital {
         return "PAT" + postfix;
     }
     // - Hàm gán thông tin cho Bệnh nhân
-    public void setInfoWithNoMedicalRecord() {
+    public void setInfoWithNoMedicalRecord(String condition) {
         Scanner sc = new Scanner(System.in);
 
         // Nhập tên Bệnh nhân
-        System.out.print(" -+ Nhập họ tên: ");
+        System.out.print(" - Nhập họ tên: ");
         String fullname = sc.nextLine();
         // Nhập ngày sinh Bệnh nhân
-        System.out.print(" -+ Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
+        System.out.print(" - Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
         String birthdayStr = sc.nextLine();
         while(!Date.getInstance().isDateFormat(birthdayStr)
                 || !Date.getInstance().getDateFromDateFormat(birthdayStr).isDate()) {
@@ -119,7 +119,7 @@ public class Patient extends Person implements ActionsInHospital {
         }
         Date birthdayObj = Date.getInstance().getDateFromDateFormat(birthdayStr);
         // Nhập giới tính Bệnh nhân
-        System.out.print(" -+ Nhập giới tính (Nam / Nữ): ");
+        System.out.print(" - Nhập giới tính (Nam / Nữ): ");
         String gender = sc.nextLine();
         while(!gender.equals("Nam") && !gender.equals("Nữ")) {
             System.out.println("----- -----");
@@ -129,7 +129,7 @@ public class Patient extends Person implements ActionsInHospital {
             System.out.println("----- -----");
         }
         // Nhập số điện thoại Bệnh nhân
-        System.out.print(" -+ Nhập số điện thoại (10 số): ");
+        System.out.print(" - Nhập số điện thoại (10 số): ");
         String phone = sc.nextLine();
         while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
             System.out.println("----- -----");
@@ -139,19 +139,8 @@ public class Patient extends Person implements ActionsInHospital {
             System.out.println("----- -----");
         }
         // Nhập quốc tịch Bệnh nhân
-        System.out.print(" -+ Nhập quốc tịch: ");
+        System.out.print(" - Nhập quốc tịch: ");
         String country = sc.nextLine();
-
-        // Nhập loại chăm sóc Bệnh nhân
-        System.out.print(" -+ Nhập loại chăm sóc (Bình thường hoặc Cao cấp): ");
-        String type = sc.nextLine();
-        while(!type.equals("Bình thường") && !type.equals("Cao cấp")) {
-            System.out.println("----- -----");
-            System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
-            System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
-            type = sc.nextLine();
-            System.out.println("----- -----");
-        }
 
         // Gán dữ liệu đã nhập cho đối tượng
         Patient.countPatientCreated++;
@@ -161,7 +150,7 @@ public class Patient extends Person implements ActionsInHospital {
         this.gender = gender;
         this.phone = phone;
         this.country = country;
-        this.type = type;
+        this.type = condition.equals("is normal patient") ? "Bình thường" : "Cao cấp";
         this.medicalRecordID = null;
     }
     // - Hàm lấy ra thông tin của Bệnh nhân
@@ -169,31 +158,4 @@ public class Patient extends Person implements ActionsInHospital {
         return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender + " | " + this.phone 
             + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
     }
-    // - Hàm khám cho Bệnh nhân
-	@Override
-	public void testPatient() {
-		System.out.println(" - Bệnh nhân đã được khám xong. Sức khoẻ có lẽ có tiến triển hơn chút");
-	}
-	// - Hàm đưa khẩu phần ăn cho Bệnh nhân
-	@Override
-	public void giveFoodToPatient() {
-        if(this.type.equals("Bình thường"))
-		    System.out.println(" - Bệnh nhân đã nhận được khẩu phần ăn loại Bình thường");
-        else if(this.type.equals("Cao cấp"))
-            System.out.println(" - Bệnh nhân đã nhận được khẩu phần ăn loại Cao cấp");
-	}
-	// - Hàm đưa thuốc uống cho Bệnh nhân (mức độ Bệnh: Nhẹ hoặc Vừa)
-	@Override
-	public void giveCurativeToPatient() {
-        if(this.type.equals("Bình thường"))
-		    System.out.println(" - Bệnh nhân đã nhận được thuốc uống, nước lọc và một chút bánh ngọt");
-        else if(this.type.equals("Cao cấp"))
-            System.out.println(" - Bệnh nhân đã nhận được thuốc uống, trái cây, nước lọc, nước trái cây và một chút bánh");
-
-	}
-	// - Hàm tiêm thuốc cho Bệnh nhân (mức độ Bệnh: Nặng)
-	@Override
-	public void injectCurativePatient() {
-		System.out.println(" - Bệnh nhân đã được tiêm thuốc xong. Bệnh nhân đang nghỉ ngơi");
-	}
 }
