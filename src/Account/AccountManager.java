@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import Common.CRUD;
+import Common.myCharacterClass;
 
 public class AccountManager implements CRUD<Account> {
     // Properties
@@ -44,17 +45,6 @@ public class AccountManager implements CRUD<Account> {
     }
 
     // Methods
-    // - Kiểm tra tên tài khoản hoặc mật khẩu có hợp lệ hay không ?
-    public boolean isUsernameOrPassword(String input) {
-        for(int i = 0; i < input.length(); i++) {
-            int charUnicode = (int) input.charAt(i);
-            if((charUnicode >= 48 && charUnicode <= 57) 
-                || (charUnicode >= 65 && charUnicode <= 90)
-                || (charUnicode >= 97 && charUnicode <= 122)) continue;
-            return false;
-        }
-        return true;
-    }
     // - Kiểm tra tài khoản có thể truy cập được hay không ?
     // - Nếu tài khoản chưa tồn tại thì không thể truy cập
     public boolean canAccess(String username, String password) {
@@ -68,7 +58,7 @@ public class AccountManager implements CRUD<Account> {
     // - Kiểm tra tài khoản có thể đăng ký được không ?
     public boolean canRegister(String username, String password) {
         // -- Nếu chưa tồn tại thì có thể tạo tài khoản đăng ký mới, mật khẩu có thể trùng nhưng tên tài khoản phải khác nhau
-        for(Account account : list) {
+        for(Account account : AccountManager.list) {
             if(account.getUsername().equals(username)) return false;
         }
 
@@ -78,46 +68,15 @@ public class AccountManager implements CRUD<Account> {
             || username.startsWith("HEW") || username.startsWith("PAT")
             || username.startsWith("MER")) return false;
 
+        
         // -- Kiểm tra tên tài khoản phải là ký tự chữ cái và chữ số
-        if(!isUsernameOrPassword(username)) return false;
-
         // -- Kiểm tra mật khẩu phải là ký tự chữ cái và chữ số
-        if(!isUsernameOrPassword(password)) return false;
+        Account account = new Account(username, password, "Người dùng mới");
+        if(!account.isValidAccount("username") || !account.isValidAccount("password")) return false;
 
         return true;
-    }
-    // - Kiểm tra có phải là tài khoản Quản lý hay không ?
-    // - Tài khoản Quản lý mặc định là admin - 1
-    public boolean isAdmin(String username, String password) {
-        if(!username.equals("admin")
-            || !password.equals("1")) return false;
-        return true;
-    }
-    // - Kiểm tra có phải là tài khoản Người dùng trong Bệnh viện (Bệnh nhân, Bác sĩ, Y tá) hay không ?
-    // -- Tài khoản Người dùng sẽ là id (của đối tượng tương ứng) - ngaysinh (ddmmyyyy)
-    public boolean isUserInHospital(String username) {
-        for(Account account : AccountManager.list) {
-            if(account.getUsername().equals(username)
-                    && account.getType().equals("Người dùng mới"))
-                return false;
-        }
-        return true;
-    }
-    // -- Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
-    public boolean isHealthcareWorker(String username) {
-        if(username.substring(0, 3).equals("HEW"))
-            return true;
-        return false;
-    }
-    // -- Kiểm tra có phải Người dùng là Bệnh nhân
-    public boolean isPatient(String username) {
-        if(username.substring(0, 3).equals("PAT"))
-            return true;
-        return false;
     }
     // - CRUD (Thêm sửa xoá với các tài khoản trong lớp quản lý)
-    // -- Tìm kiếm vị trị của một tài khoản trong danh sách thông qua thông tin đã cho
-    
     @Override
     public Account findObjectByIndex(int index) {
         if(index < 1 || index > AccountManager.numbers) return null;
@@ -165,11 +124,10 @@ public class AccountManager implements CRUD<Account> {
     @Override
     public void update(Account accountUpdate, int choice) {
         Scanner sc = new Scanner(System.in);
-        
         if(choice == 1 || choice == 3) {
             System.out.print(" - Nhập tên tài khoản mới: ");
             String newUsername = sc.nextLine();
-            while(!AccountManager.getInstance().isUsernameOrPassword(newUsername)) {
+            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newUsername)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHÔNG THỂ THAY ĐỔI");
                 System.out.print(" - Nhập lại tên tài khoản mới: ");
@@ -180,7 +138,7 @@ public class AccountManager implements CRUD<Account> {
         if(choice == 2 || choice == 3) {
             System.out.print(" - Nhập mật khẩu mới: ");
             String newPassword = sc.nextLine();
-            while(!AccountManager.getInstance().isUsernameOrPassword(newPassword)) {
+            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newPassword)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHÔNG THỂ THAY ĐỔI");
                 System.out.print(" - Nhập lại mật khẩu mới: ");

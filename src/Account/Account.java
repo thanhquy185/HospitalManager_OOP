@@ -2,6 +2,8 @@ package Account;
 
 import java.util.Scanner;
 
+import Common.myCharacterClass;
+
 public class Account {
     // Properties
     private String username;
@@ -13,6 +15,10 @@ public class Account {
         this.username = null;
         this.password = null;
         this.type = null;
+    }
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
     public Account(String username, String password, String type) {
         this.username = username;
@@ -41,9 +47,34 @@ public class Account {
     }
 
     // Methods
+    // - Kiểm tra tên tài khoản hoặc mật khẩu có hợp lệ hay không ?
+    public boolean isValidAccount(String condition) {
+        String data = condition.equals("username") ? this.username : this.password;
+        if(!myCharacterClass.getInstance().onlyHasLetterAndDigit(data)) return false;
+        return true;
+    }
+    // - Kiểm tra có phải là tài khoản Quản lý hay không (mặc định là admin - 1)
+    public boolean isAdmin() {
+        if(!this.username.equals("admin")
+            || !this.password.equals("1")
+            || !this.type.equals("Quản lý")) return false;
+        return true;
+    }
+    // -- Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
+    public boolean isHealthcareWorker() {
+        if(!this.username.substring(0, 3).equals("HEW")
+            && !this.type.equals("Nhân viên")) return true;
+        return false;
+    }
+    // -- Kiểm tra có phải Người dùng là Bệnh nhân
+    public boolean isPatient() {
+        if(!this.username.substring(0, 3).equals("PAT")
+            && !this.type.equals("Bệnh nhân")) return true;
+        return false;
+    }
+    // 
     public void setInfo() {
         Scanner sc = new Scanner(System.in);
-
         // Nhập thông tin tài khoản
         System.out.print(" - Nhập tên tài khoản: ");
         String newUsername = sc.nextLine();
@@ -63,6 +94,7 @@ public class Account {
         this.password = newPassword;
         this.type = "Người dùng mới";
     }
+    //
     public String getInfo() {
         return this.username + " | " + this.password + " | " + this.type;
     }

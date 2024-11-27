@@ -152,10 +152,16 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     // -- condition2 là trưởng Khoa hay không
     public void setInfo(String condition1, String condition2) {
         Scanner sc = new Scanner(System.in);
-        
         // - Nhập tên 
         System.out.print(" - Nhập họ tên: ");
         String fullname = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(fullname)) {
+            System.out.println("----- -----");
+            System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            fullname = sc.nextLine();
+            System.out.println("----- -----");
+        }
         // - Nhập ngày sinh 
         System.out.print(" - Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
         String birthdayStr = sc.nextLine();
@@ -191,6 +197,13 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         // - Nhập quốc tịch 
         System.out.print(" - Nhập quốc tịch: ");
         String country = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(country)) {
+            System.out.println("----- -----");
+            System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            country = sc.nextLine();
+            System.out.println("----- -----");
+        }
         // - Nhập số năm kinh nghiệm 
         String yearsOfExperienceStr = null;
         if(condition2.equals("is manager")) {

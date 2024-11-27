@@ -102,10 +102,16 @@ public abstract class Patient extends Person implements ActionsInHospital {
     // - Hàm gán thông tin cho Bệnh nhân
     public void setInfoWithNoMedicalRecord(String condition) {
         Scanner sc = new Scanner(System.in);
-
         // Nhập tên Bệnh nhân
         System.out.print(" - Nhập họ tên: ");
         String fullname = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(fullname)) {
+            System.out.println("----- -----");
+            System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            fullname = sc.nextLine();
+            System.out.println("----- -----");
+        }
         // Nhập ngày sinh Bệnh nhân
         System.out.print(" - Nhập ngày sinh (dd-mm-yyyy hoặc ddmmyyyy): ");
         String birthdayStr = sc.nextLine();
@@ -115,7 +121,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
             System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
             birthdayStr = sc.nextLine();
-           System.out.println("----- -----");
+            System.out.println("----- -----");
         }
         Date birthdayObj = Date.getInstance().getDateFromDateFormat(birthdayStr);
         // Nhập giới tính Bệnh nhân
@@ -141,6 +147,13 @@ public abstract class Patient extends Person implements ActionsInHospital {
         // Nhập quốc tịch Bệnh nhân
         System.out.print(" - Nhập quốc tịch: ");
         String country = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(country)) {
+            System.out.println("----- -----");
+            System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            country = sc.nextLine();
+            System.out.println("----- -----");
+        }
 
         // Gán dữ liệu đã nhập cho đối tượng
         Patient.countPatientCreated++;

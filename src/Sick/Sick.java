@@ -91,10 +91,16 @@ public class Sick {
     }
 	public void setInfo() {
 		Scanner sc = new Scanner(System.in);
-
 		// Nhập tên Bệnh
 		System.out.print(" - Nhập tên Bệnh: ");
 		String name = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(name)) {
+            System.out.println("----- -----");
+            System.out.println("! - TÊN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            name = sc.nextLine();
+            System.out.println("----- -----");
+        }
 		// Chọn Khoa sẽ quản lý Bệnh được tạo
 		System.out.println(" - Chọn Khoa thuộc về");
 		// 1 - DEP00001 | Tai-Mũi-Họng

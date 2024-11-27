@@ -52,13 +52,13 @@ public class Date {
 
 	//Methods
 	// - Hàm kiểm tra có phải là năm nhuận hay không ?
-	public boolean leapYear(int year) {
+	private boolean leapYear(int year) {
 		if(year % 400 == 0 || (year % 4 == 0 && year % 100 != 0))
 			return true;
 		return false;
 	}
 	// - Hàm tính tổng số ngày của đối tượng Date, tính từ 01-01-1900
-	public int calcDays(int day, int month, int year) {
+	private int calcDays(int day, int month, int year) {
 		int days = 0;
 		for(int i = 1900; i < year; i++) {
 			days += leapYear(i) ? 366 : 365;
@@ -138,7 +138,7 @@ public class Date {
 	}
 	// - Tạo đối tượng Date thông qua chuỗi hiển thị ngày dd-mm-yyyy, ddmmyyyy
 	public Date getDateFromDateFormat(String dateFormat) {
-		if(dateFormat.length() != 8 && dateFormat.length() != 10) return null;
+		if(!isDateFormat(dateFormat)) return null;
 		int day = 0; int month = 0; int year = 0;
 		if(dateFormat.length() == 8) {
 			day = Integer.parseInt(dateFormat.substring(0, 2));

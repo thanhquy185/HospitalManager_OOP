@@ -2,6 +2,8 @@ package Department;
 
 import java.util.Scanner;
 
+import Common.myCharacterClass;
+
 public class Department {
     // Properties
     private String id;
@@ -77,7 +79,21 @@ public class Department {
     }
 
     // Methods
-	 // - Kiểm tra có đúng định dạng DEPxxxxx
+    // - Hàm kiểm tra tên phòng có hợp lệ hay không (A.001, A.002, ..., Z.999)
+    private boolean isValidRoomName(String name) {
+        if(name.length() != 4) return false;
+        // -- Kiểm tra ký tự đầu tiên có là ký tự chữ cái in hoa
+        if("QWERTYUIOPASDFGHJKLZXCVBNM".indexOf(name.charAt(0)) == -1) return false;
+        // -- Kiểm tra ký tự thứ hai có là dấu chấm
+        if(name.charAt(1) != '.') return false;
+        // -- Kiểm tra các ký tự còn lại có là ký tự số hay không
+        for(int i = 2; i < name.length(); i++) {
+            int unicode = (int) name.charAt(i);
+            if(unicode < 48 || unicode > 57) return false;
+        }
+        return true;
+    }
+	// - Kiểm tra có đúng định dạng DEPxxxxx
 	private boolean isFormatId(String id) {
         // -- Nếu không phải là chuỗi 8 ký tự
         if(id.length() != 8)
@@ -101,15 +117,21 @@ public class Department {
     // - Hàm gán thông tin của Khoa
     public void setInfoWithNoManager() {
         Scanner sc = new Scanner(System.in);
-        
         // Nhập tên Khoa
         System.out.print(" - Nhập tên Khoa: ");
         String name = sc.nextLine();
+        while(!myCharacterClass.getInstance().isValidName(name)) {
+            System.out.println("----- -----");
+            System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
+            System.out.print("?! - Nhập lại: ");
+            name = sc.nextLine();
+            System.out.println("----- -----");
+        }
         // Mã trưởng Khoa sẽ có sau
         // Nhập số phòng Khoa
         System.out.print(" - Nhập số phòng (tối đa 5 ký tự): ");
         String room = sc.nextLine();
-        while(room.length() > 5) {
+        while(room.length() > 5 || !isValidRoomName(room)) {
             System.out.println("----- -----");
             System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (tối đa 5 ký tự): ");
