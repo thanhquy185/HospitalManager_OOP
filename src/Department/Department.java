@@ -78,9 +78,9 @@ public class Department {
         return Department.countDepartmentCreated;
     }
 
-    // Methods
+    // Methods  
     // - Hàm kiểm tra tên phòng có hợp lệ hay không (A.001, A.002, ..., Z.999)
-    private boolean isValidRoomName(String name) {
+    private boolean isValidRoomNameFormat(String name) {
         if(name.length() != 4) return false;
         // -- Kiểm tra ký tự đầu tiên có là ký tự chữ cái in hoa
         if("QWERTYUIOPASDFGHJKLZXCVBNM".indexOf(name.charAt(0)) == -1) return false;
@@ -131,7 +131,7 @@ public class Department {
         // Nhập số phòng Khoa
         System.out.print(" - Nhập số phòng (tối đa 5 ký tự): ");
         String room = sc.nextLine();
-        while(room.length() > 5 || !isValidRoomName(room)) {
+        while(room.length() > 5 || !isValidRoomNameFormat(room)) {
             System.out.println("----- -----");
             System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (tối đa 5 ký tự): ");

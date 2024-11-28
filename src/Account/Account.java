@@ -63,14 +63,14 @@ public class Account {
     // -- Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
     public boolean isHealthcareWorker() {
         if(!this.username.substring(0, 3).equals("HEW")
-            && !this.type.equals("Nhân viên")) return true;
-        return false;
+            && !this.type.equals("Nhân viên")) return false;
+        return true;
     }
     // -- Kiểm tra có phải Người dùng là Bệnh nhân
     public boolean isPatient() {
         if(!this.username.substring(0, 3).equals("PAT")
-            && !this.type.equals("Bệnh nhân")) return true;
-        return false;
+            && !this.type.equals("Bệnh nhân")) return false;
+        return true;
     }
     // 
     public void setInfo() {

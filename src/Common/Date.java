@@ -58,7 +58,7 @@ public class Date {
 		return false;
 	}
 	// - Hàm tính tổng số ngày của đối tượng Date, tính từ 01-01-1900
-	private int calcDays(int day, int month, int year) {
+	private int calDays(int day, int month, int year) {
 		int days = 0;
 		for(int i = 1900; i < year; i++) {
 			days += leapYear(i) ? 366 : 365;
@@ -82,9 +82,9 @@ public class Date {
 		return days;
 	}
 	// - Hàm tính số ngày giữa ngày trước và ngày sau
-	public int calcNumbersOfDay(Date dateBefore, Date dateAfter) {
-		int daysBefore = calcDays(dateBefore.getDay(), dateBefore.getMonth(), dateBefore.getYear());
-		int daysAfter = calcDays(dateAfter.getDay(), dateAfter.getMonth(), dateAfter.getYear());
+	public int calNumbersOfDay(Date dateBefore, Date dateAfter) {
+		int daysBefore = calDays(dateBefore.getDay(), dateBefore.getMonth(), dateBefore.getYear());
+		int daysAfter = calDays(dateAfter.getDay(), dateAfter.getMonth(), dateAfter.getYear());
 		int res = daysAfter - daysBefore;
 		return res;
 	}
@@ -124,7 +124,7 @@ public class Date {
 		return true;
 	}
 	// - Hàm kiểm tra ngày sau phải đúng là "sau" ngày trước
-	public boolean checkBeforeAfterDay(Date dateBefore, Date dateAfter) {
+	public boolean checkBeforeAfterDate(Date dateBefore, Date dateAfter) {
 		if (dateBefore.getYear() > dateAfter.getYear()) {
 			return false;
 		} else if(dateBefore.getYear() == dateAfter.getYear()) {

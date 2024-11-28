@@ -171,7 +171,7 @@ public abstract class MedicalRecord implements ActionsInHospital {
         String inputDayStr = sc.nextLine();
         while(!Date.getInstance().isDateFormat(inputDayStr)
                 || !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()
-				|| !Date.getInstance().checkBeforeAfterDay(patientBirthday, Date.getInstance().getDateFromDateFormat(inputDayStr))) {
+				|| !Date.getInstance().checkBeforeAfterDate(patientBirthday, Date.getInstance().getDateFromDateFormat(inputDayStr))) {
             System.out.println("----- -----");
             System.out.println("! - NGÀY LẬP HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
@@ -188,7 +188,7 @@ public abstract class MedicalRecord implements ActionsInHospital {
 			outputDayStr = sc.nextLine();
 			while(!Date.getInstance().isDateFormat(outputDayStr)
 					|| !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()
-					|| !Date.getInstance().checkBeforeAfterDay(inputDayObj, Date.getInstance().getDateFromDateFormat(outputDayStr))) {
+					|| !Date.getInstance().checkBeforeAfterDate(inputDayObj, Date.getInstance().getDateFromDateFormat(outputDayStr))) {
 				System.out.println("----- -----");
 				System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
 				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");

@@ -115,7 +115,7 @@ public class PatientManager implements CRUD<Patient> {
             String newBirthdayStr = sc.nextLine();
             while(!Date.getInstance().isDateFormat(newBirthdayStr)
                     || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()
-                    || !Date.getInstance().checkBeforeAfterDay(Date.getInstance().getDateFromDateFormat(newBirthdayStr),
+                    || !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(newBirthdayStr),
                             MedicalRecordManager.getInstance().findObjectById(patientUpdate.getMedicalRecordID()).getInputDay()
                         )) {
                 System.out.println("----- -----");

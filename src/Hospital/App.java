@@ -127,9 +127,10 @@ public class App {
                 // Nếu tài khoản hợp lệ thì có biến giữ thông tin của tài khoản đó
                 Account currentAccount = null;
                 for(Account account : AccountManager.getInstance().getList()) {
-                    if(account.equals(username) && account.equals(password)) {
+                    if(account.getUsername().equals(username)
+                            && account.getPassword().equals(password)) {
                         currentAccount = account;
-                        break; 
+                        break;
                     }
                 }
 
@@ -2861,8 +2862,7 @@ public class App {
                     System.out.println("Là tài khoản Nhân viên Y tế trong bệnh viện");
                     
                     // Biến giữ thông tin của Nhân viên Y tế
-                    HealthcareWorker healthcareWorker =
-                        HealthcareWorkerManager.getInstance().findObjectById(currentAccount.getUsername());
+                    HealthcareWorker healthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(currentAccount.getUsername());
                         
                     // Danh mục các lựa chọn
                     subLoop1:
@@ -2947,8 +2947,7 @@ public class App {
                     System.out.println("Là tài khoản Bệnh nhân trong bệnh viện");
 
                     // Biến giữ thông tin của Bệnh nhân
-                    Patient patient =
-                        PatientManager.getInstance().findObjectById(currentAccount.getUsername());
+                    Patient patient = PatientManager.getInstance().findObjectById(currentAccount.getUsername());
 
                     // Danh mục các lựa chọn
                     subLoop1:

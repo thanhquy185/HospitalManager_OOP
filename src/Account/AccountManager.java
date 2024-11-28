@@ -68,11 +68,10 @@ public class AccountManager implements CRUD<Account> {
             || username.startsWith("HEW") || username.startsWith("PAT")
             || username.startsWith("MER")) return false;
 
-        
         // -- Kiểm tra tên tài khoản phải là ký tự chữ cái và chữ số
         // -- Kiểm tra mật khẩu phải là ký tự chữ cái và chữ số
-        Account account = new Account(username, password, "Người dùng mới");
-        if(!account.isValidAccount("username") || !account.isValidAccount("password")) return false;
+        if(!myCharacterClass.getInstance().onlyHasLetterAndDigit(username)
+            || !myCharacterClass.getInstance().onlyHasLetterAndDigit(password)) return false;
 
         return true;
     }

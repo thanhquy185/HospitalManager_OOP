@@ -32,7 +32,7 @@ public class TreatmentRecord extends MedicalRecord {
 	public double calFee() {
 		double basicFee = 100, feeCoefficient = 0;
 		// Là chữa bệnh (có thể chữa nhiều ngày)
-		feeCoefficient += 0.8 * Date.getInstance().calcNumbersOfDay(inputDay, outputDay);
+		feeCoefficient += 0.8 * Date.getInstance().calNumbersOfDay(inputDay, outputDay);
 		// Tuỳ theo việc loại chăm sóc Bệnh nhân là Bình thường hay Cao cấp thì hệ số phí sẽ khác
 		if(PatientManager.getInstance().findObjectById(this.patientID).getType().equals("Bình thường")) feeCoefficient += 0.5;
 		else if(PatientManager.getInstance().findObjectById(this.patientID).getType().equals("Cao cấp")) feeCoefficient += 2;

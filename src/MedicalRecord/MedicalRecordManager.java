@@ -143,9 +143,9 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 			String inputDayStr = sc.nextLine();
 			while(!Date.getInstance().isDateFormat(inputDayStr)
 					|| !Date.getInstance().getDateFromDateFormat(inputDayStr).isDate()
-					|| !Date.getInstance().checkBeforeAfterDay(
+					|| !Date.getInstance().checkBeforeAfterDate(
 							PatientManager.getInstance().findObjectById(medicalRecordUpdate.getPatientID()).getBirthday(), Date.getInstance().getDateFromDateFormat(inputDayStr))
-					|| !Date.getInstance().checkBeforeAfterDay(Date.getInstance().getDateFromDateFormat(inputDayStr), medicalRecordUpdate.getOutputDay())) {
+					|| !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(inputDayStr), medicalRecordUpdate.getOutputDay())) {
 				System.out.println("----- -----");
 				System.out.println("! - NGÀY LẬP HỒ SƠ KHÔNG HỢP LỆ");
 				System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
@@ -163,7 +163,7 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 				String outputDayStr = sc.nextLine();
 				while(!Date.getInstance().isDateFormat(outputDayStr)
 						|| !Date.getInstance().getDateFromDateFormat(outputDayStr).isDate()
-						|| !Date.getInstance().checkBeforeAfterDay(medicalRecordUpdate.getInputDay(), Date.getInstance().getDateFromDateFormat(outputDayStr))) {
+						|| !Date.getInstance().checkBeforeAfterDate(medicalRecordUpdate.getInputDay(), Date.getInstance().getDateFromDateFormat(outputDayStr))) {
 					System.out.println("----- -----");
 					System.out.println("! - NGÀY KHOÁ HỒ SƠ BỆNH ÁN KHÔNG HỢP LỆ");
 					System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
