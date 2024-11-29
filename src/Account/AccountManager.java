@@ -91,6 +91,16 @@ public class AccountManager implements CRUD<Account> {
         return null;
     }
     @Override
+    public String getInfoByIndex(int index) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInfoByIndex'");
+    }
+    @Override
+    public String getInfoById(String id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInfoById'");
+    }
+    @Override
     public void show() {
         System.out.println("+-------------------------------------------------------+");
 	    System.out.println("| TÊN TÀI KHOẢN |       MẬT KHẨU       |      LOẠI      |");
@@ -105,16 +115,6 @@ public class AccountManager implements CRUD<Account> {
             System.out.println("+-------------------------------------------------------+");
     }
     @Override
-    public String getInfoByIndex(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInfoByIndex'");
-    }
-    @Override
-    public String getInfoById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInfoById'");
-    }
-    @Override
     public void add(Account newAccount) {
         // Thêm một tài khoản vào danh sách
         AccountManager.list.add(newAccount);
@@ -126,7 +126,8 @@ public class AccountManager implements CRUD<Account> {
         if(choice == 1 || choice == 3) {
             System.out.print(" - Nhập tên tài khoản mới: ");
             String newUsername = sc.nextLine();
-            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newUsername)) {
+            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newUsername)
+                    || findObjectById(newUsername) != null) {
                 System.out.println("----- -----");
                 System.out.println("! - KHÔNG THỂ THAY ĐỔI");
                 System.out.print(" - Nhập lại tên tài khoản mới: ");
@@ -158,12 +159,35 @@ public class AccountManager implements CRUD<Account> {
         }
     }
     @Override
+    public void find() {
+        Scanner sc = new Scanner(System.in);
+        // Tìm kiếm bằng mã Tài khoản hay tên Tài khoản đều được phép
+        System.out.println("Bạn có thể tìm bằng tên Tài khoản hoặc loại Tài khoản");
+        System.out.print(" - Nhập thông tin Tài khoản cần tìm: ");
+        String info = sc.nextLine();
+        ArrayList<Account> accountSearchList = new ArrayList<>();
+        for(Account account : AccountManager.list) {
+            if(account.getUsername().toLowerCase().contains(info.trim().toLowerCase())
+                    || account.getType().toLowerCase().contains(info.trim().toLowerCase()))
+                accountSearchList.add(account);
+        }
+
+        // Thông báo kết quả tìm được
+        if(accountSearchList.size() == 0) {
+            System.out.println("! - Không tìm được Tài khoản nào với thông tin đã cho");
+        } else {
+            for(Account accountSearch : accountSearchList) {
+                System.out.println(accountSearch.getInfo());
+            }
+        }
+    }
+    @Override
     public void sort(String condition) {
         // AccountManager.getInstance().getList().sort(Comparator.comparing(()));
         // asc: Sắp xếp tăng dần
         // desc: Sắp xếp giảm dần
         switch (condition) {
-            case "username assc": {
+            case "username asc": {
                 AccountManager.list.sort(Comparator.comparing((Account account) -> account.getUsername()));
                 break;
             }
@@ -180,6 +204,10 @@ public class AccountManager implements CRUD<Account> {
             return;
         }
         try {
+            // Đặt lại tất cả dữ liệu của Tài khoản
+            AccountManager.list = new ArrayList<>();
+            AccountManager.numbers = 0;
+            // Đọc dữ liệu từ file
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while(true) {

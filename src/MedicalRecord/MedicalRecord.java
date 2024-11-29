@@ -6,6 +6,7 @@ import Common.*;
 import Sick.*;
 import HealthcareWorker.HealthcareWorker;
 import HealthcareWorker.HealthcareWorkerManager;
+import Patient.PatientManager;
 
 public abstract class MedicalRecord implements ActionsInHospital {
     //	Properties
@@ -207,7 +208,7 @@ public abstract class MedicalRecord implements ActionsInHospital {
         String info1 = sc.nextLine();
         while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
                     && SickManager.getInstance().findObjectById(info1) == null)
-                || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
+                || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info1)
                     && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
             System.out.println("----- -----");
             System.out.println("! - BỆNH KHÔNG HỢP LỆ");
@@ -261,8 +262,11 @@ public abstract class MedicalRecord implements ActionsInHospital {
 							|| !HealthcareWorkerManager.getInstance().findObjectById(info2).getDepartmentID().equals(
 									SickManager.getInstance().findObjectById(sickID).getDepartmentID()
 								)))
-					|| (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
-						&& HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)) {
+					|| (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info2)
+						&& (HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)
+							|| !HealthcareWorkerManager.getInstance().findObjectById(info2).getDepartmentID().equals(
+									SickManager.getInstance().findObjectById(sickID).getDepartmentID()
+								))) {
 				System.out.println("----- -----");
 				System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
 				System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
@@ -291,4 +295,10 @@ public abstract class MedicalRecord implements ActionsInHospital {
 			+ " | " + this.fee + " | " + this.patientID + " | " + this.healthcareWorkerID 
 			+ " | " + this.sickID + " | " + this.sickLevel;
     }
+	public void testPatient() {
+		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
+			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
+		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc khám cho Bệnh nhân "
+			+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
+	}
 }

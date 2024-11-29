@@ -10,11 +10,11 @@ public class Nurse extends HealthcareWorker {
         super();
     }
     public Nurse(String fullname, Date birthday, String gender, String phone, String country,
-            String type, int yearsOfExperience, String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String type, int yearsOfExperience, String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country, type, yearsOfExperience, departmentID, isManagerDepartment, medicalRecordID);
     }
     public Nurse(String fullname, Date birthday, String gender, String phone, String country, String id,
-            String type, int yearsOfExperience, double salary, String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String type, int yearsOfExperience, double salary, String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
     }
     public Nurse(Nurse nurse) {

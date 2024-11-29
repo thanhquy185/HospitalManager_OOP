@@ -115,7 +115,7 @@ public class Sick {
 		String info = sc.nextLine();
 		while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
 		            && DepartmentManager.getInstance().findObjectById(info) == null)
-		        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+		        || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
 		            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
 		    System.out.println("----- -----");
 		    System.out.println("! - KHOA KHÔNG HỢP LỆ");

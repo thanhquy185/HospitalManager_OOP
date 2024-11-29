@@ -25,6 +25,9 @@ public interface CRUD<T> {
 
     // - Xoá một đối tượng (đã tồn tại)
     void remove(String id);
+    
+    // - Tìm kiếm thông tin của một đối tượng trong danh sách
+    void find();
 
     // - Sắp xếp danh sách quản lý theo một lựa chọn
     void sort(String condition);

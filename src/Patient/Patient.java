@@ -8,7 +8,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
     protected String id;
     protected String type;
     protected String medicalRecordID;
-    protected static int countPatientCreated;
+    private static int countPatientCreated;
 
     // Static
     static {
@@ -168,7 +168,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
     }
     // - Hàm lấy ra thông tin của Bệnh nhân
     public String getInfo() {
-        return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender + " | " + this.phone 
-            + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
+        return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender
+            + " | " + this.phone + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
     }
 }

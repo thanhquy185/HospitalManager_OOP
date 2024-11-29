@@ -14,7 +14,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     protected Integer yearsOfExperience;
     protected Double salary;
     protected String departmentID;
-    protected String isManagerDepartment;
+    protected Boolean isManagerDepartment;
     protected String medicalRecordID;
     private static int countHealthcareWorkerCreated;
 
@@ -35,7 +35,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         this.medicalRecordID = null;
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String phone, String country,
-            String type, int yearsOfExperience, String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String type, int yearsOfExperience, String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country);
         HealthcareWorker.countHealthcareWorkerCreated++;
         this.id = getFormatId();
@@ -48,7 +48,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     }
     public HealthcareWorker(String fullname, Date birthday, String gender, String phone,
             String country, String id, String type, int yearsOfExperience, double salary,
-            String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country);
         this.id = id;
         this.type = type;
@@ -88,7 +88,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     public void setDepartmentID(String departmentID) {
         this.departmentID = departmentID;
     }
-    public void setIsManagerDepartment(String isManagerDepartment) {
+    public void setIsManagerDepartment(boolean isManagerDepartment) {
         this.isManagerDepartment = isManagerDepartment;
     }
     public void setMedicalRecordID(String medicalRecordID) {
@@ -112,7 +112,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     public String getDepartmentID() {
         return this.departmentID;
     }
-    public String getIsManagerDepartment() {
+    public boolean getIsManagerDepartment() {
         return this.isManagerDepartment;
     }
     public String getMedicalRecordID() {
@@ -124,7 +124,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
 
     // Methods
     // - Hàm tính tiền lương cho một Nhân viên Y tế
-    protected abstract double calSalary();
+    public abstract double calSalary();
     // - Kiểm tra có đúng định dạng (DOC/NUR)xxxxx
     private boolean isFormatId(String id) {
         // -- Nếu không phải là chuỗi 8 ký tự
@@ -246,8 +246,8 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
             String info = sc.nextLine();
             while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
                         && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                    || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
+                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
                 System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
@@ -269,15 +269,16 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         this.country = country;
         this.type = condition1.equals("is nurse") ? "Y tá" : "Bác sĩ";
         this.yearsOfExperience = yearsOfExperienceInt;
-        this.salary = calSalary();
         this.departmentID = departmentID;
-        this.isManagerDepartment = condition2.equals("is manager") ? "Có" : "Không";
+        this.isManagerDepartment = condition2.equals("is manager") ? true : false;
+        this.salary = calSalary();
     }
     // - Hàm lấy ra thông tin của Nhân viên Y tế
     public String getInfo() {
         return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross")
             + " | " + this.gender + " | " + this.phone + " | " + this.country + " | " + this.id
-            + " | " + this.type + " | " + this.yearsOfExperience + " | " + this.salary
-            + " | " + this.departmentID + " | " + this.isManagerDepartment + " | " + this.medicalRecordID;
+            + " | " + this.type + " | " + this.yearsOfExperience + " | " + this.salary 
+            + " | " + this.departmentID + " | " + (this.isManagerDepartment ? "Có" : "Không") 
+            + " | " + this.medicalRecordID;
     }
 }

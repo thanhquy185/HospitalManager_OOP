@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 import Common.*;
+import Account.AccountManager;
 import HealthcareWorker.*;
 
 public class DepartmentManager implements CRUD<Department> {
@@ -106,6 +107,13 @@ public class DepartmentManager implements CRUD<Department> {
         if(choice == 1 || choice == 4) {
             System.out.print(" - Nhập tên mới: ");
             String newName = sc.nextLine();
+            while(!myCharacterClass.getInstance().isValidName(newName)) {
+                System.out.println("----- -----");
+                System.out.println("! - TÊN KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại: ");
+                newName = sc.nextLine();
+                System.out.println("----- -----");
+            }
             departmentUpdate.setName(newName);
         }
         if(choice == 2 || choice == 4) {
@@ -114,7 +122,7 @@ public class DepartmentManager implements CRUD<Department> {
             ArrayList<HealthcareWorker> doctorSearchList = new ArrayList<>();
             for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
                 if(healthcareWorker.getDepartmentID().equals(departmentUpdate.getId())
-                    && healthcareWorker.getIsManagerDepartment().equals("Không")
+                    && healthcareWorker.getIsManagerDepartment() == false
                     && healthcareWorker.getType().equals("Bác sĩ")) doctorSearchList.add(healthcareWorker);
             }
             if(doctorSearchList.size() == 0) {
@@ -122,7 +130,9 @@ public class DepartmentManager implements CRUD<Department> {
                     + " không có Bác sĩ cùng Khoa nào để có thể bổ nhiểm làm trưởng Khoa");
             } else {
                 // Thiết lập lại trưởng Khoa cũ
-                HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID()).setIsManagerDepartment("Không");
+                HealthcareWorker oldHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID());
+                oldHealthcareWorker.setIsManagerDepartment(false);
+                oldHealthcareWorker.setSalary(oldHealthcareWorker.calSalary());
 
                 // - Chọn Bác sĩ từ danh sách
                 System.out.println(" - Chọn Bác sĩ cần bổ nhiệm");
@@ -138,10 +148,9 @@ public class DepartmentManager implements CRUD<Department> {
                 System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
                 String info = sc.nextLine();
                 while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                            && (HealthcareWorkerManager.getInstance().findObjectById(info) == null
-                                || !HealthcareWorkerManager.getInstance().findObjectById(info).getDepartmentID().equals(departmentUpdate.getId())))
-                        || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info) && (Integer.parseInt(info) < 1 || Integer.parseInt(info) > numberList
-                            || doctorSearchList.get(Integer.parseInt(info) - 1) == null))) {
+                            && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
+                        || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info) && (Integer.parseInt(info) < 1 
+                                || Integer.parseInt(info) > numberList || doctorSearchList.get(Integer.parseInt(info) - 1) == null))) {
                     System.out.println("----- -----");
                     System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
                     System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
@@ -157,12 +166,27 @@ public class DepartmentManager implements CRUD<Department> {
 
                 // Thiết lập trưởng Khoa mới
                 departmentUpdate.setManagerID(doctorSelect.getId());
-                doctorSelect.setIsManagerDepartment("Có");
+                doctorSelect.setIsManagerDepartment(true);
+                doctorSelect.setSalary(doctorSelect.calSalary());
+            }
+            // Hỏi đã đọc thông báo chưa ?
+            System.out.print("Bạn đã đọc xong thông báo. Nhập 'YES' để tiếp tục: ");
+            String wantContinue = sc.nextLine();
+            while(!wantContinue.equals("YES")) {
+                System.out.print("- Bạn đã không nhập 'YES', nhập lại nếu đã đọc xong: ");
+                wantContinue = sc.nextLine();
             }
         }
         if(choice == 3 || choice == 4) {
+            Department departmentTemp = new Department();
             System.out.print(" - Nhập số phòng mới: ");
             String newRoom = sc.nextLine();
+            while(!departmentTemp.isValidRoomNameFormat(newRoom)) {
+                System.out.println("----- -----");
+                System.out.println("! - SỐ PHÒNG KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại: ");
+                newRoom = sc.nextLine();
+            }
             departmentUpdate.setRoom(newRoom);
         }
     }
@@ -174,6 +198,27 @@ public class DepartmentManager implements CRUD<Department> {
                 DepartmentManager.list.remove(i);
                 DepartmentManager.numbers--;
                 return;
+            }
+        }
+    }
+    @Override 
+    public void find() {
+        Scanner sc = new Scanner(System.in);
+        // Tìm kiếm bằng mã Khoa hay tên Khoa đều được phép
+        System.out.println("Bạn có thể tìm bằng mã Khoa hoặc tên Khoa");
+        System.out.print(" - Nhập thông tin Khoa cần tìm: ");
+        String info = sc.nextLine();
+        ArrayList<Department> departmentSearchList = new ArrayList<>();
+        for(Department department : DepartmentManager.list) {
+            if(department.getName().toLowerCase().contains(info.trim().toLowerCase())
+                    || department.getId().equals(info)) departmentSearchList.add(department);
+        }
+        // Thông báo kết quả tìm được
+        if(departmentSearchList.size() == 0) {
+            System.out.println("! - Không tìm được Khoa nào với thông tin đã cho");
+        } else {
+            for(Department departmentSearch : departmentSearchList) {
+                System.out.println(departmentSearch.getInfo());
             }
         }
     }
@@ -217,6 +262,10 @@ public class DepartmentManager implements CRUD<Department> {
             return;
         }
         try {
+            // Đặt lại tất cả dữ liệu của Tài khoản
+            DepartmentManager.list = new ArrayList<>();
+            DepartmentManager.numbers = 0;
+            // Đọc dữ liệu từ file
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while(true) {
@@ -226,8 +275,7 @@ public class DepartmentManager implements CRUD<Department> {
                 String id = info[0];
                 String name = info[1];
                 String managerID = null;
-                if(!info[2].equals("null"))
-                    managerID = info[2];
+                if(!info[2].equals("null")) managerID = info[2];
                 String room = info[3];
                 Department newDepartment = new Department(id, name, managerID, room);
                 add(newDepartment);

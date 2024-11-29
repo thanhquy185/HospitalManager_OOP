@@ -49,13 +49,6 @@ public class TreatmentRecord extends MedicalRecord {
 		return basicFee + basicFee * feeCoefficient;
 	}
 	@Override
-	public void testPatient() {
-		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
-			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
-		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc khám cho Bệnh nhân "
-			+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
-	}
-	@Override
 	public void giveFoodToPatient() {
 		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
 			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());

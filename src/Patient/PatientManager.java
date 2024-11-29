@@ -3,9 +3,6 @@ package Patient;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import Account.AccountManager;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 import Common.*;
+import Account.AccountManager;
 import MedicalRecord.MedicalRecordManager;
 public class PatientManager implements CRUD<Patient> {
     //Properties
@@ -108,6 +106,13 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 1 || choice == 6) {
             System.out.print(" - Nhập họ và tên mới: ");
             String newFullname = sc.nextLine();
+            while(!myCharacterClass.getInstance().isValidName(newFullname)) {
+                System.out.println("----- -----");
+                System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại: ");
+                newFullname = sc.nextLine();
+                System.out.println("----- -----");
+            }
             patientUpdate.setFullname(newFullname);
         }
         if(choice == 2 || choice == 6) {
@@ -155,20 +160,15 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 5 || choice == 6) {
             System.out.print(" - Nhập quốc tịch mới: ");
             String newCountry = sc.nextLine();
+            while(!myCharacterClass.getInstance().isValidName(newCountry)) {
+                System.out.println("----- -----");
+                System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại: ");
+                newCountry = sc.nextLine();
+                System.out.println("----- -----");
+            }
             patientUpdate.setCountry(newCountry);
         }
-        // if(choice == 6 || choice == 7) {
-        //     System.out.print(" - Nhập loại chăm sóc mới (Bình thường hoặc Cao cấp): ");
-        //     String newType = sc.nextLine();
-        //     while(!newType.equals("Bình thường") && !newType.equals("Cao cấp")) {
-        //         System.out.println("----- -----");
-        //         System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
-        //         System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
-        //         newType = sc.nextLine();
-        //         System.out.println("----- -----");
-        //     }
-        //     patientUpdate.setType(newType);
-        // }
     }
     @Override
     public void remove(String id){
@@ -178,6 +178,28 @@ public class PatientManager implements CRUD<Patient> {
                 PatientManager.list.remove(i);
                 PatientManager.numbers--;
                 return;
+            }
+        }
+    }
+    @Override
+    public void find() {
+        Scanner sc = new Scanner(System.in);
+        // Tìm kiếm bằng mã Bệnh nhân hay tên Bệnh nhân đều được phép
+        System.out.println("Bạn có thể tìm bằng mã Bệnh nhân, họ tên Bệnh nhân hoặc mã Bệnh án");
+        System.out.print(" - Nhập thông tin Bệnh nhân cần tìm: ");
+        String info = sc.nextLine();
+        ArrayList<Patient> patientSearchList = new ArrayList<>();
+        for(Patient patient : PatientManager.list) {
+            if(patient.getFullname().toLowerCase().contains(info.trim().toLowerCase())
+                    || patient.getId().equals(info) || patient.getMedicalRecordID().equals(info))
+                patientSearchList.add(patient);
+        }
+        // Thông báo kết quả tìm được
+        if(patientSearchList.size() == 0) {
+            System.out.println("! - Không tìm được Khoa nào với thông tin đã cho");
+        } else {
+            for(Patient patientSearch : patientSearchList) {
+                System.out.println(patientSearch.getInfo());
             }
         }
     }
@@ -232,6 +254,10 @@ public class PatientManager implements CRUD<Patient> {
             return;
         }
         try {
+            // Đặt lại tất cả dữ liệu của Tài khoản
+            PatientManager.list = new ArrayList<>();
+            PatientManager.numbers = 0;
+            // Đọc dữ liệu từ file
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             /**

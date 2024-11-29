@@ -101,10 +101,16 @@ public class SickManager implements CRUD<Sick> {
     @Override
     public void update(Sick sickUpdate, int choice) {
         Scanner sc = new Scanner(System.in);
-
         if(choice == 1 || choice == 3) {
             System.out.print(" - Nhập tên mới: ");
             String newName = sc.nextLine();
+            while(!myCharacterClass.getInstance().isValidName(newName)) {
+                System.out.println("----- -----");
+                System.out.println("! - TÊN KHÔNG HỢP LỆ");
+                System.out.print("?! - Nhập lại: ");
+                newName = sc.nextLine();
+                System.out.println("----- -----");
+            }
             sickUpdate.setName(newName);
         }
         if(choice == 2 || choice == 3) {
@@ -121,7 +127,7 @@ public class SickManager implements CRUD<Sick> {
             String info = sc.nextLine();
             while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
                         && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (!myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+                    || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
                         && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -143,6 +149,27 @@ public class SickManager implements CRUD<Sick> {
                 SickManager.list.remove(i);
                 SickManager.numbers--;
                 return;
+            }
+        }
+    }
+    @Override
+    public void find() {
+        Scanner sc = new Scanner(System.in);
+        // Tìm kiếm bằng mã Bệnh hay tên Bệnh đều được phép
+        System.out.println("Bạn có thể tìm bằng mã Bệnh hoặc tên Bệnh");
+        System.out.print(" - Nhập thông tin Bệnh cần tìm: ");
+        String info = sc.nextLine();
+        ArrayList<Sick> sickSearchList = new ArrayList<>();
+        for(Sick sick : SickManager.list) {
+            if(sick.getName().toLowerCase().contains(info.trim().toLowerCase())
+                || sick.getId().equals(info)) sickSearchList.add(sick);
+        }
+        // Thông báo kết quả tìm được
+        if(sickSearchList.size() == 0) {
+            System.out.println("! - Không tìm được Bệnh nào với thông tin đã cho");
+        } else {
+            for(Sick sickSearch : sickSearchList) {
+                System.out.println(sickSearch.getInfo());
             }
         }
     }
@@ -178,6 +205,10 @@ public class SickManager implements CRUD<Sick> {
             return;
         }
         try {
+            // Đặt lại tất cả dữ liệu của Tài khoản
+            SickManager.list = new ArrayList<>();
+            SickManager.numbers = 0;
+            // Đọc dữ liệu từ file
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while(true) {

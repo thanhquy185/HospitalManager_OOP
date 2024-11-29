@@ -10,11 +10,11 @@ public class Doctor extends HealthcareWorker {
         super();
     }
     public Doctor(String fullname, Date birthday, String gender, String phone, String country,
-            String type, int yearsOfExperience, String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String type, int yearsOfExperience, String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country, type, yearsOfExperience, departmentID, isManagerDepartment, medicalRecordID);
     }
     public Doctor(String fullname, Date birthday, String gender, String phone, String country, String id,
-            String type, int yearsOfExperience, double salary, String departmentID, String isManagerDepartment, String medicalRecordID) {
+            String type, int yearsOfExperience, double salary, String departmentID, boolean isManagerDepartment, String medicalRecordID) {
         super(fullname, birthday, gender, phone, country, id, type, yearsOfExperience, salary, departmentID, isManagerDepartment, medicalRecordID);
     }
     public Doctor(Doctor doctor) {
@@ -27,7 +27,8 @@ public class Doctor extends HealthcareWorker {
     //Methods
     @Override
 	public double calSalary() {
-		double basicSalary = 1300, salaryCoefficient = 0.2;
+		double basicSalary = 1300;
+        double salaryCoefficient = this.isManagerDepartment == true ? 0.5 : 0.2;
 		return basicSalary + basicSalary * this.yearsOfExperience * salaryCoefficient;
 	}
    @Override

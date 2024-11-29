@@ -88,6 +88,19 @@ public class Date {
 		int res = daysAfter - daysBefore;
 		return res;
 	}
+	// - Hàm kiểm tra ngày sau phải đúng là "sau" ngày trước
+	public boolean checkBeforeAfterDate(Date dateBefore, Date dateAfter) {
+		if (dateBefore.getYear() > dateAfter.getYear()) {
+			return false;
+		} else if(dateBefore.getYear() == dateAfter.getYear()) {
+			if (dateBefore.getMonth() > dateAfter.getMonth()) {
+				return false;
+			} else if(dateBefore.getMonth() == dateAfter.getMonth()) {
+				if(dateBefore.getDay() >= dateAfter.getDay()) return false;
+			}
+		}
+		return true;
+	}
 	// - Kiểm tra ngày sinh có hợp lệ hay không ? (đối tượng Date)
 	public boolean isDate() {
 		if(year < 1900 || year > 2025) return false;
@@ -119,19 +132,6 @@ public class Date {
 			for(int i = 0; i < date.length(); i++) {
 				if((i == 2 || i == 5) && (int) date.charAt(i) != 45) return false;
 				if(i != 2 && i != 5 && ((int) date.charAt(i) < 48 || (int) date.charAt(i) > 57)) return false;
-			}
-		}
-		return true;
-	}
-	// - Hàm kiểm tra ngày sau phải đúng là "sau" ngày trước
-	public boolean checkBeforeAfterDate(Date dateBefore, Date dateAfter) {
-		if (dateBefore.getYear() > dateAfter.getYear()) {
-			return false;
-		} else if(dateBefore.getYear() == dateAfter.getYear()) {
-			if (dateBefore.getMonth() > dateAfter.getMonth()) {
-				return false;
-			} else if(dateBefore.getMonth() == dateAfter.getMonth()) {
-				if(dateBefore.getDay() >= dateAfter.getDay()) return false;
 			}
 		}
 		return true;
