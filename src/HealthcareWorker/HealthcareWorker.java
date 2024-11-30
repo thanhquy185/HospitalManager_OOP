@@ -187,7 +187,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         // - Nhập số điện thoại 
         System.out.print(" - Nhập số điện thoại (10 số): ");
         String phone = sc.nextLine();
-        while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
+        while(phone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(phone)) {
             System.out.println("----- -----");
             System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (10 số): ");
@@ -209,7 +209,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         if(condition2.equals("is manager")) {
             System.out.print(" - Nhập số năm kinh nghiệm (từ 4 năm trở lên): ");
             yearsOfExperienceStr = sc.nextLine();
-            while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
+            while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                     || Integer.parseInt(yearsOfExperienceStr) < 4) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -220,7 +220,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
         } else if(condition2.equals("is not manager")) {
             System.out.print(" - Nhập số năm kinh nghiệm (từ 0 năm trở lên): ");
             yearsOfExperienceStr = sc.nextLine();
-            while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
+            while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                     || Integer.parseInt(yearsOfExperienceStr) < 0) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -244,9 +244,12 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
             // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
             String info = sc.nextLine();
-            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                        && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
+            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                    || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                            && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                    || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                            && DepartmentManager.getInstance().findObjectById(info) == null)
+                    || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
                             && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -254,7 +257,7 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
                 info = sc.nextLine();
             }
             // Lấy mã Khoa đã được chọn
-            departmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+            departmentID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
                 ? DepartmentManager.getInstance().findObjectById(info).getId()
                 : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
         }

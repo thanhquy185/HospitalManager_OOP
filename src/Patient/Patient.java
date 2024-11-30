@@ -139,7 +139,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
         // Nhập số điện thoại Bệnh nhân
         System.out.print(" - Nhập số điện thoại (10 số): ");
         String phone = sc.nextLine();
-        while(phone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(phone)) {
+        while(phone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(phone)) {
             System.out.println("----- -----");
             System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (10 số): ");

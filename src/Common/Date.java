@@ -58,15 +58,15 @@ public class Date {
 		return false;
 	}
 	// - Hàm tính tổng số ngày của đối tượng Date, tính từ 01-01-1900
-	private int calDays(int day, int month, int year) {
+	public int calDays() {
 		int days = 0;
-		for(int i = 1900; i < year; i++) {
+		for(int i = 1900; i < this.year; i++) {
 			days += leapYear(i) ? 366 : 365;
 		}
-		for(int i = 1; i < month; i++) {
+		for(int i = 1; i < this.month; i++) {
 			switch(i) {
 				case 2: {
-					days += leapYear(year) ? 29 : 28;
+					days += leapYear(this.year) ? 29 : 28;
 					break;
 				}
 				case 4: case 6: case 9: case 11: {
@@ -78,13 +78,13 @@ public class Date {
 				}
 			}
 		}
-		days += day;
+		days += this.day;
 		return days;
 	}
 	// - Hàm tính số ngày giữa ngày trước và ngày sau
 	public int calNumbersOfDay(Date dateBefore, Date dateAfter) {
-		int daysBefore = calDays(dateBefore.getDay(), dateBefore.getMonth(), dateBefore.getYear());
-		int daysAfter = calDays(dateAfter.getDay(), dateAfter.getMonth(), dateAfter.getYear());
+		int daysBefore = dateBefore.calDays();
+		int daysAfter = dateAfter.calDays();
 		int res = daysAfter - daysBefore;
 		return res;
 	}

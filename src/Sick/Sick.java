@@ -113,17 +113,20 @@ public class Sick {
 		// Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
 		System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
 		String info = sc.nextLine();
-		while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-		            && DepartmentManager.getInstance().findObjectById(info) == null)
-		        || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-		            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+		while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+				|| (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+						&& !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                        && DepartmentManager.getInstance().findObjectById(info) == null)
+                || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                    	&& DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
 		    System.out.println("----- -----");
 		    System.out.println("! - KHOA KHÔNG HỢP LỆ");
 		    System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
 		    info = sc.nextLine();
 		}
 		// Lấy mã Khoa đã được chọn
-		String departmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+		String departmentID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
 		    ? DepartmentManager.getInstance().findObjectById(info).getId()
 		    : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
 

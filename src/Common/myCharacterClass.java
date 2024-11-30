@@ -12,25 +12,25 @@ public class myCharacterClass {
     }
 
     // Methods
-    // - Kiểm tra trong chuỗi có ít nhất 1 ký tự là chữ cái hay không ?
-    public boolean hasOneCharacterIsLetter(String s) {
+    // - Kiểm tra trong chuỗi có toàn ký tự là chữ cái chữ cái hay không ?
+    public boolean hasAllCharacterIsLetter(String s) {
         if(s.length() == 0) return false;
         String validChars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOASDFGHJKLZXCVBM";
         for(int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if(validChars.indexOf(c) != -1) return true;
+            if(validChars.indexOf(c) == -1) return false;
         }
-        return false;
+        return true;
     }
-    // - Kiểm tra trong chuỗi có ít nhất 1 ký tự không phải là chữ số hay không ?
-    public boolean hasOneCharacterIsNotNumber(String s) {
+    // - Kiểm tra trong chuỗi có toàn ký tự chữ số hay không ?
+    public boolean hasAllCharacterIsNumber(String s) {
         if(s.length() == 0) return false;
         String validChars = "1234567890";
         for(int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if(validChars.indexOf(c) == -1) return true;
+            if(validChars.indexOf(c) == -1) return false;
         }
-        return false;
+        return true;
     }
     // - Hàm kiểm tra cho phép một chuỗi chỉ có ký tự chữ cái và chữ số
     public boolean onlyHasLetterAndDigit(String s) {

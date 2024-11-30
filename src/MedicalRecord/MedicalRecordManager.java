@@ -249,15 +249,11 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 				break;
 			}
 			case "inputDay asc": {
-				MedicalRecordManager.list.sort(Comparator.comparing(
-						(MedicalRecord medicalRecord) -> medicalRecord.getInputDay().getDateFormatByCondition("has not cross")
-					));
+				MedicalRecordManager.list.sort(Comparator.comparing((MedicalRecord medicalRecord) -> medicalRecord.getInputDay().calDays()));
 				break;
 			}
 			case "inputDay desc": {
-				MedicalRecordManager.list.sort(Comparator.comparing(
-						(MedicalRecord medicalRecord) -> medicalRecord.getInputDay().getDateFormatByCondition("has not cross")
-					).reversed());
+				MedicalRecordManager.list.sort(Comparator.comparing((MedicalRecord medicalRecord) -> medicalRecord.getInputDay().calDays()).reversed());
 				break;
 			}
 			case "fee asc": {

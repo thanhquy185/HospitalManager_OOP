@@ -3,6 +3,7 @@ package MedicalRecord;
 import java.util.Scanner;
 
 import Common.*;
+import Department.DepartmentManager;
 import Sick.*;
 import HealthcareWorker.*;
 import Patient.*;
@@ -205,17 +206,20 @@ public abstract class MedicalRecord implements ActionsInHospital {
         }
         System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
         String info1 = sc.nextLine();
-        while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
-                    && SickManager.getInstance().findObjectById(info1) == null)
-                || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info1)
-                    && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
+        while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info1)
+				|| (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info1) 
+						&& !myCharacterClass.getInstance().hasAllCharacterIsNumber(info1))
+                || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info1)
+                        && SickManager.getInstance().findObjectById(info1) == null)
+                || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info1)
+                    	&& SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
             System.out.println("----- -----");
             System.out.println("! - BỆNH KHÔNG HỢP LỆ");
             System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
             info1 = sc.nextLine();
             System.out.println("----- -----");
         }
-        String sickID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info1)
+        String sickID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info1)
             ? SickManager.getInstance().findObjectById(info1).getId()
             : SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1).getId();
         // Nhập mức độ Bệnh cho Bệnh vừa chọn
@@ -256,23 +260,20 @@ public abstract class MedicalRecord implements ActionsInHospital {
 		if(healthcareWorkerFiltered >= 1) {
 			System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
 			String info2 = sc.nextLine();
-			while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
-						&& (HealthcareWorkerManager.getInstance().findObjectById(info2) == null
-							|| !HealthcareWorkerManager.getInstance().findObjectById(info2).getDepartmentID().equals(
-									SickManager.getInstance().findObjectById(sickID).getDepartmentID()
-								)))
-					|| (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info2)
-						&& (HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)
-							|| !HealthcareWorkerManager.getInstance().findObjectById(info2).getDepartmentID().equals(
-									SickManager.getInstance().findObjectById(sickID).getDepartmentID()
-								))) {
+			while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info2)
+					|| (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info2) 
+							&& !myCharacterClass.getInstance().hasAllCharacterIsNumber(info2))
+					|| (myCharacterClass.getInstance().hasAllCharacterIsLetter(info2)
+							&& HealthcareWorkerManager.getInstance().findObjectById(info2) == null)
+					|| (myCharacterClass.getInstance().hasAllCharacterIsNumber(info2)
+							&& HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)) {
 				System.out.println("----- -----");
 				System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
 				System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
 				info2 = sc.nextLine();
 				System.out.println("----- -----");
 			}
-			String healthcareWorkerID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info2)
+			String healthcareWorkerID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info2)
 				? HealthcareWorkerManager.getInstance().findObjectById(info2).getId()
 				: HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1).getId();
 

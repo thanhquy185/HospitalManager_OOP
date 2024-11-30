@@ -269,10 +269,13 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info) && AccountManager.getInstance().findObjectById(info) == null
-                                                && !AccountManager.getInstance().findObjectById(info).getType().equals("Người dùng mới"))
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                    && (Integer.parseInt(info) < 1 || Integer.parseInt(info) > numberList || newUserList.get(Integer.parseInt(info) - 1) == null))) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && AccountManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && newUserList.get(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - TÀI KHOẢN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc tên tài khoản): ");
@@ -281,7 +284,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountUpdate = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         accountUpdate = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountUpdate =  newUserList.get(Integer.parseInt(info) - 1);
@@ -358,10 +361,13 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info) && AccountManager.getInstance().findObjectById(info) == null
-                                                && !AccountManager.getInstance().findObjectById(info).getType().equals("Người dùng mới"))
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                    && (Integer.parseInt(info) < 1 || Integer.parseInt(info) > numberList || newUserList.get(Integer.parseInt(info) - 1) == null))) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && SickManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && newUserList.get(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - TÀI KHOẢN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc tên tài khoản): ");
@@ -370,7 +376,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountRemove = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         accountRemove = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountRemove =  newUserList.get(Integer.parseInt(info) - 1);
@@ -638,9 +644,12 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc mã Khoa): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && DepartmentManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -650,7 +659,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Khoa cần sửa thông tin
                                     Department departmentUpdate = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         departmentUpdate = DepartmentManager.getInstance().findObjectById(info);
                                     } else {
                                         departmentUpdate =  DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -732,9 +741,12 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && DepartmentManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -744,7 +756,7 @@ public class App {
 
                                     // Tìm thông tin của Khoa cần xoá
                                     Department departmentRemove = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         departmentRemove = DepartmentManager.getInstance().findObjectById(info);
                                     } else {
                                         departmentRemove = DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1028,19 +1040,22 @@ public class App {
                                         System.out.println(++numberList + " - " + sick.getId() + " | " + sick.getName());
                                     }
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn SICKxxxxx)
-                                    System.out.print("? -- Chọn (số thứ tự hoặc mã Bệnh): ");
+                                    System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && SickManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && SickManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
                                         info = sc.nextLine();
                                     }
                                     Sick sickUpdate = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         sickUpdate = SickManager.getInstance().findObjectById(info);
                                     } else {
                                         sickUpdate =  SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1115,10 +1130,13 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && SickManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && SickManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
@@ -1126,7 +1144,7 @@ public class App {
                                     }
                                     // Lấy thông tin của Bệnh cần xoá
                                     Sick sickRemove = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         sickRemove = SickManager.getInstance().findObjectById(info);
                                     } else {
                                         sickRemove =  SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1424,10 +1442,13 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
@@ -1437,7 +1458,7 @@ public class App {
 
                                     // Tìm thông tin của Nhân viên Y tế cần sửa
                                     HealthcareWorker healthcareWorkerUpdate = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         healthcareWorkerUpdate = HealthcareWorkerManager.getInstance().findObjectById(info);
                                     } else {
                                         healthcareWorkerUpdate = HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1554,10 +1575,13 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC/NUR00001)
                                     System.out.print("? - Chọn: ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -1566,7 +1590,7 @@ public class App {
 
                                     // Lấy thông tin của Nhân viên Y tế cần xoá
                                     HealthcareWorker healthcareWorkerRemove = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         healthcareWorkerRemove = HealthcareWorkerManager.getInstance().findObjectById(info);
                                     } else {
                                         healthcareWorkerRemove =  HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1929,10 +1953,13 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh nhân): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && PatientManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && PatientManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH NHÂN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh nhân): ");
@@ -1942,7 +1969,7 @@ public class App {
 
                                     // Tìm thông tin của Bệnh nhân cần sửa
                                     Patient patientUpdate = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         patientUpdate = PatientManager.getInstance().findObjectById(info);
                                     } else {
                                         patientUpdate = PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -2038,10 +2065,13 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh nhân): ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && PatientManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && PatientManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - Bệnh nhân KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh nhân): ");
@@ -2051,7 +2081,7 @@ public class App {
 
                                     // Tìm thông tin của Bệnh nhân cần xoá
                                     Patient patientRemove = null;
-                                    if(myCharacterClass.getInstance().hasOneCharacterIsLetter(info)) {
+                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
                                         patientRemove = PatientManager.getInstance().findObjectById(info);
                                     } else {
                                         patientRemove = PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -2302,10 +2332,13 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn MER00001)
                                     System.out.print("? -- Chọn: ");
                                     String info = sc.nextLine();
-                                    while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                                                && MedicalRecordManager.getInstance().findObjectById(info) == null)
-                                            || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                                                && MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                                    && MedicalRecordManager.getInstance().findObjectById(info) == null)
+                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! -- BỆNH ÁN KHÔNG HỢP LỆ");
                                         System.out.print("?! -- Chọn lại: ");

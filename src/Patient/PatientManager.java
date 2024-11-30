@@ -148,7 +148,7 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 4 || choice == 6) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
-            while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
+            while(newPhone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (10 số): ");
@@ -218,32 +218,20 @@ public class PatientManager implements CRUD<Patient> {
             case "name asc":
                 PatientManager.list.sort(Comparator.comparing((Patient patient) -> {
                     String[] nameParts = patient.getFullname().split(" ");
-                    return nameParts[nameParts.length - 1];     // Lấy tên, là phần tử cuối của nameParts
+                    return nameParts[nameParts.length - 1];
                 }));
                 break;
             case "name desc":
                 PatientManager.list.sort(Comparator.comparing((Patient patient) -> {
                     String[] nameParts = patient.getFullname().split(" ");
-                    return nameParts[nameParts.length - 1];     // Lấy tên, là phần tử cuối của nameParts
+                    return nameParts[nameParts.length - 1];
                 }));
                 break;
             case "birthday asc":
-                PatientManager.list.sort(
-                    Comparator.comparing((Patient patient) -> patient.getBirthday().getYear())
-                        .thenComparing(patient -> patient.getBirthday().getMonth())
-                        .thenComparing(patient -> patient.getBirthday().getDay())
-                );
+                PatientManager.list.sort(Comparator.comparing((Patient patient) -> patient.getBirthday().calDays()));
                 break;
             case "birthday desc":
-                PatientManager.list.sort(
-                    Comparator.comparing((Patient patient) -> patient.getBirthday().getYear()).reversed()
-                        .thenComparing(patient -> patient.getBirthday().getMonth()).reversed()
-                        .thenComparing(patient -> patient.getBirthday().getDay()).reversed()
-                );
-                break;
-            default:
-                System.out.println("Lựa chọn sắp xếp không hợp lệ.");
-                break;
+                PatientManager.list.sort(Comparator.comparing((Patient patient) -> patient.getBirthday().calDays()).reversed());
         }
     }
     @Override

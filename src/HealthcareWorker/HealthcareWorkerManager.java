@@ -156,7 +156,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         if(choice == 4 || choice == 9) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
-            while(newPhone.length() != 10 || myCharacterClass.getInstance().hasOneCharacterIsNotNumber(newPhone)) {
+            while(newPhone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (10 số): ");
@@ -182,7 +182,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             if(healthcareWorkerUpdate.getIsManagerDepartment()) {
                 System.out.print(" - Nhập số năm kinh nghiệm (từ 4 trở lên): ");
                 yearsOfExperienceStr = sc.nextLine();
-                while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
+                while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                         || Integer.parseInt(yearsOfExperienceStr) < 4) {
                     System.out.println("----- -----");
                     System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -193,7 +193,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             } else {
                 System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
                 yearsOfExperienceStr = sc.nextLine();
-                while(myCharacterClass.getInstance().hasOneCharacterIsNotNumber(yearsOfExperienceStr)
+                while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                         || Integer.parseInt(yearsOfExperienceStr) < 0) {
                     System.out.println("----- -----");
                     System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -228,17 +228,20 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
             String info = sc.nextLine();
-            while((myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
-                        && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (!myCharacterClass.getInstance().hasOneCharacterIsNotNumber(info)
-                        && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
+                    || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
+                            && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
+                    || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                            && DepartmentManager.getInstance().findObjectById(info) == null)
+                    || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                    	    && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
                 System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
                 info = sc.nextLine();
             }
             // Lấy mã Khoa đã được chọn
-            String newDepartmentID = myCharacterClass.getInstance().hasOneCharacterIsLetter(info)
+            String newDepartmentID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
                 ? DepartmentManager.getInstance().findObjectById(info).getId()
                 : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
             healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
@@ -320,63 +323,49 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         // desc: Sắp xếp giảm dần
         switch(condition) {
             case "id asc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getId()
-                    ));
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getId()));
                 break;
             }
             case "id desc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getId()
-                    ).reversed());
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getId()).reversed());
                 break;
             }
             case "name asc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getFullname()
-                    ));
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> {
+                    String[] nameParts = healthcareWorker.getFullname().split(" ");
+                    return nameParts[nameParts.length - 1];
+                }));
                 break;
             }
             case "name desc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getFullname()
-                    ).reversed());
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> {
+                    String[] nameParts = healthcareWorker.getFullname().split(" ");
+                    return nameParts[nameParts.length - 1];
+                }).reversed());
                 break;
             }
             case "birthday asc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getBirthday().getDateFormatByCondition("has not cross")
-                    ));
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getBirthday().calDays()));
                 break;
             }
             case "birthday desc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getBirthday().getDateFormatByCondition("has not cross")
-                    ).reversed());
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getBirthday().calDays()).reversed());
                 break;
             }
             case "years asc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getYearsOfExperience()
-                    ));
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getYearsOfExperience()));
                 break;
             }
             case "years desc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getYearsOfExperience()
-                    ).reversed());
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getYearsOfExperience()).reversed());
                 break;
             }
             case "salary asc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getSalary()
-                    ));
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getSalary()));
                 break;
             }
             case "salary desc": {
-                HealthcareWorkerManager.list.sort(Comparator.comparing(
-                        (HealthcareWorker healthcareWorker) -> healthcareWorker.getSalary()
-                    ).reversed());
+                HealthcareWorkerManager.list.sort(Comparator.comparing((HealthcareWorker healthcareWorker) -> healthcareWorker.getSalary()).reversed());
             }
         }
     }
