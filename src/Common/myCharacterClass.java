@@ -14,26 +14,30 @@ public class myCharacterClass {
     // Methods
     // - Kiểm tra trong chuỗi có ít nhất 1 ký tự là chữ cái hay không ?
     public boolean hasOneCharacterIsLetter(String s) {
+        if(s.length() == 0) return false;
+        String validChars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOASDFGHJKLZXCVBM";
         for(int i = 0; i < s.length(); i++) {
-            if(Character.isLetter(s.charAt(i))) return true;
+            char c = s.charAt(i);
+            if(validChars.indexOf(c) != -1) return true;
         }
         return false;
     }
     // - Kiểm tra trong chuỗi có ít nhất 1 ký tự không phải là chữ số hay không ?
     public boolean hasOneCharacterIsNotNumber(String s) {
+        if(s.length() == 0) return false;
+        String validChars = "1234567890";
         for(int i = 0; i < s.length(); i++) {
-            if(!Character.isDigit(s.charAt(i))) return true;
+            char c = s.charAt(i);
+            if(validChars.indexOf(c) == -1) return true;
         }
         return false;
     }
     // - Hàm kiểm tra cho phép một chuỗi chỉ có ký tự chữ cái và chữ số
     public boolean onlyHasLetterAndDigit(String s) {
+        String validChars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOASDFGHJKLZXCVBM1234567890";
         for(int i = 0; i < s.length(); i++) {
-            int charUnicode = (int) s.charAt(i);
-            if((charUnicode >= 48 && charUnicode <= 57)
-                || (charUnicode >= 65 && charUnicode <= 90)
-                || (charUnicode >= 97 && charUnicode <= 122)) continue;
-            return false;
+            char c = s.charAt(i);
+            if(validChars.indexOf(c) == -1) return false;
         }
         return true;
     }
