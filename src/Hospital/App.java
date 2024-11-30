@@ -2582,10 +2582,8 @@ public class App {
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
                                         medicalRecord.giveFoodToPatient();
-                                        if(medicalRecord.getType().equals("Chữa bệnh")) {
-                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveFoodToPatient();
-                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveFoodToPatient();
-                                        }
+                                        HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveFoodToPatient();
+                                        PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveFoodToPatient();
                                     }
 
                                     // Thông báo hỏi có tiếp tục hay không
@@ -2611,15 +2609,13 @@ public class App {
                                         continue subLoop2;
                                     }
 
-                                    // Thực hiện công việc Khám
+                                    // Thực hiện công việc Đưa thuốc uống cho các Bệnh nhân
                                     int numberList = 1;
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
                                         medicalRecord.giveCurativeToPatient();
-                                        if(medicalRecord.getType().equals("Chữa bệnh") && (medicalRecord.getSickLevel().equals("Nhẹ") || medicalRecord.getSickLevel().equals("Vừa"))) {
-                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveCurativeToPatient();
-                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveCurativeToPatient();
-                                        }
+                                        HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).giveCurativeToPatient();
+                                        PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).giveCurativeToPatient();
                                     }
 
                                     // Thông báo hỏi có tiếp tục hay không
@@ -2650,10 +2646,8 @@ public class App {
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         System.out.println("Hồ sơ Bệnh án thứ " + numberList++);
                                         medicalRecord.injectCurativePatient();
-                                        if(medicalRecord.getType().equals("Chữa bệnh") && medicalRecord.getSickLevel().equals("Nặng")) {
-                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).injectCurativePatient();
-                                            PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).injectCurativePatient();
-                                        }
+                                        HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).injectCurativePatient();
+                                        PatientManager.getInstance().findObjectById(medicalRecord.getPatientID()).injectCurativePatient();
                                     }
 
                                     // Thông báo hỏi có tiếp tục hay không
@@ -2673,20 +2667,6 @@ public class App {
                         } else if(subChoice1.equals("9")) {
                             System.out.println("Đã chọn Truy xuất dữ liệu Bệnh viện");
 
-                            // Đặt lại tất cả dữ liệu của Bệnh viện
-                            AccountManager.getInstance().setList(new ArrayList<>());
-                            AccountManager.getInstance().setNumbers(0);
-                            DepartmentManager.getInstance().setList(new ArrayList<>());
-                            DepartmentManager.getInstance().setNumbers(0);
-                            SickManager.getInstance().setList(new ArrayList<>());
-                            SickManager.getInstance().setNumbers(0);
-                            HealthcareWorkerManager.getInstance().setList(new ArrayList<>());
-                            HealthcareWorkerManager.getInstance().setNumbers(0);
-                            PatientManager.getInstance().setList(new ArrayList<>());
-                            PatientManager.getInstance().setNumbers(0);
-                            MedicalRecordManager.getInstance().setList(new ArrayList<>());
-                            MedicalRecordManager.getInstance().setNumbers(0);
-
                             // Truy xuất dữ liệu từ cả các file
                             AccountManager.getInstance().loadFromFile();
                             DepartmentManager.getInstance().loadFromFile();
@@ -2696,7 +2676,7 @@ public class App {
                             MedicalRecordManager.getInstance().loadFromFile();
 
                             // Thông báo đã truy xuất dữ liệu Bệnh viện thành công
-                            System.out.println("Đã truy xuất dữ liệu Bệnh viện thành công");
+                            System.out.println("! - Đã truy xuất dữ liệu Bệnh viện thành công");
 
                             // Thông báo hỏi có tiếp tục hay không
                             System.out.print("Nhập 'YES' để tiếp tục: ");
@@ -2722,7 +2702,7 @@ public class App {
                             MedicalRecordManager.getInstance().saveToFile();
 
                             // Thông báo đã sao lưu dữ liệu Bệnh viện thành công
-                            System.out.println("Đã sao lưu dữ liệu Bệnh viện thành công");
+                            System.out.println("! - Đã sao lưu dữ liệu Bệnh viện thành công");
 
                             // Thông báo hỏi có tiếp tục hay không
                             System.out.print("Nhập 'YES' để tiếp tục: ");

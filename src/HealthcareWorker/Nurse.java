@@ -31,19 +31,15 @@ public class Nurse extends HealthcareWorker {
 		return basicSalary + basicSalary * this.yearsOfExperience * salaryCoefficient;
 	}
     @Override
-	public void testPatient() {
-		System.out.println(" - Y tá chuẩn bị các thiết bị. Tiến hành công việc khám");
-	}
-	@Override
 	public void giveFoodToPatient() {
-		System.out.println(" - Y tá chuẩn bị khẩu phần ăn. Đưa cho Bệnh nhân");
-	}
+        System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+    }
 	@Override
 	public void giveCurativeToPatient() {
-		System.out.println(" - Y tá chuẩn bị thuốc uống và một số thứ khác. Đưa cho Bệnh nhân");
-	}
+        System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+    }
 	@Override
 	public void injectCurativePatient() {
-		System.out.println(" - Y tá chuẩn bị ông tiếm. Tiến hành công việc tiêm thuốc");
-	}
+        System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+    }
 }

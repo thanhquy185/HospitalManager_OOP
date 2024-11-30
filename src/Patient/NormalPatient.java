@@ -1,6 +1,8 @@
 package Patient;
 
 import Common.Date;
+import MedicalRecord.MedicalRecord;
+import MedicalRecord.MedicalRecordManager;
 
 public class NormalPatient extends Patient {
     //Properties
@@ -24,25 +26,14 @@ public class NormalPatient extends Patient {
     }
 
     //Methods
-    // - Hàm khám cho Bệnh nhân
-	@Override
-	public void testPatient() {
-		System.out.println(" - Bệnh nhân đã được khám xong. Sức khoẻ có lẽ có tiến triển hơn chút");
-	}
-	// - Hàm đưa khẩu phần ăn cho Bệnh nhân
-	@Override
-	public void giveFoodToPatient() {
-		System.out.println(" - Bệnh nhân đã nhận được khẩu phần ăn loại Bình thường");
-	}
-	// - Hàm đưa thuốc uống cho Bệnh nhân (mức độ Bệnh: Nhẹ hoặc Vừa)
 	@Override
 	public void giveCurativeToPatient() {
-		System.out.println(" - Bệnh nhân đã nhận được thuốc uống, nước lọc và một chút bánh ngọt");
-
-	}
-	// - Hàm tiêm thuốc cho Bệnh nhân (mức độ Bệnh: Nặng)
-	@Override
-	public void injectCurativePatient() {
-		System.out.println(" - Bệnh nhân đã được tiêm thuốc xong. Bệnh nhân đang nghỉ ngơi");
+        MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh") 
+                && (currentMedicalRecord.getSickLevel().equals("Nhẹ") || currentMedicalRecord.getSickLevel().equals("Vừa"))) {
+		    System.out.println(" - Bệnh nhân " + this.fullname + " đã nhận được thuốc uống, nước lọc");
+        } else {
+            System.out.println(" - Bệnh nhân " + this.fullname + " không làm gì và tiếp tục nghỉ ngơi");
+        }
 	}
 }

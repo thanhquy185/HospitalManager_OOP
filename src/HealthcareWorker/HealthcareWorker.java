@@ -281,4 +281,14 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
             + " | " + this.departmentID + " | " + (this.isManagerDepartment ? "Có" : "Không") 
             + " | " + this.medicalRecordID;
     }
+    @Override
+	public void testPatient() {
+		System.out.println(" - " + this.type + " " + this.fullname + " chuẩn bị các thiết bị (theo chế độ chăm sóc). Tiến hành công việc khám");
+	}
+	@Override
+	public void giveFoodToPatient() {}
+	@Override
+	public void giveCurativeToPatient() {}
+	@Override
+	public void injectCurativePatient() {}
 }

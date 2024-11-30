@@ -1,6 +1,8 @@
 package HealthcareWorker;
 
 import Common.Date;
+import MedicalRecord.MedicalRecord;
+import MedicalRecord.MedicalRecordManager;
 
 public class Doctor extends HealthcareWorker {
     //Properties
@@ -31,20 +33,32 @@ public class Doctor extends HealthcareWorker {
         double salaryCoefficient = this.isManagerDepartment == true ? 0.5 : 0.2;
 		return basicSalary + basicSalary * this.yearsOfExperience * salaryCoefficient;
 	}
-   @Override
-	public void testPatient() {
-		System.out.println(" - Bác sĩ chuẩn bị các thiết bị. Tiến hành công việc khám");
-	}
-	@Override
+    @Override
 	public void giveFoodToPatient() {
-		System.out.println(" - Bác sĩ chuẩn bị khẩu phần ăn. Đưa cho Bệnh nhân");
+        MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh")) {
+            System.out.println(" - " + this.type + " " + this.fullname + " chuẩn bị khẩu phần ăn (theo chế độ chăm sóc). Đưa cho Bệnh nhân");
+        } else {
+            System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+        }
 	}
 	@Override
 	public void giveCurativeToPatient() {
-		System.out.println(" - Bác sĩ chuẩn bị thuốc uống và một số thứ khác. Đưa cho Bệnh nhân");
+        MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh")
+                && (currentMedicalRecord.getSickLevel().equals("Nhẹ") || currentMedicalRecord.getSickLevel().equals("Vừa"))) {
+            System.out.println(" - " + this.type + " " + this.fullname + " chuẩn bị thuốc uống và một số thứ khác (theo chế độ chăm sóc). Đưa cho Bệnh nhân");
+        } else {
+            System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+        }
 	}
 	@Override
 	public void injectCurativePatient() {
-		System.out.println(" - Bác sĩ chuẩn bị ông tiếm. Tiến hành công việc tiêm thuốc");
+        MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh") && currentMedicalRecord.getSickLevel().equals("Nặng")) {
+            System.out.println(" - " + this.type + " " + this.fullname + " chuẩn bị ông tiếm (theo chế độ chăm sóc). Tiến hành công việc tiêm thuốc");
+        } else {
+            System.out.println(" - " + this.type + " " + this.fullname + " không làm gì");
+        }
 	}
 }

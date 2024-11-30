@@ -1,7 +1,9 @@
 package MedicalRecord;
 
 import Common.Date;
+import HealthcareWorker.HealthcareWorker;
 import HealthcareWorker.HealthcareWorkerManager;
+import Patient.Patient;
 import Patient.PatientManager;
 
 public class TreatmentRecord extends MedicalRecord {
@@ -50,29 +52,36 @@ public class TreatmentRecord extends MedicalRecord {
 	}
 	@Override
 	public void giveFoodToPatient() {
-		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
-			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
-		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc đưa khẩu phần ăn cho Bệnh nhân "
-			+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
+		Patient currentPatient = PatientManager.getInstance().findObjectById(this.patientID);
+		HealthcareWorker currentHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID);
+		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ", " + currentPatient.getType() + ")"
+			+ " đang được kiểm tra bởi Nhân viên Y tế " + currentHealthcareWorker.getId() + " - " + currentHealthcareWorker.getFullname());
+		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc đưa khẩu phần ăn cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
 	}
 	@Override
 	public void giveCurativeToPatient() {
-		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
-			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
-		if(this.sickLevel.equals("Nhẹ") || this.sickLevel.equals("Vừa"))
-			System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc đưa thuốc uống cho Bệnh nhân "
-				+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
-		else System.out.println(" - Việc kiểm tra hoàn tất. Không thể tiến hành công việc đưa thuốc uống cho Bệnh nhân "
-				+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
+		HealthcareWorker currentHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID);
+		Patient currentPatient = PatientManager.getInstance().findObjectById(this.patientID);
+		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ", " + currentPatient.getType() + ")"
+			+ " đang được kiểm tra bởi Nhân viên Y tế " + currentHealthcareWorker.getId() + " - " + currentHealthcareWorker.getFullname());
+		if(this.sickLevel.equals("Nhẹ") || this.sickLevel.equals("Vừa")) {
+			System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc khám cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
+		}
+		else {
+			System.out.println(" - Việc kiểm tra hoàn tất. Không thể tiến hành công việc đưa thuốc uống cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
+		} 
 	}
 	@Override
 	public void injectCurativePatient() {
-		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
-			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
-		if(this.sickLevel.equals("Nặng"))
-			System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc tiêm thuốc cho Bệnh nhân "
-				+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
-		else System.out.println(" - Việc kiểm tra hoàn tất. Không thể tiến hành công việc tiêm thuốc cho Bệnh nhân "
-				+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
+		HealthcareWorker currentHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID);
+		Patient currentPatient = PatientManager.getInstance().findObjectById(this.patientID);
+		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ", " + currentPatient.getType() + ")"
+			+ " đang được kiểm tra bởi Nhân viên Y tế " + currentHealthcareWorker.getId() + " - " + currentHealthcareWorker.getFullname());
+		if(this.sickLevel.equals("Nặng")) {
+			System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc tiêm thuốc cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
+		}
+		else {
+			System.out.println(" - Việc kiểm tra hoàn tất. Không thể tiến hành công việc tiêm thuốc cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
+		} 
 	}
 }

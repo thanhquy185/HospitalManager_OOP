@@ -3,6 +3,8 @@ package Patient;
 import java.util.Scanner;
 
 import Common.*;
+import MedicalRecord.MedicalRecord;
+import MedicalRecord.MedicalRecordManager;
 public abstract class Patient extends Person implements ActionsInHospital {
     // Properties
     protected String id;
@@ -171,4 +173,28 @@ public abstract class Patient extends Person implements ActionsInHospital {
         return this.fullname + " | " + this.birthday.getDateFormatByCondition("has cross") + " | " + this.gender
             + " | " + this.phone + " | " + this.country + " | " + this.id + " | " + this.type + " | " + this.medicalRecordID;
     }
+    @Override
+    public void testPatient() {
+        System.out.println(" - Bệnh nhân " + this.fullname + " đã được khám xong (chế độ chăm sóc: "+ this.type + "). Sức khoẻ có lẽ có tiến triển hơn chút");
+    }
+    @Override
+	public void giveFoodToPatient() {
+        MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh")) {
+            System.out.println(" - Bệnh nhân " + this.fullname + " đã nhận được khẩu phần ăn loại " + this.type);
+        } else {
+            System.out.println(" - Bệnh nhân " + this.fullname + " không làm gì và tiếp tục nghỉ ngơi");
+        }
+	}
+	@Override
+	public void giveCurativeToPatient() {}
+	@Override
+	public void injectCurativePatient() {
+		MedicalRecord currentMedicalRecord = MedicalRecordManager.getInstance().findObjectById(this.medicalRecordID);
+        if(currentMedicalRecord.getType().equals("Chữa bệnh") && currentMedicalRecord.getSickLevel().equals("Nặng")) {
+		    System.out.println(" - Bệnh nhân " + this.fullname + " đã được tiêm thuốc loại " + this.type + " xong. Bệnh nhân đang nghỉ ngơi");
+        } else {
+            System.out.println(" - Bệnh nhân " + this.fullname + " không làm gì và tiếp tục nghỉ ngơi");
+        }
+	}
 }

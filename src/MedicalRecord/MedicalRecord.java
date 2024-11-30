@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 import Common.*;
 import Sick.*;
-import HealthcareWorker.HealthcareWorker;
-import HealthcareWorker.HealthcareWorkerManager;
-import Patient.PatientManager;
+import HealthcareWorker.*;
+import Patient.*;
 
 public abstract class MedicalRecord implements ActionsInHospital {
     //	Properties
@@ -295,10 +294,18 @@ public abstract class MedicalRecord implements ActionsInHospital {
 			+ " | " + this.fee + " | " + this.patientID + " | " + this.healthcareWorkerID 
 			+ " | " + this.sickID + " | " + this.sickLevel;
     }
+	@Override
 	public void testPatient() {
-		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ")" + " đang được kiểm tra bởi Nhân viên Y tế "
-			+ this.healthcareWorkerID + " - " + HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID).getFullname());
-		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc khám cho Bệnh nhân "
-			+ this.patientID + " - " + PatientManager.getInstance().findObjectById(this.patientID).getFullname());
+		Patient currentPatient = PatientManager.getInstance().findObjectById(this.patientID);
+		HealthcareWorker currentHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(this.healthcareWorkerID);
+		System.out.println(" - Hồ sơ Bệnh án " + "(" + this.id + ", " + this.type + ", " + this.sickID + ", " + this.sickLevel + ", " + currentPatient.getType() + ")"
+			+ " đang được kiểm tra bởi Nhân viên Y tế " + currentHealthcareWorker.getId() + " - " + currentHealthcareWorker.getFullname());
+		System.out.println(" - Việc kiểm tra hoàn tất. Tiến hành công việc khám cho Bệnh nhân " + currentPatient.getId() + " - " + currentPatient.getFullname());
 	}
+	@Override
+	public void giveFoodToPatient() {}
+	@Override
+	public void giveCurativeToPatient() {}
+	@Override
+	public void injectCurativePatient() {}
 }
