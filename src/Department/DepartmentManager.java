@@ -122,17 +122,20 @@ public class DepartmentManager implements CRUD<Department> {
             ArrayList<HealthcareWorker> doctorSearchList = new ArrayList<>();
             for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
                 if(healthcareWorker.getDepartmentID().equals(departmentUpdate.getId())
-                    && healthcareWorker.getIsManagerDepartment() == false
-                    && healthcareWorker.getType().equals("Bác sĩ")) doctorSearchList.add(healthcareWorker);
+                    && healthcareWorker.getIsManagerDepartment() == false && healthcareWorker.getType().equals("Bác sĩ")
+                    && healthcareWorker.getYearsOfExperience() >= 4) doctorSearchList.add(healthcareWorker);
             }
             if(doctorSearchList.size() == 0) {
                 System.out.println("Hiện tại Khoa " + departmentUpdate.getId() + " - " + departmentUpdate.getName() 
                     + " không có Bác sĩ cùng Khoa nào để có thể bổ nhiểm làm trưởng Khoa");
             } else {
                 // Thiết lập lại trưởng Khoa cũ
-                HealthcareWorker oldHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID());
-                oldHealthcareWorker.setIsManagerDepartment(false);
-                oldHealthcareWorker.setSalary(oldHealthcareWorker.calSalary());
+                HealthcareWorker oldHealthcareWorker = null;
+                if(departmentUpdate.getManagerID() != null) {
+                    oldHealthcareWorker = HealthcareWorkerManager.getInstance().findObjectById(departmentUpdate.getManagerID());
+                    oldHealthcareWorker.setIsManagerDepartment(false);
+                    oldHealthcareWorker.setSalary(oldHealthcareWorker.calSalary());
+                }
 
                 // - Chọn Bác sĩ từ danh sách
                 System.out.println(" - Chọn Bác sĩ cần bổ nhiệm");
@@ -170,13 +173,6 @@ public class DepartmentManager implements CRUD<Department> {
                 departmentUpdate.setManagerID(doctorSelect.getId());
                 doctorSelect.setIsManagerDepartment(true);
                 doctorSelect.setSalary(doctorSelect.calSalary());
-            }
-            // Hỏi đã đọc thông báo chưa ?
-            System.out.print("Bạn đã đọc xong thông báo. Nhập 'YES' để tiếp tục: ");
-            String wantContinue = sc.nextLine();
-            while(!wantContinue.equals("YES")) {
-                System.out.print("- Bạn đã không nhập 'YES', nhập lại nếu đã đọc xong: ");
-                wantContinue = sc.nextLine();
             }
         }
         if(choice == 3 || choice == 4) {

@@ -109,7 +109,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
     @Override
     public void update(HealthcareWorker healthcareWorkerUpdate, int choice) {
         Scanner sc = new Scanner(System.in);
-        if(choice == 1 || choice == 9) {
+        if(choice == 1 || choice == 8) {
             System.out.print(" - Nhập họ tên mới: "); 
             String newFullname = sc.nextLine();
             while(!myClass.getInstance().isValidName(newFullname)) {
@@ -121,7 +121,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setFullname(newFullname);
         }
-        if(choice == 2 || choice == 9) {
+        if(choice == 2 || choice == 8) {
             Date medicalRecordInputDay = null;
             if(healthcareWorkerUpdate.getMedicalRecordID() != null) {
                 medicalRecordInputDay = MedicalRecordManager.getInstance().findObjectById(healthcareWorkerUpdate.getMedicalRecordID()).getInputDay();
@@ -130,7 +130,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             String newBirthdayStr = sc.nextLine();
             while(!Date.getInstance().isDateFormat(newBirthdayStr)
                     || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()
-                    || !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(newBirthdayStr), medicalRecordInputDay)) {
+                    || (medicalRecordInputDay != null && !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(newBirthdayStr), medicalRecordInputDay))) {
                 System.out.println("----- -----");
                 System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
@@ -141,7 +141,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             healthcareWorkerUpdate.setBirthday(newBirthdayObj);
             AccountManager.getInstance().findObjectById(healthcareWorkerUpdate.getId()).setPassword(newBirthdayObj.getDateFormatByCondition("has not cross"));
         }
-        if(choice == 3 || choice == 9) {
+        if(choice == 3 || choice == 8) {
             System.out.print(" - Nhập giới tính mới (Nam hoặc Nữ): "); 
             String newGender = sc.nextLine();
             while(!newGender.equals("Nam") && !newGender.equals("Nữ")) {
@@ -153,7 +153,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setGender(newGender);
         }
-        if(choice == 4 || choice == 9) {
+        if(choice == 4 || choice == 8) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
             while(newPhone.length() != 10 || !myClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
@@ -165,7 +165,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setPhone(newPhone);
         }
-        if(choice == 5 || choice == 9) {
+        if(choice == 5 || choice == 8) {
             System.out.print(" - Nhập quốc tịch mới: ");
             String newCountry = sc.nextLine();
             while(!myClass.getInstance().isValidName(newCountry)) {
@@ -177,7 +177,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             }
             healthcareWorkerUpdate.setCountry(newCountry);
         }
-        if(choice == 6 || choice == 9) {
+        if(choice == 6 || choice == 8) {
             String yearsOfExperienceStr = null;
             if(healthcareWorkerUpdate.getIsManagerDepartment()) {
                 System.out.print(" - Nhập số năm kinh nghiệm (từ 4 trở lên): ");
@@ -206,7 +206,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             healthcareWorkerUpdate.setYearsOfExperience(yearsOfExperienceInt);
             healthcareWorkerUpdate.setSalary(healthcareWorkerUpdate.calSalary());
         }
-        if(choice == 7 || choice == 9) {
+        if(choice == 7 || choice == 8) {
             // Xử lý những vấn đề chưa hợp logic ở Khoa cũ
             Department oldDepartment = DepartmentManager.getInstance().findObjectById(healthcareWorkerUpdate.getDepartmentID());
             if(oldDepartment != null) {
@@ -243,44 +243,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
                 ? DepartmentManager.getInstance().findObjectById(info).getId()
                 : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
             healthcareWorkerUpdate.setDepartmentID(newDepartmentID);
-        }
-        if(choice == 8 || choice == 9) {
-            // Lấy ra mã Khoa quản lí Nhân viên Y tế hiện tại
-            String departmentID = healthcareWorkerUpdate.getDepartmentID();
-            // Nếu Khoa quản lí hiện tại chưa có trưởng Khoa thì có thể thiết lập trưởng Khoa
-            Department currentDepartment = DepartmentManager.getInstance().findObjectById(departmentID);
-            if(currentDepartment.getManagerID() != null) {
-                System.out.println("Khoa " + departmentID + " hiện tại đã có trưởng Khoa");
-                if(currentDepartment.getManagerID().equals(healthcareWorkerUpdate.getId())) {
-                    System.out.println("Trưởng Khoa chính là Nhân viên Y tế đang được sửa");
-                }
-                else {
-                    System.out.println("Trưởng Khoa không phải là Nhân viên Y tế đang được sửa");
-                }
-            } else {
-                System.out.println("Vì Khoa " + departmentID + " hiện tại chưa có trưởng Khoa");
-                System.out.println("Bạn có muốn bổ nhiệm Nhân viên này làm trưởng Khoa ?");
-                System.out.print(" - Nhập 'YES' để xác nhận: ");
-                String conform = sc.nextLine();
-                if(conform.equals("YES")) {
-                    if(healthcareWorkerUpdate.getType().equals("Bác sĩ")) {
-                        DepartmentManager.getInstance().findObjectById(departmentID).setManagerID(healthcareWorkerUpdate.getId());
-                        healthcareWorkerUpdate.setIsManagerDepartment(true);
-                        System.out.println(" - Đã bổ nhiểm Nhân viên Y tế làm trưởng Khoa");
-                    } else {
-                        System.out.println(" - Vì Nhân viên Y tế hiện tại là Y tá nên không thể bổ nhiệm làm trưởng Khoa");
-                    }
-                } else {
-                    System.out.println("Bạn đã không nhập 'YES' nên không bổ nhiệm");
-                }
-            }
-            // Hỏi đã đọc thông báo chưa ?
-            System.out.print("Bạn đã đọc xong thông báo. Nhập 'YES' để tiếp tục: ");
-            String wantContinue = sc.nextLine();
-            while(!wantContinue.equals("YES")) {
-                System.out.print("- Bạn đã không nhập 'YES', nhập lại nếu đã đọc xong: ");
-                wantContinue = sc.nextLine();
-            }
+            healthcareWorkerUpdate.setSalary(healthcareWorkerUpdate.calSalary());
         }
     }
     @Override

@@ -116,13 +116,15 @@ public class PatientManager implements CRUD<Patient> {
             patientUpdate.setFullname(newFullname);
         }
         if(choice == 2 || choice == 6) {
+            Date medicalRecordInputDay = null;
+            if(patientUpdate.getMedicalRecordID() != null) {
+                medicalRecordInputDay = MedicalRecordManager.getInstance().findObjectById(patientUpdate.getMedicalRecordID()).getInputDay();
+            }
             System.out.print(" - Nhập ngày sinh mới (dd-mm-yyyy hoặc ddmmyyyy): ");
             String newBirthdayStr = sc.nextLine();
             while(!Date.getInstance().isDateFormat(newBirthdayStr)
                     || !Date.getInstance().getDateFromDateFormat(newBirthdayStr).isDate()
-                    || !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(newBirthdayStr),
-                            MedicalRecordManager.getInstance().findObjectById(patientUpdate.getMedicalRecordID()).getInputDay()
-                        )) {
+                    || (medicalRecordInputDay != null && !Date.getInstance().checkBeforeAfterDate(Date.getInstance().getDateFromDateFormat(newBirthdayStr), medicalRecordInputDay))) {
                 System.out.println("----- -----");
                 System.out.println("! - NGÀY SINH KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (dd-mm-yyyy hoặc ddmmyyyy): ");
@@ -191,8 +193,9 @@ public class PatientManager implements CRUD<Patient> {
         ArrayList<Patient> patientSearchList = new ArrayList<>();
         for(Patient patient : PatientManager.list) {
             if(patient.getFullname().toLowerCase().contains(info.trim().toLowerCase())
-                    || patient.getId().equals(info) || patient.getMedicalRecordID().equals(info))
+                    || patient.getId().equals(info) || patient.getMedicalRecordID().equals(info)) {
                 patientSearchList.add(patient);
+            }
         }
         // Thông báo kết quả tìm được
         if(patientSearchList.size() == 0) {
@@ -225,7 +228,7 @@ public class PatientManager implements CRUD<Patient> {
                 PatientManager.list.sort(Comparator.comparing((Patient patient) -> {
                     String[] nameParts = patient.getFullname().split(" ");
                     return nameParts[nameParts.length - 1];
-                }));
+                }).reversed());
                 break;
             case "birthday asc":
                 PatientManager.list.sort(Comparator.comparing((Patient patient) -> patient.getBirthday().calDays()));

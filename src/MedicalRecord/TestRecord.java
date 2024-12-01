@@ -41,11 +41,11 @@ public class TestRecord extends MedicalRecord {
 		// Mặc định các loại Bệnh khác nhau đều có chung một hệ số phí (phức tạp quá nên Quy không dám làm sợ sai ngữ nghĩa)
 		feeCoefficient += 1;
 		// Tuỳ theo mức độ của Bệnh mà hệ số phí sẽ khác
-		if(this.type.equals("Nhẹ")) {
+		if(this.sickLevel.equals("Nhẹ")) {
 			feeCoefficient += 0.2;
-		} else if(this.type.equals("Vừa")) {
+		} else if(this.sickLevel.equals("Vừa")) {
 			feeCoefficient += 0.5;
-		} else if(this.type.equals("Nặng")) {
+		} else if(this.sickLevel.equals("Nặng")) {
 			feeCoefficient += 0.8;
 		}
 		return basicFee + basicFee*feeCoefficient;

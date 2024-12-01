@@ -91,6 +91,10 @@ public class Department {
             int unicode = (int) name.charAt(i);
             if(unicode < 48 || unicode > 57) return false;
         }
+        // -- Kiểm tra số phòng đó đã tồn tại hay chưa ?
+        for(Department department : DepartmentManager.getInstance().getList()) {
+            if(department.getRoom().equals(name)) return false;
+        }
         return true;
     }
 	// - Kiểm tra có đúng định dạng DEPxxxxx

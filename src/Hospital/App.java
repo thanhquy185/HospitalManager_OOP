@@ -1248,10 +1248,6 @@ public class App {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Bệnh");
 
-                                    // Đặt lại tất cả dữ liệu của Bệnh
-                                    SickManager.getInstance().setList(new ArrayList<>());
-                                    SickManager.getInstance().setNumbers(0);
-
                                     // Truy xuất dữ liệu từ Bệnh
                                     SickManager.getInstance().loadFromFile();
 
@@ -1457,13 +1453,12 @@ public class App {
                                         System.out.println("5 - Quốc tịch");
                                         System.out.println("6 - Số năm kinh nghiệm");
                                         System.out.println("7 - Khoa quản lý");
-                                        System.out.println("8 - Làm trưởng Khoa");
-                                        System.out.println("9 - Tất cả");
+                                        System.out.println("8 - Tất cả");
                                         System.out.print("? - Chọn: ");
                                         String subChoice3 = sc.nextLine();
 
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 9)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 8)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -1511,19 +1506,8 @@ public class App {
                                                 break;
                                             }
                                             case 8: {
-                                                System.out.println("Đã chọn cập nhật Làm trưởng Khoa");
-                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 8);
-                                                System.out.print(" - Nhập 'YES' để tiếp tục: ");
-                                                String wantContinue = sc.nextLine();
-                                                if(!wantContinue.equals("YES")) {
-                                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                                    break mainLoop;
-                                                }
-                                                break;
-                                            }
-                                            case 9: {
                                                 System.out.println("Đã chọn cập nhật Tất cả");
-                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 9);
+                                                HealthcareWorkerManager.getInstance().update(healthcareWorkerUpdate, 8);
                                             }
                                         }
 
@@ -2070,6 +2054,7 @@ public class App {
                                     for(MedicalRecord medicalRecord : MedicalRecordManager.getInstance().getList()) {
                                         if(medicalRecord.getPatientID().equals(patientRemoveID)) {
                                             MedicalRecordManager.getInstance().remove(medicalRecord.getId());
+                                            HealthcareWorkerManager.getInstance().findObjectById(medicalRecord.getHealthcareWorkerID()).setMedicalRecordID(null);
                                             break;
                                         }
                                     }
@@ -2185,10 +2170,6 @@ public class App {
                                 } else if(subChoice2.equals("8")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Truy xuất dữ liệu Bệnh nhân");
-
-                                    // Đặt lại tất cả dữ liệu của Bệnh nhân
-                                    PatientManager.getInstance().setList(new ArrayList<>());
-                                    PatientManager.getInstance().setNumbers(0);
 
                                     // Truy xuất dữ liệu từ Bệnh nhân
                                     PatientManager.getInstance().loadFromFile();
