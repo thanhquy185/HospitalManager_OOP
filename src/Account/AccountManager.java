@@ -11,7 +11,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import Common.CRUD;
-import Common.myCharacterClass;
+import Common.myClass;
 
 public class AccountManager implements CRUD<Account> {
     // Properties
@@ -70,8 +70,8 @@ public class AccountManager implements CRUD<Account> {
 
         // -- Kiểm tra tên tài khoản phải là ký tự chữ cái và chữ số
         // -- Kiểm tra mật khẩu phải là ký tự chữ cái và chữ số
-        if(!myCharacterClass.getInstance().onlyHasLetterAndDigit(username)
-            || !myCharacterClass.getInstance().onlyHasLetterAndDigit(password)) return false;
+        if(!myClass.getInstance().onlyHasLetterAndNumber(username)
+            || !myClass.getInstance().onlyHasLetterAndNumber(password)) return false;
 
         return true;
     }
@@ -126,7 +126,7 @@ public class AccountManager implements CRUD<Account> {
         if(choice == 1 || choice == 3) {
             System.out.print(" - Nhập tên tài khoản mới: ");
             String newUsername = sc.nextLine();
-            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newUsername)
+            while(!myClass.getInstance().onlyHasLetterAndNumber(newUsername)
                     || findObjectById(newUsername) != null) {
                 System.out.println("----- -----");
                 System.out.println("! - KHÔNG THỂ THAY ĐỔI");
@@ -138,7 +138,7 @@ public class AccountManager implements CRUD<Account> {
         if(choice == 2 || choice == 3) {
             System.out.print(" - Nhập mật khẩu mới: ");
             String newPassword = sc.nextLine();
-            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(newPassword)) {
+            while(!myClass.getInstance().onlyHasLetterAndNumber(newPassword)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHÔNG THỂ THAY ĐỔI");
                 System.out.print(" - Nhập lại mật khẩu mới: ");

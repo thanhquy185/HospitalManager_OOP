@@ -2,7 +2,7 @@ package Department;
 
 import java.util.Scanner;
 
-import Common.myCharacterClass;
+import Common.myClass;
 
 public class Department {
     // Properties
@@ -120,7 +120,7 @@ public class Department {
         // Nhập tên Khoa
         System.out.print(" - Nhập tên Khoa: ");
         String name = sc.nextLine();
-        while(!myCharacterClass.getInstance().isValidName(name)) {
+        while(!myClass.getInstance().isValidName(name)) {
             System.out.println("----- -----");
             System.out.println("! - TÊN KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại: ");

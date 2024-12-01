@@ -106,7 +106,7 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 1 || choice == 6) {
             System.out.print(" - Nhập họ và tên mới: ");
             String newFullname = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newFullname)) {
+            while(!myClass.getInstance().isValidName(newFullname)) {
                 System.out.println("----- -----");
                 System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");
@@ -148,7 +148,7 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 4 || choice == 6) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
-            while(newPhone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
+            while(newPhone.length() != 10 || !myClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (10 số): ");
@@ -160,7 +160,7 @@ public class PatientManager implements CRUD<Patient> {
         if(choice == 5 || choice == 6) {
             System.out.print(" - Nhập quốc tịch mới: ");
             String newCountry = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newCountry)) {
+            while(!myClass.getInstance().isValidName(newCountry)) {
                 System.out.println("----- -----");
                 System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");

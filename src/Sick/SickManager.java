@@ -3,6 +3,9 @@ package Sick;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
+
+import Account.AccountManager;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,7 +13,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 import Common.CRUD;
-import Common.myCharacterClass;
+import Common.myClass;
 import Department.*;
 
 public class SickManager implements CRUD<Sick> {
@@ -104,7 +107,7 @@ public class SickManager implements CRUD<Sick> {
         if(choice == 1 || choice == 3) {
             System.out.print(" - Nhập tên mới: ");
             String newName = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newName)) {
+            while(!myClass.getInstance().isValidName(newName)) {
                 System.out.println("----- -----");
                 System.out.println("! - TÊN KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");
@@ -125,12 +128,10 @@ public class SickManager implements CRUD<Sick> {
             // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
             String info = sc.nextLine();
-            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                    || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                            && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                    || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+            while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                    || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                             && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                    || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                             && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -138,7 +139,7 @@ public class SickManager implements CRUD<Sick> {
                 info = sc.nextLine();
             }
             // Lấy mã Khoa đã được chọn
-            String newDepartmentID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+            String newDepartmentID = !myClass.getInstance().hasAllCharacterIsNumber(info)
                 ? DepartmentManager.getInstance().findObjectById(info).getId()
                 : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
             sickUpdate.setDepartmentID(newDepartmentID);

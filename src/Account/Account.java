@@ -2,7 +2,7 @@ package Account;
 
 import java.util.Scanner;
 
-import Common.myCharacterClass;
+import Common.myClass;
 
 public class Account {
     // Properties
@@ -50,7 +50,7 @@ public class Account {
     // - Kiểm tra tên tài khoản hoặc mật khẩu có hợp lệ hay không ?
     public boolean isValidAccount(String condition) {
         String data = condition.equals("username") ? this.username : this.password;
-        if(!myCharacterClass.getInstance().onlyHasLetterAndDigit(data)) return false;
+        if(!myClass.getInstance().onlyHasLetterAndNumber(data)) return false;
         return true;
     }
     // - Kiểm tra có phải là tài khoản Quản lý hay không (mặc định là admin - 1)
@@ -60,16 +60,21 @@ public class Account {
             || !this.type.equals("Quản lý")) return false;
         return true;
     }
-    // -- Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
+    // - Kiểm tra có phải Người dùng là Bác sĩ / Y tá (Nhân viên y tế)
     public boolean isHealthcareWorker() {
         if(!this.username.substring(0, 3).equals("HEW")
             || !this.type.equals("Nhân viên")) return false;
         return true;
     }
-    // -- Kiểm tra có phải Người dùng là Bệnh nhân
+    // - Kiểm tra có phải Người dùng là Bệnh nhân
     public boolean isPatient() {
         if(!this.username.substring(0, 3).equals("PAT")
             || !this.type.equals("Bệnh nhân")) return false;
+        return true;
+    }
+    // - Kiểm tra có phải Người dùng là Người dùng mới
+    public boolean isNewUser() {
+        if(!this.type.equals("Người dùng mới")) return false;
         return true;
     }
     // 

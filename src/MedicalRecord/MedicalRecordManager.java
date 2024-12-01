@@ -82,9 +82,9 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
     }
     @Override
     public void show() {
-		System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
-	    System.out.println("| MÃ BỆNH ÁN | NGÀY LẬP HỒ SƠ | NGÀY KHOÁ HỒ SƠ | LOẠI HỒ SƠ | TIỀN PHÍ |               BỆNH NHÂN              |              NHÂN VIÊN              |              BỆNH              | MỨC ĐỘ |");  
-	    System.out.println("*------------+----------------+-----------------+------------+----------+--------------------------------------+-------------------------------------+--------------------------------+--------*");
+		System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+	    System.out.println("| MÃ BỆNH ÁN | NGÀY LẬP HỒ SƠ | NGÀY KHOÁ HỒ SƠ | LOẠI HỒ SƠ | TIỀN PHÍ |               BỆNH NHÂN              |              NHÂN VIÊN              |                    BỆNH                    | MỨC ĐỘ |");  
+	    System.out.println("*------------+----------------+-----------------+------------+----------+--------------------------------------+-------------------------------------+--------------------------------------------+--------*");
 		for(MedicalRecord medicalRecord : MedicalRecordManager.list) {
 			String id = medicalRecord.getId();
             String inputDay = medicalRecord.getInputDay().getDateFormatByCondition("has cross");
@@ -127,11 +127,11 @@ public class MedicalRecordManager implements CRUD<MedicalRecord> {
 
 			String sickLevel = medicalRecord.getSickLevel();
 
-			System.out.println(String.format("| %-10s | %-14s | %-15s | %-10s | %-8s | %-9s - %-24s | %-8s - %-24s | %-9s - %-18s | %-6s |",
+			System.out.println(String.format("| %-10s | %-14s | %-15s | %-10s | %-8s | %-9s - %-24s | %-8s - %-24s | %-9s - %-30s | %-6s |",
 				id, inputDay, outputDay, type, fee, patientID, patientName, healthcareWorkerID, healthcareWorkerFullname, sickID, sickName, sickLevel));
 		}
 		if(MedicalRecordManager.numbers >= 1)
-	    	System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+	    	System.out.println("*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
 	}
     @Override
 	public void add(MedicalRecord medicalRecord) {

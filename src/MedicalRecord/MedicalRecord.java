@@ -1,7 +1,9 @@
 package MedicalRecord;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import Account.AccountManager;
 import Common.*;
 import Department.DepartmentManager;
 import Sick.*;
@@ -206,20 +208,18 @@ public abstract class MedicalRecord implements ActionsInHospital {
         }
         System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
         String info1 = sc.nextLine();
-        while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info1)
-				|| (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info1) 
-						&& !myCharacterClass.getInstance().hasAllCharacterIsNumber(info1))
-                || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info1)
-                        && SickManager.getInstance().findObjectById(info1) == null)
-                || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info1)
-                    	&& SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
+        while(!myClass.getInstance().onlyHasLetterAndNumber(info1)
+    			|| (!myClass.getInstance().hasAllCharacterIsNumber(info1)
+			            && SickManager.getInstance().findObjectById(info1) == null)
+			    || (myClass.getInstance().hasAllCharacterIsNumber(info1)
+			            && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1) == null)) {
             System.out.println("----- -----");
             System.out.println("! - BỆNH KHÔNG HỢP LỆ");
             System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bệnh): ");
             info1 = sc.nextLine();
             System.out.println("----- -----");
         }
-        String sickID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info1)
+        String sickID = !myClass.getInstance().hasAllCharacterIsNumber(info1)
             ? SickManager.getInstance().findObjectById(info1).getId()
             : SickManager.getInstance().findObjectByIndex(Integer.parseInt(info1) - 1).getId();
         // Nhập mức độ Bệnh cho Bệnh vừa chọn
@@ -237,45 +237,42 @@ public abstract class MedicalRecord implements ActionsInHospital {
         // - Nếu là Chữa bệnh thì chỉ có thể Bác sĩ chữa
         System.out.println(" - Chọn Nhân viên Y tế");
         int numberList2 = 0;
-		int healthcareWorkerFiltered = 0;
+		ArrayList<HealthcareWorker> healthcareWorkerSearchList = new ArrayList<>();
         if(condition.equals("is test")) {
             for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
                 if(healthcareWorker.getMedicalRecordID() == null
                         && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
-                    System.out.println((numberList2 + 1) + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-					healthcareWorkerFiltered++;
+                    System.out.println(++numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
+					healthcareWorkerSearchList.add(healthcareWorker);
                 }
-                numberList2++;
             }
         } else if(condition.equals("is not test")) {
             for(HealthcareWorker healthcareWorker : HealthcareWorkerManager.getInstance().getList()) {
                 if(healthcareWorker.getType().equals("Bác sĩ") && healthcareWorker.getMedicalRecordID() == null
                         && SickManager.getInstance().findObjectById(sickID).getDepartmentID().equals(healthcareWorker.getDepartmentID())) {
-                    System.out.println((numberList2 + 1) + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
-					healthcareWorkerFiltered++;
+                    System.out.println(++numberList2 + " - " + healthcareWorker.getId() + " | " + healthcareWorker.getFullname());
+					healthcareWorkerSearchList.add(healthcareWorker);
                 }
-                numberList2++;
             }
         }
-		if(healthcareWorkerFiltered >= 1) {
+		if(numberList2 >= 1) {
 			System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
 			String info2 = sc.nextLine();
-			while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info2)
-					|| (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info2) 
-							&& !myCharacterClass.getInstance().hasAllCharacterIsNumber(info2))
-					|| (myCharacterClass.getInstance().hasAllCharacterIsLetter(info2)
-							&& HealthcareWorkerManager.getInstance().findObjectById(info2) == null)
-					|| (myCharacterClass.getInstance().hasAllCharacterIsNumber(info2)
-							&& HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1) == null)) {
+			while(!myClass.getInstance().onlyHasLetterAndNumber(info2)
+        			|| (!myClass.getInstance().hasAllCharacterIsNumber(info2)
+			                && AccountManager.getInstance().findObjectById(info2) == null)
+			        || (myClass.getInstance().hasAllCharacterIsNumber(info2) 
+			                && (!myClass.getInstance().isValidChoice(info2, 1, numberList2) 
+			                        || healthcareWorkerSearchList.get(Integer.parseInt(info2) - 1) == null))) {
 				System.out.println("----- -----");
 				System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
 				System.out.print("?! - Chọn lại (số thứ tự hoặc mã Nhân viên Y tế): ");
 				info2 = sc.nextLine();
 				System.out.println("----- -----");
 			}
-			String healthcareWorkerID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info2)
+			String healthcareWorkerID = !myClass.getInstance().hasAllCharacterIsNumber(info2)
 				? HealthcareWorkerManager.getInstance().findObjectById(info2).getId()
-				: HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info2) - 1).getId();
+				: healthcareWorkerSearchList.get(Integer.parseInt(info2) - 1).getId();
 
 			// Gán dữ liệu đã nhập cho Bệnh án
 			countMedicalRecordCreated++;

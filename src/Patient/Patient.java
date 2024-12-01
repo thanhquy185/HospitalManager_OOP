@@ -107,7 +107,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
         // Nhập tên Bệnh nhân
         System.out.print(" - Nhập họ tên: ");
         String fullname = sc.nextLine();
-        while(!myCharacterClass.getInstance().isValidName(fullname)) {
+        while(!myClass.getInstance().isValidName(fullname)) {
             System.out.println("----- -----");
             System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại: ");
@@ -139,7 +139,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
         // Nhập số điện thoại Bệnh nhân
         System.out.print(" - Nhập số điện thoại (10 số): ");
         String phone = sc.nextLine();
-        while(phone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(phone)) {
+        while(phone.length() != 10 || !myClass.getInstance().hasAllCharacterIsNumber(phone)) {
             System.out.println("----- -----");
             System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại (10 số): ");
@@ -149,7 +149,7 @@ public abstract class Patient extends Person implements ActionsInHospital {
         // Nhập quốc tịch Bệnh nhân
         System.out.print(" - Nhập quốc tịch: ");
         String country = sc.nextLine();
-        while(!myCharacterClass.getInstance().isValidName(country)) {
+        while(!myClass.getInstance().isValidName(country)) {
             System.out.println("----- -----");
             System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
             System.out.print("?! - Nhập lại: ");

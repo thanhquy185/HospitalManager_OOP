@@ -112,7 +112,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         if(choice == 1 || choice == 9) {
             System.out.print(" - Nhập họ tên mới: "); 
             String newFullname = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newFullname)) {
+            while(!myClass.getInstance().isValidName(newFullname)) {
                 System.out.println("----- -----");
                 System.out.println("! - HỌ TÊN KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");
@@ -156,7 +156,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         if(choice == 4 || choice == 9) {
             System.out.print(" - Nhập số điện thoại mới (10 số): ");
             String newPhone = sc.nextLine();
-            while(newPhone.length() != 10 || !myCharacterClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
+            while(newPhone.length() != 10 || !myClass.getInstance().hasAllCharacterIsNumber(newPhone)) {
                 System.out.println("----- -----");
                 System.out.println("! - SỐ ĐIỆN THOẠI KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại (10 số): ");
@@ -168,7 +168,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
         if(choice == 5 || choice == 9) {
             System.out.print(" - Nhập quốc tịch mới: ");
             String newCountry = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newCountry)) {
+            while(!myClass.getInstance().isValidName(newCountry)) {
                 System.out.println("----- -----");
                 System.out.println("! - QUỐC TỊCH KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");
@@ -182,7 +182,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             if(healthcareWorkerUpdate.getIsManagerDepartment()) {
                 System.out.print(" - Nhập số năm kinh nghiệm (từ 4 trở lên): ");
                 yearsOfExperienceStr = sc.nextLine();
-                while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
+                while(!myClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                         || Integer.parseInt(yearsOfExperienceStr) < 4) {
                     System.out.println("----- -----");
                     System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -193,7 +193,7 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             } else {
                 System.out.print(" - Nhập số năm kinh nghiệm (từ 0 trở lên): ");
                 yearsOfExperienceStr = sc.nextLine();
-                while(!myCharacterClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
+                while(!myClass.getInstance().hasAllCharacterIsNumber(yearsOfExperienceStr)
                         || Integer.parseInt(yearsOfExperienceStr) < 0) {
                     System.out.println("----- -----");
                     System.out.println("! - SỐ NĂM KINH NGHIỆM KHÔNG HỢP LỆ");
@@ -228,20 +228,18 @@ public class HealthcareWorkerManager implements CRUD<HealthcareWorker> {
             // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
             System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
             String info = sc.nextLine();
-            while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                    || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                            && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                    || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+            while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                    || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                             && DepartmentManager.getInstance().findObjectById(info) == null)
-                    || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
-                    	    && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
+                    || (myClass.getInstance().hasAllCharacterIsNumber(info) 
+                            && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                 System.out.println("----- -----");
                 System.out.println("! - KHOA KHÔNG HỢP LỆ");
                 System.out.print("?! - Chọn lại (số thứ tự hoặc mã Khoa): ");
                 info = sc.nextLine();
             }
             // Lấy mã Khoa đã được chọn
-            String newDepartmentID = myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+            String newDepartmentID = !myClass.getInstance().hasAllCharacterIsNumber(info)
                 ? DepartmentManager.getInstance().findObjectById(info).getId()
                 : DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1).getId();
             healthcareWorkerUpdate.setDepartmentID(newDepartmentID);

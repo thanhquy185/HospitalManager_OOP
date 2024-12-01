@@ -29,7 +29,7 @@ public class App {
 
     // Methods
     // - Hàm xoá những nội dung trước đó trên màn hình console
-    private void clearTerminal() {
+    public void clearTerminal() {
         try {
             // Kiểm tra hệ điều hành và thực thi lệnh phù hợp
             if (System.getProperty("os.name").contains("Windows")) {
@@ -46,14 +46,6 @@ public class App {
      * 2. Nếu không nằm trong khoảng [min; max] hay không phải số nguyên -> false  
      * 3. Ngược lại -> True
      *  */ 
-    private static boolean isValidChoice(String choice, int minOption, int maxOption){
-        try{
-            int option = Integer.parseInt(choice);
-            return minOption <= option && option <= maxOption;
-        } catch (NumberFormatException e){
-            return false;
-        }
-    }
     // - Hàm khởi tạo chương trình
     public void init() {
         // Khởi tạo Scanner
@@ -84,7 +76,7 @@ public class App {
             System.out.println("2 - Đăng ký");
             System.out.print("? - Chọn: ");
             String mainChoice = sc.nextLine();
-            while(!isValidChoice(mainChoice, 0, 2)) {
+            while(!myClass.getInstance().isValidChoice(mainChoice, 0, 2)) {
                 System.out.println("---------- ----------");
                 System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                 System.out.print("?! - Chọn lại: ");
@@ -154,7 +146,7 @@ public class App {
                         System.out.println("10 - Sao lưu dữ liệu Bệnh viện");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
-                        while(!isValidChoice(subChoice1, 0, 10)) {
+                        while(!myClass.getInstance().isValidChoice(subChoice1, 0, 10)) {
                             System.out.println("---------- ----------");
                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                             System.out.print("?! - Chọn lại: ");
@@ -185,7 +177,7 @@ public class App {
                                 System.out.println("9 - Sao lưu dữ liệu Tài khoản");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 9)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -269,13 +261,12 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && AccountManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
-                                                    && newUserList.get(Integer.parseInt(info) - 1) == null)) {
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
+                                                    && (!myClass.getInstance().isValidChoice(info, 1, numberList) 
+                                                            || newUserList.get(Integer.parseInt(info) - 1) == null))) {
                                         System.out.println("----- -----");
                                         System.out.println("! - TÀI KHOẢN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc tên tài khoản): ");
@@ -284,7 +275,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountUpdate = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         accountUpdate = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountUpdate =  newUserList.get(Integer.parseInt(info) - 1);
@@ -302,7 +293,7 @@ public class App {
                                         System.out.print("? - Chọn: ");
                                         String subChoice3 = sc.nextLine();
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 3)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 3)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -332,7 +323,6 @@ public class App {
                                         clearTerminal();
                                         System.out.println("Thông tin của tài khoản sau khi sửa: " + accountUpdate.getInfo());
                                     }
-
                                 } else if(subChoice2.equals("5")) {
                                     clearTerminal();
                                     System.out.println("Đã chọn Xoá một tài khoản");
@@ -361,13 +351,12 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc tên tài khoản): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
-                                                    && SickManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
-                                                    && newUserList.get(Integer.parseInt(info) - 1) == null)) {
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && AccountManager.getInstance().findObjectById(info) == null)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info)
+                                                    && (!myClass.getInstance().isValidChoice(info, 1, numberList) 
+                                                            || newUserList.get(Integer.parseInt(info) - 1) == null))) {
                                         System.out.println("----- -----");
                                         System.out.println("! - TÀI KHOẢN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại (số thứ tự hoặc tên tài khoản): ");
@@ -376,7 +365,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Tài khoản cần sửa thông tin
                                     Account accountRemove = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         accountRemove = AccountManager.getInstance().findObjectById(info);
                                     } else {
                                         accountRemove =  newUserList.get(Integer.parseInt(info) - 1);
@@ -443,7 +432,7 @@ public class App {
                                     System.out.println("2 - Sắp xếp theo tên tài khoản giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 2)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 2)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -539,7 +528,7 @@ public class App {
                                 System.out.println("9 - Sao lưu dữ liệu Khoa");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 9)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -644,12 +633,10 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEPxxxxx)
                                     System.out.print("? - Chọn (chọn số thự tự hoặc mã Khoa): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -659,7 +646,7 @@ public class App {
 
                                     // Biến tạm giữ thông tin của Khoa cần sửa thông tin
                                     Department departmentUpdate = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         departmentUpdate = DepartmentManager.getInstance().findObjectById(info);
                                     } else {
                                         departmentUpdate =  DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -680,7 +667,7 @@ public class App {
                                         String subChoice3 = sc.nextLine();
 
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 4)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 4)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -741,12 +728,10 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Khoa): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && DepartmentManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - KHOA KHÔNG HỢP LỆ");
@@ -756,7 +741,7 @@ public class App {
 
                                     // Tìm thông tin của Khoa cần xoá
                                     Department departmentRemove = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         departmentRemove = DepartmentManager.getInstance().findObjectById(info);
                                     } else {
                                         departmentRemove = DepartmentManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -849,7 +834,7 @@ public class App {
                                     System.out.println("6 - Sắp xếp theo số phòng giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 6)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 6)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -956,7 +941,7 @@ public class App {
                                 System.out.println("9 - Sao lưu dữ liệu Bệnh");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 9)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -1042,12 +1027,10 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn SICKxxxxx)
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && SickManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH KHÔNG HỢP LỆ");
@@ -1055,7 +1038,7 @@ public class App {
                                         info = sc.nextLine();
                                     }
                                     Sick sickUpdate = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         sickUpdate = SickManager.getInstance().findObjectById(info);
                                     } else {
                                         sickUpdate =  SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1074,7 +1057,7 @@ public class App {
                                         System.out.print("? - Chọn: ");
                                         String subChoice3 = sc.nextLine();
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 3)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 3)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -1130,12 +1113,10 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DEP00001)
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && SickManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH KHÔNG HỢP LỆ");
@@ -1144,7 +1125,7 @@ public class App {
                                     }
                                     // Lấy thông tin của Bệnh cần xoá
                                     Sick sickRemove = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         sickRemove = SickManager.getInstance().findObjectById(info);
                                     } else {
                                         sickRemove =  SickManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1226,7 +1207,7 @@ public class App {
                                     System.out.println("4 - Sắp xếp theo tên giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 4)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 4)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -1332,7 +1313,7 @@ public class App {
                                 System.out.println("9 - Sao lưu dữ liệu Nhân viên Y tế");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 9)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -1442,12 +1423,10 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Nhân viên Y tế): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
@@ -1458,7 +1437,7 @@ public class App {
 
                                     // Tìm thông tin của Nhân viên Y tế cần sửa
                                     HealthcareWorker healthcareWorkerUpdate = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         healthcareWorkerUpdate = HealthcareWorkerManager.getInstance().findObjectById(info);
                                     } else {
                                         healthcareWorkerUpdate = HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1484,7 +1463,7 @@ public class App {
                                         String subChoice3 = sc.nextLine();
 
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 9)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 9)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -1575,12 +1554,10 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC/NUR00001)
                                     System.out.print("? - Chọn: ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - NHÂN VIÊN Y TẾ KHÔNG HỢP LỆ");
@@ -1590,7 +1567,7 @@ public class App {
 
                                     // Lấy thông tin của Nhân viên Y tế cần xoá
                                     HealthcareWorker healthcareWorkerRemove = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         healthcareWorkerRemove = HealthcareWorkerManager.getInstance().findObjectById(info);
                                     } else {
                                         healthcareWorkerRemove =  HealthcareWorkerManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1688,7 +1665,7 @@ public class App {
                                     System.out.println("10 - Sắp xếp theo tiền lương giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 10)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 10)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -1808,7 +1785,7 @@ public class App {
                                 System.out.println("9 - Sao lưu dữ liệu Bệnh nhân");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 9)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 9)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -1953,12 +1930,10 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh nhân): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && PatientManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - BỆNH NHÂN KHÔNG HỢP LỆ");
@@ -1969,7 +1944,7 @@ public class App {
 
                                     // Tìm thông tin của Bệnh nhân cần sửa
                                     Patient patientUpdate = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         patientUpdate = PatientManager.getInstance().findObjectById(info);
                                     } else {
                                         patientUpdate = PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -1992,7 +1967,7 @@ public class App {
                                         String subChoice3 = sc.nextLine();
 
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 6)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 6)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -2065,12 +2040,10 @@ public class App {
                                     // Cho phép chọn numberList hoặc id
                                     System.out.print("? - Chọn (số thứ tự hoặc mã Bệnh nhân): ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && PatientManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - Bệnh nhân KHÔNG HỢP LỆ");
@@ -2081,7 +2054,7 @@ public class App {
 
                                     // Tìm thông tin của Bệnh nhân cần xoá
                                     Patient patientRemove = null;
-                                    if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         patientRemove = PatientManager.getInstance().findObjectById(info);
                                     } else {
                                         patientRemove = PatientManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -2166,7 +2139,7 @@ public class App {
                                     System.out.println("6 - Sắp xếp theo ngày sinh giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 6)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 6)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -2275,7 +2248,7 @@ public class App {
                                 System.out.println("7 - Sao lưu dữ liệu Bệnh án");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 7)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 7)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -2332,12 +2305,10 @@ public class App {
                                     // Cho phép chọn numberList - id (chọn 1 hoặc chọn MER00001)
                                     System.out.print("? -- Chọn: ");
                                     String info = sc.nextLine();
-                                    while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                                            || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                                    && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                                    while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                                            || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                                     && MedicalRecordManager.getInstance().findObjectById(info) == null)
-                                            || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
+                                            || (myClass.getInstance().hasAllCharacterIsNumber(info) 
                                                     && MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1) == null)) {
                                         System.out.println("----- -----");
                                         System.out.println("! -- BỆNH ÁN KHÔNG HỢP LỆ");
@@ -2345,7 +2316,7 @@ public class App {
                                         info = sc.nextLine();
                                     }
                                     MedicalRecord medicalRecordUpdate = null;
-                                    if(info.length() != 1) {
+                                    if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                                         medicalRecordUpdate = MedicalRecordManager.getInstance().findObjectById(info);
                                     } else {
                                         medicalRecordUpdate =  MedicalRecordManager.getInstance().findObjectByIndex(Integer.parseInt(info) - 1);
@@ -2365,7 +2336,7 @@ public class App {
                                         System.out.print("? - Chọn: ");
                                         String subChoice3 = sc.nextLine();
                                         // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
-                                        while(!isValidChoice(subChoice3, 0, 4)) {
+                                        while(!myClass.getInstance().isValidChoice(subChoice3, 0, 4)) {
                                             System.out.println("---------- ----------");
                                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                             System.out.print("?! - Chọn lại: ");
@@ -2450,7 +2421,7 @@ public class App {
                                     System.out.println("6 - Sắp xếp theo ngày tiền viện phí giảm dần");
                                     System.out.print("? - Chọn: ");
                                     String subChoice3 = sc.nextLine();
-                                    while(!isValidChoice(subChoice3, 0, 6)) {
+                                    while(!myClass.getInstance().isValidChoice(subChoice3, 0, 6)) {
                                         System.out.println("----- -----");
                                         System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                         System.out.print("?! - Chọn lại: ");
@@ -2554,7 +2525,7 @@ public class App {
                                 System.out.println("5 - Tiêm thuốc cho các Bệnh nhân (đang được chữa bệnh, mức độ Bệnh: Nặng)");
                                 System.out.print("? - Chọn: ");
                                 String subChoice2 = sc.nextLine();
-                                while(!isValidChoice(subChoice2, 0, 5)) {
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 5)) {
                                     System.out.println("---------- ----------");
                                     System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                                     System.out.print("?! - Chọn lại: ");
@@ -2767,7 +2738,7 @@ public class App {
                         System.out.println("3 - Thông tin trong Bệnh viện");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
-                        while(!isValidChoice(subChoice1, 0, 3)) {
+                        while(!myClass.getInstance().isValidChoice(subChoice1, 0, 3)) {
                             System.out.println("---------- ----------");
                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                             System.out.print("?! - Chọn lại: ");
@@ -2854,7 +2825,7 @@ public class App {
                         System.out.println("3 - Thông tin trong Bệnh viện");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
-                        while(!isValidChoice(subChoice1, 0, 3)) {
+                        while(!myClass.getInstance().isValidChoice(subChoice1, 0, 3)) {
                             System.out.println("---------- ----------");
                             System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
                             System.out.print("?! - Chọn lại: ");
@@ -2944,151 +2915,192 @@ public class App {
                         System.out.println("0 - Kết thúc");
                         System.out.println("1 - Quay lại");
                         System.out.println("2 - Đăng ký khám - chữa bệnh");
-                        System.out.println("3 - Xoá tài khoản");
+                        System.out.println("3 - Thay đổi thông tin đăng nhập");
+                        System.out.println("4 - Xoá tài khoản");
                         System.out.print("? - Chọn: ");
                         String subChoice1 = sc.nextLine();
-                            while(!isValidChoice(subChoice1, 0, 3)) {
-                                System.out.println("---------- ----------");
-                                System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
-                                System.out.print("?! - Chọn lại: ");
-                                subChoice1 = sc.nextLine();
+                        while(!myClass.getInstance().isValidChoice(subChoice1, 0, 4)) {
+                            System.out.println("---------- ----------");
+                            System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
+                            System.out.print("?! - Chọn lại: ");
+                            subChoice1 = sc.nextLine();
+                        }
+                        if(subChoice1.equals("0")) {
+                            System.out.println("Đã chọn Kết thúc");
+                            break mainLoop;
+                        } else if(subChoice1.equals("1")) {
+                            clearTerminal();
+                            System.out.println("Đã chọn Quay lại");
+                            continue mainLoop;
+                        } else if(subChoice1.equals("2")) {
+                            clearTerminal();
+                            System.out.println("Đã chọn Đăng ký khám - chữa bệnh");
+
+                            // Nếu không có Khoa nào được tạo thì không thể đăng ký khám bệnh
+                            if(DepartmentManager.getInstance().getNumbers() == 0) {
+                                clearTerminal();
+                                System.out.println("Hiện tại Bệnh viện chưa có Khoa, cần tạo ít nhất một Khoa");
+                                continue subLoop1;
                             }
-                            if(subChoice1.equals("0")) {
-                                System.out.println("Đã chọn Kết thúc");
-                                break mainLoop;
-                            } else if(subChoice1.equals("1")) {
+                            // Nếu không có Bệnh nào được tạo thì không thể đăng ký khám bệnh
+                            if(SickManager.getInstance().getNumbers() == 0) {
                                 clearTerminal();
-                                System.out.println("Đã chọn Quay lại");
-                                continue mainLoop;
-                            } else if(subChoice1.equals("2")) {
+                                System.out.println("Hiện tại Bệnh viện chưa có thông tin về các loại Bệnh, cần tạo ít nhất một Bệnh");
+                                continue subLoop1;
+                            }
+                            // Nếu không có Nhân viên Y tế nào được tạo thì không thể đăng ký khám bệnh
+                            if(HealthcareWorkerManager.getInstance().getNumbers() == 0) {
                                 clearTerminal();
-                                System.out.println("Đã chọn Đăng ký khám - chữa bệnh");
+                                System.out.println("Hiện tại Bệnh viện chưa có Nhân viên Y tế, cần tạo ít nhất một Nhân viên Y tế");
+                                continue subLoop1;
+                            }
 
-                                // Nếu không có Khoa nào được tạo thì không thể đăng ký khám bệnh
-                                if(DepartmentManager.getInstance().getNumbers() == 0) {
-                                    clearTerminal();
-                                    System.out.println("Hiện tại Bệnh viện chưa có Khoa, cần tạo ít nhất một Khoa");
-                                    continue subLoop1;
-                                }
-                                // Nếu không có Bệnh nào được tạo thì không thể đăng ký khám bệnh
-                                if(SickManager.getInstance().getNumbers() == 0) {
-                                    clearTerminal();
-                                    System.out.println("Hiện tại Bệnh viện chưa có thông tin về các loại Bệnh, cần tạo ít nhất một Bệnh");
-                                    continue subLoop1;
-                                }
-                                // Nếu không có Nhân viên Y tế nào được tạo thì không thể đăng ký khám bệnh
-                                if(HealthcareWorkerManager.getInstance().getNumbers() == 0) {
-                                    clearTerminal();
-                                    System.out.println("Hiện tại Bệnh viện chưa có Nhân viên Y tế, cần tạo ít nhất một Nhân viên Y tế");
-                                    continue subLoop1;
-                                }
+                            // Thiết lập người đăng ký khám thành một Bệnh nhân
+                            Patient newPatient = null;
+                            System.out.print(" - Chọn loại chăm sóc (Bình thường hoặc Cao cấp): ");
+                            String patientType = sc.nextLine();
+                            while(!patientType.equals("Bình thường") && !patientType.equals("Cao cấp")) {
+                                System.out.println("----- -----");
+                                System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
+                                System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
+                                patientType = sc.nextLine();
+                                System.out.println("----- -----");
+                            }
+                            // - Nhập các thông tin khác khi đã biết loại chăm sóc
+                            if(patientType.equals("Bình thường")) {
+                                newPatient = new NormalPatient();
+                                newPatient.setInfoWithNoMedicalRecord("is normal patient");
+                            } else if(patientType.equals("Cao cấp")) {
+                                newPatient = new PremiumPatient();
+                                newPatient.setInfoWithNoMedicalRecord("is not normal patient");
+                            }
+                            PatientManager.getInstance().add(newPatient);
 
-                                // Thiết lập người đăng ký khám thành một Bệnh nhân
-                                Patient newPatient = null;
-                                System.out.print(" - Chọn loại chăm sóc (Bình thường hoặc Cao cấp): ");
-                                String patientType = sc.nextLine();
-                                while(!patientType.equals("Bình thường") && !patientType.equals("Cao cấp")) {
-                                    System.out.println("----- -----");
-                                    System.out.println("! - LOẠI CHĂM SÓC KHÔNG HỢP LỆ");
-                                    System.out.print("?! - Nhập lại (Bình thường hoặc Cao cấp): ");
-                                    patientType = sc.nextLine();
-                                    System.out.println("----- -----");
-                                }
-                                // - Nhập các thông tin khác khi đã biết loại chăm sóc
-                                if(patientType.equals("Bình thường")) {
-                                    newPatient = new NormalPatient();
-                                    newPatient.setInfoWithNoMedicalRecord("is normal patient");
-                                } else if(patientType.equals("Cao cấp")) {
-                                    newPatient = new PremiumPatient();
-                                    newPatient.setInfoWithNoMedicalRecord("is not normal patient");
-                                }
-                                PatientManager.getInstance().add(newPatient);
+                            // Người dùng mới có thể đăng ký Khám bệnh hoặc Chữa bệnh
+                            // Tạo một Hồ sơ Bệnh án cho Bệnh nhân vừa mới được tạo
+                            MedicalRecord newMedicalRecord = null;
+                            // - Nhập loại Hồ sơ Bệnh án (Hồ sơ Chữa bệnh hoặc Hồ sơ Khám bệnh)
+                            System.out.print(" - Nhập loại Hồ sơ (Khám bệnh hoặc Chữa bệnh): ");
+                            String medicalRecordType = sc.nextLine();
+                            while(!medicalRecordType.equals("Khám bệnh") && !medicalRecordType.equals("Chữa bệnh")) {
+                                System.out.println("----- -----");
+                                System.out.println("! - LOẠI HỒ SƠ KHÔNG HỢP LỆ");
+                                System.out.print("?! - Nhập lại (Khám bệnh hoặc Chữa bệnh): ");
+                                medicalRecordType = sc.nextLine();
+                                System.out.println("----- -----");
+                            }
+                            // - Nhập các thông tin khác khi đã biết loại Hồ sơ
+                            if(medicalRecordType.equals("Khám bệnh")) {
+                                newMedicalRecord = new TestRecord();
+                                newMedicalRecord.setInfoWithNoPatient("is test", newPatient.getBirthday());
+                            } else if(medicalRecordType.equals("Chữa bệnh")) {
+                                newMedicalRecord = new TreatmentRecord();
+                                newMedicalRecord.setInfoWithNoPatient("is not test", newPatient.getBirthday());
+                            }
+                            // - Nếu không có mã Bệnh án thì biết là đang thiếu Nhân viên để có thể chữa bệnh mà Bệnh nhân đang mắc phải
+                            if(newMedicalRecord.getId() == null) {
+                                clearTerminal();
+                                System.out.println("! - Đăng ký không thành công vì Bệnh viện chúng tôi hiện không có đủ Nhân viên Y tế để chữa bệnh đang mắc phải");
+                                System.out.println("! - Vì thế Bệnh viện sẽ xoá dữ liệu mà đã được nhập từ trước đó");
+                                PatientManager.getInstance().remove(newPatient.getId());
+                                continue subLoop1;
+                            }
+                            MedicalRecordManager.getInstance().add(newMedicalRecord);
+                            
+                            // Thiết lập sự liên kết
+                            newPatient.setMedicalRecordID(newMedicalRecord.getId());
+                            HealthcareWorkerManager.getInstance().findObjectById(newMedicalRecord.getHealthcareWorkerID()).setMedicalRecordID(newMedicalRecord.getId());
+                            newMedicalRecord.setPatientID(newPatient.getId());
+                            newMedicalRecord.setFee(newMedicalRecord.calFee());
 
-                                // Người dùng mới có thể đăng ký Khám bệnh hoặc Chữa bệnh
-                                // Tạo một Hồ sơ Bệnh án cho Bệnh nhân vừa mới được tạo
-                                System.out.println("Bạn cần tạo Hồ sơ Bệnh án cho Bệnh nhân " + newPatient.getId() + " - " + newPatient.getFullname());
-                                MedicalRecord newMedicalRecord = null;
-                                // - Nhập loại Hồ sơ Bệnh án (Hồ sơ Chữa bệnh hoặc Hồ sơ Khám bệnh)
-                                System.out.print(" - Nhập loại Hồ sơ (Khám bệnh hoặc Chữa bệnh): ");
-                                String medicalRecordType = sc.nextLine();
-                                while(!medicalRecordType.equals("Khám bệnh") && !medicalRecordType.equals("Chữa bệnh")) {
-                                    System.out.println("----- -----");
-                                    System.out.println("! - LOẠI HỒ SƠ KHÔNG HỢP LỆ");
-                                    System.out.print("?! - Nhập lại (Khám bệnh hoặc Chữa bệnh): ");
-                                    medicalRecordType = sc.nextLine();
-                                    System.out.println("----- -----");
-                                }
-                                // - Nhập các thông tin khác khi đã biết loại Hồ sơ
-                                if(medicalRecordType.equals("Khám bệnh")) {
-                                    newMedicalRecord = new TestRecord();
-                                    newMedicalRecord.setInfoWithNoPatient("is test", newPatient.getBirthday());
-                                } else if(medicalRecordType.equals("Chữa bệnh")) {
-                                    newMedicalRecord = new TreatmentRecord();
-                                    newMedicalRecord.setInfoWithNoPatient("is not test", newPatient.getBirthday());
-                                }
-                                // - Nếu không có mã Bệnh án thì biết là đang thiếu Nhân viên để có thể chữa bệnh mà Bệnh nhân đang mắc phải
-                                if(newMedicalRecord.getId() == null) {
-                                    clearTerminal();
-                                    System.out.println("! - Đăng ký không thành công vì Bệnh viện chúng tôi hiện không có đủ Nhân viên Y tế để chữa bệnh đang mắc phải");
-                                    System.out.println("! - Vì thế Bệnh viện sẽ xoá dữ liệu mà đã được nhập từ trước đó");
-                                    PatientManager.getInstance().remove(newPatient.getId());
-                                    continue subLoop1;
-                                }
-                                MedicalRecordManager.getInstance().add(newMedicalRecord);
-                                
-                                // Thiết lập sự liên kết
-                                newPatient.setMedicalRecordID(newMedicalRecord.getId());
-                                HealthcareWorkerManager.getInstance().findObjectById(newMedicalRecord.getHealthcareWorkerID()).setMedicalRecordID(newMedicalRecord.getId());
-                                newMedicalRecord.setPatientID(newPatient.getId());
-                                newMedicalRecord.setFee(newMedicalRecord.calFee());
+                            // Tạo tài khoản người dùng trong Bệnh viện khi đã đăng ký khám thành công
+                            AccountManager.getInstance().remove(currentAccount.getUsername());
+                            String newUsername = newPatient.getId();
+                            String newPassword = newPatient.getBirthday().getDateFormatByCondition("has not cross");
+                            Account newAccount = new Account(newUsername, newPassword, "Bệnh nhân");
+                            AccountManager.getInstance().add(newAccount);
 
-                                // Tạo tài khoản người dùng trong Bệnh viện khi đã đăng ký khám thành công
+                            // Thông báo đã đăng ký khám thành công
+                            System.out.println("! - Bạn đã đăng ký thành công");
+                            System.out.println("! - Chúng tôi xin xoá tài khoản hiện tại và cấp cho bạn tài khoản mới");
+                            System.out.println("! - Bạn có thể sử dụng tài khoản sau để kiểm tra thông tin: " + newUsername + " - " + newPassword);
+                            
+                            // Hỏi đã đọc xong thông báo chưa ?
+                            System.out.print("Bạn đã đọc xong thông báo. Nhập 'YES' để quay về trang Đăng nhập - Đăng ký: ");
+                            String wantContinue = sc.nextLine();
+                            while(!wantContinue.equals("YES")) {
+                                System.out.print("- Bạn đã không nhập 'YES', nhập lại nếu đã đọc xong: ");
+                                wantContinue = sc.nextLine();
+                            }
+                            clearTerminal();
+                            continue mainLoop;
+                        } else if(subChoice1.equals("3")) {
+                            clearTerminal();
+                            System.out.println("Đã chọn Thay đổi thông tin tài khoản");
+                            System.out.println("Thông tin của tài khoản Người dùng mới đã chọn để sửa: " + currentAccount.getInfo());
+
+                            while(true) {
+                                System.out.println("! - Chọn thông tin cần sửa");
+                                System.out.println("0 - Quay lại");
+                                System.out.println("1 - Tên tài khoản");
+                                System.out.println("2 - Mật khẩu");
+                                System.out.println("3 - Tất cả");
+                                System.out.print("? - Chọn: ");
+                                String subChoice2 = sc.nextLine();
+                                // Kiểm tra input cho lựa chọn hợp lệ, cho nhập lại đến khi hợp lệ
+                                while(!myClass.getInstance().isValidChoice(subChoice2, 0, 3)) {
+                                    System.out.println("---------- ----------");
+                                    System.out.println("! - LỰA CHỌN KHÔNG HỢP LỆ");
+                                    System.out.print("?! - Chọn lại: ");
+                                    subChoice2 = sc.nextLine();
+                                }
+                                switch (Integer.parseInt(subChoice2)) {
+                                    case 0: {
+                                        clearTerminal();
+                                        System.out.println("Đã chọn quay lại");
+                                        continue subLoop1;
+                                    }
+                                    case 1: {
+                                        System.out.println("Đã chọn cập nhật Tên tài khoản");
+                                        AccountManager.getInstance().update(currentAccount, 1);
+                                        break;
+                                    }
+                                    case 2: {
+                                        System.out.println("Đã chọn cập nhật Mật khẩu");
+                                        AccountManager.getInstance().update(currentAccount, 2);
+                                        break;
+                                    }
+                                    case 3: {
+                                        System.out.println("Đã chọn cập nhật Tất cả");
+                                        AccountManager.getInstance().update(currentAccount, 3);
+                                    }
+                                }
+                                clearTerminal();
+                                System.out.println("Thông tin của tài khoản sau khi sửa: " + currentAccount.getInfo());
+                            }
+                        } else if(subChoice1.equals("4")) {
+                            clearTerminal();
+                            System.out.println("Đã chọn Xoá tài khoản");
+
+                            // Hỏi lần nữa có muốn xoá tài khoản hay không ?
+                            System.out.print("Nhập 'YES' nếu bạn chắc chắn sẽ xoá tài khoản này: ");
+                            String wantRemove = sc.nextLine();
+                            if(wantRemove.equals("YES")) {
+                                // Xoá tài khoản
                                 AccountManager.getInstance().remove(currentAccount.getUsername());
-                                String newUsername = newPatient.getId();
-                                String newPassword = newPatient.getBirthday().getDateFormatByCondition("has not cross");
-                                Account newAccount = new Account(newUsername, newPassword, "Bệnh nhân");
-                                AccountManager.getInstance().add(newAccount);
-
-                                // Thông báo đã đăng ký khám thành công
-                                System.out.println("! - Bạn đã đăng ký thành công");
-                                System.out.println("! - Chúng tôi xin xoá tài khoản hiện tại và cấp cho bạn tài khoản mới");
-                                System.out.println("! - Bạn có thể sử dụng tài khoản sau để kiểm tra thông tin: " + newUsername + " - " + newPassword);
-                                
-                                // Thông báo hỏi có tiếp tục hay không
-                                System.out.print("Nhập 'YES' để tiếp tục: ");
-                                String wantContinue = sc.nextLine();
-                                if(wantContinue.equals("YES")) {
-                                    clearTerminal();
-                                    System.out.println("Bạn đã nhập 'YES' nên chương trình sẽ tiếp tục");
-                                    continue subLoop1;
-                                } else {
-                                    System.out.println("Bạn đã không nhập 'YES' nên chương trình sẽ dừng lại");
-                                    break mainLoop;
-                                }
-                                
-                            } else if(subChoice1.equals("3")) {
+                                // Vì xoá tài khoản nên đưa về trang Đăng nhập - Đăng ký
                                 clearTerminal();
-                                System.out.println("Đã chọn Xoá tài khoản");
-
-                                // Hỏi lần nữa có muốn xoá tài khoản hay không ?
-                                System.out.print("Nhập 'YES' nếu bạn chắc chắn sẽ xoá tài khoản này: ");
-                                String wantRemove = sc.nextLine();
-                                if(wantRemove.equals("YES")) {
-                                    // Xoá tài khoản
-                                    AccountManager.getInstance().remove(currentAccount.getUsername());
-                                    // Vì xoá tài khoản nên đưa về trang Đăng nhập - Đăng ký
-                                    clearTerminal();
-                                    System.out.println("Tài khoản đã được xoá. Bạn có thể tạo tài khoản mới nếu muốn");
-                                    continue mainLoop;
-                                } else {
-                                    System.out.println("Bạn đã không nhập 'YES' nên tài khoản chưa được xoá");
-                                    System.out.println("Chương trình vẫn sẽ tiếp tục.");
-                                    continue subLoop1;
-                                }
-
+                                System.out.println("Tài khoản đã được xoá. Bạn có thể tạo tài khoản mới nếu muốn");
+                                continue mainLoop;
+                            } else {
+                                System.out.println("Bạn đã không nhập 'YES' nên tài khoản chưa được xoá");
+                                System.out.println("Chương trình vẫn sẽ tiếp tục.");
+                                continue subLoop1;
                             }
+
                         }
                     }
+                }
             } else if(mainChoice.equals("2")) {
                 clearTerminal();
                 System.out.println("Đã chọn Đăng ký");

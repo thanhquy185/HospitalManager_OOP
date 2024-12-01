@@ -107,7 +107,7 @@ public class DepartmentManager implements CRUD<Department> {
         if(choice == 1 || choice == 4) {
             System.out.print(" - Nhập tên mới: ");
             String newName = sc.nextLine();
-            while(!myCharacterClass.getInstance().isValidName(newName)) {
+            while(!myClass.getInstance().isValidName(newName)) {
                 System.out.println("----- -----");
                 System.out.println("! - TÊN KHÔNG HỢP LỆ");
                 System.out.print("?! - Nhập lại: ");
@@ -147,13 +147,12 @@ public class DepartmentManager implements CRUD<Department> {
                 // Cho phép chọn numberList - id (chọn 1 hoặc chọn DOC00001)
                 System.out.print("? - Chọn (số thứ tự hoặc mã Bác sĩ): ");
                 String info = sc.nextLine();
-                while(!myCharacterClass.getInstance().onlyHasLetterAndDigit(info)
-                        || (!myCharacterClass.getInstance().hasAllCharacterIsLetter(info) 
-                                && !myCharacterClass.getInstance().hasAllCharacterIsNumber(info))
-                        || (myCharacterClass.getInstance().hasAllCharacterIsLetter(info)
+                while(!myClass.getInstance().onlyHasLetterAndNumber(info)
+                        || (!myClass.getInstance().hasAllCharacterIsNumber(info)
                                 && HealthcareWorkerManager.getInstance().findObjectById(info) == null)
-                        || (myCharacterClass.getInstance().hasAllCharacterIsNumber(info)
-                                && doctorSearchList.get(Integer.parseInt(info) - 1) == null)) {
+                        || (myClass.getInstance().hasAllCharacterIsNumber(info) 
+                                && (!myClass.getInstance().isValidChoice(info, 1, numberList) 
+                                        || doctorSearchList.get(Integer.parseInt(info) - 1) == null))) {
                     System.out.println("----- -----");
                     System.out.println("! - BÁC SĨ KHÔNG HỢP LỆ");
                     System.out.print("?! - Chọn lại (số thứ tự hoặc mã Bác sĩ): ");
@@ -161,7 +160,7 @@ public class DepartmentManager implements CRUD<Department> {
                 }
                 // Lấy thông tin của Bác sĩ bổ nhiệm làm trưởng Khoa
                 HealthcareWorker doctorSelect = null;
-                if(myCharacterClass.getInstance().hasAllCharacterIsLetter(info)) {
+                if(!myClass.getInstance().hasAllCharacterIsNumber(info)) {
                     doctorSelect = HealthcareWorkerManager.getInstance().findObjectById(info);
                 } else {
                     doctorSelect =  doctorSearchList.get(Integer.parseInt(info) - 1);
