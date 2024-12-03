@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import Account.AccountManager;
 import Common.*;
-import Department.DepartmentManager;
 import Sick.*;
 import HealthcareWorker.*;
 import Patient.*;
@@ -155,10 +154,7 @@ public abstract class MedicalRecord implements ActionsInHospital {
         if(!prefix.equals("MER")) return false;
         // -- Kiểm tra hậu tố
         String postfix = id.substring(3);
-        for(int i = 0; i < postfix.length(); i++) {
-            int charUnicode = (int) postfix.charAt(i);
-            if(charUnicode < 48 || charUnicode > 57) return false;
-        }
+       	if(!myClass.getInstance().hasAllCharacterIsNumber(postfix)) return false;
         return true;
     }
 	// - Lấy id có đúng định dạng MERxxxxx

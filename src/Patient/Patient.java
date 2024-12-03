@@ -77,25 +77,20 @@ public abstract class Patient extends Person implements ActionsInHospital {
     }
 
     // Methods
-    // - Kiểm tra có đúng định dạng (NPAT/PPAT)xxxxx
+    // - Kiểm tra có đúng định dạng (PAT)xxxxx
     private boolean isFormatId(String id) {
-        // -- Nếu không phải là chuỗi 9 ký tự
+        // -- Nếu không phải là chuỗi 8 ký tự
         if(id.length() != 9)
             return false;
         // -- Kiểm tra tiền tối
-        String prefix = id.substring(0, 4);
-        if(!prefix.equals("NPAT")
-            && !prefix.equals("PPAT")) return false;
+        String prefix = id.substring(0, 3);
+        if(!prefix.equals("PAT")) return false;
         // -- Kiểm tra hậu tố
-        String postfix = id.substring(4);
-        for(int i = 0; i < postfix.length(); i++) {
-            int charUnicode = (int) postfix.charAt(i);
-            if(charUnicode < 48 || charUnicode > 57)
-                return false;
-        }
+        String postfix = id.substring(3);
+        if(!myClass.getInstance().hasAllCharacterIsNumber(postfix)) return false;
         return true;
     }
-    // - Lấy id đúng định dạng (NPAT/PPAT)xxxxx
+    // - Lấy id đúng định dạng (PAT)xxxxx
     private String getFormatId() {
         // --
         String postfix = String.format("%05d", Patient.countPatientCreated);

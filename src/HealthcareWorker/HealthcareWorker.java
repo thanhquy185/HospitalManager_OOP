@@ -128,18 +128,13 @@ public abstract class HealthcareWorker extends Person implements ActionsInHospit
     // - Kiểm tra có đúng định dạng (DOC/NUR)xxxxx
     private boolean isFormatId(String id) {
         // -- Nếu không phải là chuỗi 8 ký tự
-        if(id.length() != 8)
-            return false;
+        if(id.length() != 8) return false;
         // -- Kiểm tra tiền tối
         String prefix = id.substring(0, 3);
-        if(!prefix.equals("DOC")
-            && !prefix.equals("NUR")) return false;
+        if(!prefix.equals("HEW")) return false;
         // -- Kiểm tra hậu tố
         String postfix = id.substring(3);
-        for(int i = 0; i < postfix.length(); i++) {
-            int charUnicode = (int) postfix.charAt(i);
-            if(charUnicode < 48 || charUnicode > 57) return false;
-        }
+        if(!myClass.getInstance().hasAllCharacterIsNumber(postfix)) return false;
         return true;
     }
     // - Lấy id có đúng định dạng (DOC/NUR)xxxxx
